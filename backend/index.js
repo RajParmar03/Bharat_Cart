@@ -1,19 +1,30 @@
-const express = require("express");
-require('dotenv').config();
+const express = require("express"); // importing the express from packages
+require('dotenv').config(); //importing the dotenv.
 
-const connection = require("./config/db");
-
-
-const app = express();
-const port = process.env.PORT;
+const connection = require("./config/db"); // importing the connection from the db file.
+const userRouter = require("./routes/user.route"); // importing userRouter from the user.router file.
+const productRouter = require("./routes/product.route"); // importing productRouter from the product.route file.
 
 
-app.use(express.json());
+const app = express(); // creating the application using express
+const port = process.env.PORT; // importing the value of the port from the .env
 
+
+
+
+app.use(express.json()); // applying the json middleware
+
+// this is the get request [just for the demo purpose] (http://localhost:1010/);
 app.get("/" , (req,res) => {
     res.send("You are on the home page of raj parmar's first own website...");
 });
 
+app.use("/user" , userRouter); // applying the user router with use of middleware
+
+app.use("/product" , productRouter); // applying the product router with use of middleware
+
+
+// this is for creating the server.
 app.listen(port , async () => {
     try {
         await connection;
