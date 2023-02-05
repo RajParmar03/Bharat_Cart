@@ -1,10 +1,10 @@
 const express = require("express"); // importing the express from packages
 require('dotenv').config(); //importing the dotenv.
+const cors = require('cors') // importing cors from packages.
 
 const connection = require("./config/db"); // importing the connection from the db file.
 const userRouter = require("./routes/user.route"); // importing userRouter from the user.router file.
 const productRouter = require("./routes/product.route"); // importing productRouter from the product.route file.
-
 
 const app = express(); // creating the application using express
 const port = process.env.PORT; // importing the value of the port from the .env
@@ -12,6 +12,7 @@ const port = process.env.PORT; // importing the value of the port from the .env
 
 
 
+app.use(cors()); // appling cors middleware.
 app.use(express.json()); // applying the json middleware
 
 // this is the get request [just for the demo purpose] (http://localhost:1010/);
