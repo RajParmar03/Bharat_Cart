@@ -3,25 +3,26 @@ import React from 'react'
 import axios from "axios";
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-const getData = async () => {
-  let data = await axios.get("http://localhost:1010/product");
+const getData = async (category) => {
+  let data = await axios.get(`http://localhost:1010/product?main_category=${category}`);
   // console.log(data);
   return data.data;
 }
 
 const Products = () => {
 
-
+  const params = useParams();
   const [data, setData] = useState([]);
 
 
   useEffect(() => {
-    getData().then((res) => {
+    getData(params.category).then((res) => {
       setData(res);
     });
   }, []);
-  // console.log(data);
+  // console.log("this is params"  , params);
 
   return (
     <Grid templateColumns='repeat(5, 1fr)' gap={6} m={10} >
@@ -36,6 +37,7 @@ const Products = () => {
               <Text textDecoration="line-through">Value :- {elem.strike}</Text>
               <Text>Price :- {elem.price}</Text>
               <Text>Discount :- {elem.discount}</Text>
+              <Text>Main-Category :- {elem.main_category}</Text>
               <Button>Add to Cart</Button>
             </VStack>
           )
