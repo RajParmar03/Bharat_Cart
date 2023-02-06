@@ -8,8 +8,10 @@ const Navbar = () => {
         <Spacer />
         <Heading as='h3' size='md'><Link to="/">Home</Link></Heading>
         <Spacer />
-        <Heading as='h3' size='md'><Link to="/products">Products</Link></Heading>
+        <Heading as='h3' size='md'><Link to="/selectproducts">SelectProducts</Link></Heading>
         <Spacer />
+        {/* <Heading as='h3' size='md'><Link to="/products/:category">Products</Link></Heading>
+        <Spacer /> */}
         <Heading as='h3' size='md'><Link to="/cart">Cart</Link></Heading>
         <Spacer />
         <Heading as='h3' size='md'><Link to="/user">User</Link></Heading>
