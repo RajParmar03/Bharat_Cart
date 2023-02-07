@@ -17,7 +17,7 @@ const key = process.env.KEY; // importing the key value from .env
 
 // this is the post API for the signup of new user.
 userRouter.post("/signup" , async (req , res) => {
-    let {name,email,phone,password,type} = req.body;
+    let {name,username,email,phone,password,role} = req.body;
     
     try {
         bcrypt.hash(password, +salt , async (err, hash) => {
@@ -25,7 +25,7 @@ userRouter.post("/signup" , async (req , res) => {
                 if(err){
                     res.status(400).send("error in the bcrypt try part and error is :- " , err);
                 }else{
-                    let user = new UserModel({name,email,phone,password : hash , type});
+                    let user = new UserModel({name,username,email,phone,password : hash , role});
                     await user.save();
                     res.status(200).send({message : "signup successfully.."});
                 }

@@ -14,7 +14,7 @@ import SelectProducts from '../pages/SelectProducts';
 
 const AllRoutes = () => {
   return (
-    <Box h={"500px"}>
+    <Box m={"30px auto 30px auto"}>
         <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
