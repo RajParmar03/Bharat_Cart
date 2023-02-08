@@ -2,12 +2,16 @@ const mongoose = require("mongoose"); // importing mongoose from packages.
 
 // creating the user schema.
 const userSchema = mongoose.Schema({
+    image : String,
     name : String ,
-    username : String,
-    email : String , 
-    phone : Number , 
+    username : { type: String, unique: true },
+    email : { type: String, unique: true }, 
+    phone : { type: Number, unique: true } , 
     password : String ,
-    role: { type: String, default: 'user' }
+    role: { type: String, default: 'buyer' },
+    cartList : {type : Array, default : []},
+    wishList : {type : Array, default : []},
+    orderList : {type : Array, default : []}
 });
 
 // creating the user model.
