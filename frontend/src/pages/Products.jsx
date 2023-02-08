@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const getData = async (category) => {
   let data = await axios.get(`http://localhost:1010/product?main_category=${category}`);
@@ -57,6 +58,8 @@ const Products = () => {
   const [currentSubCategory, setCurrentSubCategory] = useState("");
   const [currentSort, setCurrentSort] = useState("");
 
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     getData(params.category).then((res) => {
@@ -88,6 +91,10 @@ const Products = () => {
     });
   }
 
+  const handleSingleProduct = (id) => {
+    navigate(`/singleproduct/${id}`);
+  }
+
 
   return (
     <>
@@ -115,7 +122,7 @@ const Products = () => {
         {
           data.map((elem) => {
             return (
-              <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5}>
+              <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5} onClick={() => handleSingleProduct(elem._id)}>
                 <Box h={"50px"}>
                   <img src={elem.image1} alt={elem.title} style={{ height: "100%" }} />
                 </Box>
@@ -125,7 +132,6 @@ const Products = () => {
                 <Text>Discount :- {elem.discount}</Text>
                 <Text>Main-Category :- {elem.main_category}</Text>
                 <Text>Sub-Category :- {elem.sub_category}</Text>
-                <Button fontSize={"18px"} colorScheme="orange" variant='outline' border={"2px solid"}>Add to Cart</Button>
               </VStack>
             )
           })

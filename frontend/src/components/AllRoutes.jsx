@@ -10,6 +10,7 @@ import Signup from "../pages/Signup";
 import Wishlist from "../pages/Wishlist";
 import { Box } from '@chakra-ui/react';
 import SelectProducts from '../pages/SelectProducts';
+import SingleProduct from '../pages/SingleProduct';
 
 
 const AllRoutes = () => {
@@ -21,6 +22,7 @@ const AllRoutes = () => {
             <Route path="/login" element={<Login />}></Route>
             <Route path="/selectproducts" element={<SelectProducts />}></Route>
             <Route path="/products/:category" element={<Products />}></Route>
+            <Route path="/singleproduct/:id" element={<SingleProduct />}></Route>
             <Route path="/cart" element={<Cart />}></Route>
             <Route path="/wishlist" element={<Wishlist />}></Route>
             <Route path="/user" element={<User />}></Route>
