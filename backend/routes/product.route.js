@@ -43,6 +43,16 @@ productRouter.get("/" , async (req , res) => {
     }   
 });
 
+productRouter.get("/:id", async (req,res) => {
+    let id = req.params.id;
+    try {
+        let product = await ProductModel.find({_id : id});
+        res.status(200).send(product[0]);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 
 // exporting the productRouter.
 module.exports = productRouter;
