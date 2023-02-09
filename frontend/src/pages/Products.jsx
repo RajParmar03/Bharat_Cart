@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import image from "../bagImage.jpg";
+
 
 const getData = async (category) => {
   let data = await axios.get(`http://localhost:1010/product?main_category=${category}`);
@@ -118,18 +120,18 @@ const Products = () => {
           <Heading as={"h3"} size={"md"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are found.</Heading>
         </Box>
       </Flex>
-      <Grid templateColumns='repeat(5, 1fr)' gap={6} m={10} >
+      <Grid templateColumns='repeat(4, 1fr)' gap={6} m={10} >
         {
           data.map((elem) => {
             return (
-              <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5} onClick={() => handleSingleProduct(elem._id)}>
-                <Box h={"50px"}>
-                  <img src={elem.image1} alt={elem.title} style={{ height: "100%" }} />
+              <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3} onClick={() => handleSingleProduct(elem._id)}>
+                <Box h={"60%"}>
+                  <img src={image} alt={elem.title} style={{ height: "100%" }} />
                 </Box>
                 <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
                 <Text textDecoration="line-through">Value :- {elem.strike}</Text>
                 <Text>Price :- {elem.price}</Text>
-                <Text>Discount :- {elem.discount}</Text>
+                {/* <Text>Discount :- {elem.discount}</Text> */}
                 <Text>Main-Category :- {elem.main_category}</Text>
                 <Text>Sub-Category :- {elem.sub_category}</Text>
               </VStack>

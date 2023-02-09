@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useState } from 'react';
 
 const getUser = async (token) => {
-  console.log("this is token" , token);
   let user = await axios.get("http://localhost:1010/user/getuser",{
     headers :{
       Authorization : token
@@ -24,7 +23,6 @@ const User = () => {
       setUser(res);
     });
   },[]);
-  console.log(user);
 
   return (
     <Box m={"30px auto auto auto"} p={"30px"} w={"35%"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
