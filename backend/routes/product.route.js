@@ -1,8 +1,12 @@
 const express = require("express"); // importing express from the packages.
 const ProductModel = require("../models/product.model");
+const UserModel = require("../models/user.model");
+require('dotenv').config();
+const jwt = require("jsonwebtoken");
 
 const productRouter = express.Router(); // creating the router for the product.
 
+const key = process.env.KEY;
 
 // this is the get request for the product.
 productRouter.get("/" , async (req , res) => {
@@ -22,7 +26,7 @@ productRouter.get("/" , async (req , res) => {
             let realQuery = {};
             for(let i in req.query){
                 if(i === "sort"){
-                    continue;
+                    continue; 
                 }
                 realQuery[i] = req.query[i];
             }
@@ -52,6 +56,8 @@ productRouter.get("/:id", async (req,res) => {
         res.send(error);
     }
 });
+
+
 
 
 // exporting the productRouter.
