@@ -1,8 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { rawListeners } = require("../models/cart.model");
 const CartModel = require("../models/cart.model");
-const ProductModel = require("../models/product.model");
 require('dotenv').config();
 
 
@@ -81,5 +79,25 @@ cartRouter.patch("/update/:id", async (req , res) => {
         res.send({message : "error occured during updating the amount"});
     }
 });
+
+cartRouter.delete("/delete/:id" , async (req,res) => {
+    let id = req.params.id;
+    let token = req.headers.authorization;
+    let decoded = jwt.verify(token, key);
+    let email = decoded.email;
+    try {
+        let users = await UserModel.find({email});
+        let user = users[0];
+        let cartList = user.cartList;
+        let updatedCartList = cartList.filter((elem) => {
+            return id != elem.cartId;
+        });
+        await UserModel.findByIdAndUpdate({_id:user._id},{cartList : updatedCartList});
+        await CartModel.findByIdAndDelete({_id:id});
+        res.send({message : "Deleted the item successfully."});
+    } catch (error) {
+        res.send({message: "error occured during deleteing the cart item"});
+    }
+})
 
 module.exports = cartRouter;

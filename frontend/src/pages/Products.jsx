@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, Heading, Select, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, Heading, HStack, Select, Text, VStack } from '@chakra-ui/react';
 import React from 'react'
 import axios from "axios";
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import image from "../bagImage.jpg";
+import { BsHeart } from "react-icons/bs";
 
 
 const getData = async (category) => {
@@ -49,6 +50,15 @@ const getSortData = async (main_category, sub_category, sorting) => {
     }
   }
   return data.data;
+}
+
+const addToWishList = async (id , token) => {
+  let wishListItem = await axios.post(`http://localhost:1010/wishlist/add/${id}`,{},{
+    headers : {
+      Authorization : token
+    }
+  });
+  return wishListItem.data;
 }
 
 const Products = () => {
@@ -97,6 +107,13 @@ const Products = () => {
     navigate(`/singleproduct/${id}`);
   }
 
+  const handleAddToWishList = (id) => {
+    let token = localStorage.getItem("token");
+    addToWishList(id , token).then((res) => {
+      alert(res.message);
+    });
+  }
+
 
   return (
     <>
@@ -124,16 +141,19 @@ const Products = () => {
         {
           data.map((elem) => {
             return (
-              <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3} onClick={() => handleSingleProduct(elem._id)}>
-                <Box h={"60%"}>
-                  <img src={image} alt={elem.title} style={{ height: "100%" }} />
-                </Box>
-                <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
-                <Text textDecoration="line-through">Value :- {elem.strike}</Text>
-                <Text>Price :- {elem.price}</Text>
-                {/* <Text>Discount :- {elem.discount}</Text> */}
-                <Text>Main-Category :- {elem.main_category}</Text>
-                <Text>Sub-Category :- {elem.sub_category}</Text>
+              <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3}>
+                <Box marginLeft={"220px"} onClick={() => handleAddToWishList(elem._id)}><BsHeart size={"30px"} /></Box>
+                <VStack onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
+                  <Box h={"50%"}>
+                    <img src={image} alt={elem.title} style={{ height: "100%" }} />
+                  </Box>
+                  <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
+                  <Text textDecoration="line-through">Value :- {elem.strike}</Text>
+                  <Text>Price :- {elem.price}</Text>
+                  {/* <Text>Discount :- {elem.discount}</Text> */}
+                  <Text>Main-Category :- {elem.main_category}</Text>
+                  <Text>Sub-Category :- {elem.sub_category}</Text>
+                </VStack>
               </VStack>
             )
           })
