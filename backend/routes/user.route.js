@@ -57,10 +57,10 @@ userRouter.post("/signup" , async (req , res) => {
 // this is post API for the login of the user.
 userRouter.post("/login" , async (req , res) => {
     const {email , password} = req.body;
-    console.log("this is the req.body" , req.body)
+    
     try {
         const user = await UserModel.find({email});
-        console.log("this is the user" , user);
+        
         const token = jwt.sign({ email : email}, key);
         bcrypt.compare(password, user[0].password , (err, result) => {
             if(err){

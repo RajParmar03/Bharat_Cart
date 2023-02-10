@@ -17,6 +17,24 @@ const updateCartList = async (id,val) => {
   return updatedCart.data;
 }
 
+const deleteCartItem = async (id,token) => {
+  let deletedItem = await axios.delete(`http://localhost:1010/cart/delete/${id}`,{
+    headers : {
+      Authorization : token,
+    }
+  });
+  return deletedItem.data;
+}
+
+const addToWishList = async (id , token) => {
+  let wishListItem = await axios.post(`http://localhost:1010/wishlist/add/${id}`,{},{
+    headers : {
+      Authorization : token
+    }
+  });
+  return wishListItem.data;
+}
+
 
 const Cart = () => {
 
@@ -30,14 +48,14 @@ const Cart = () => {
     });
   }, []);
   console.log(cartList);
-
+  
   useEffect(() => {
     let total = cartList.reduce((acc , elem) => {
       return acc + elem.price * elem.quantity;
     }, 0);
     setAmount(total);
   },[cartList]);
-
+  
   const handleQuantity = (id , val) => {
     updateCartList(id , val).then((res) => {
       alert(res.message);
@@ -45,9 +63,25 @@ const Cart = () => {
         setCartList(res);
       });
     });
-
   }
-
+  
+  const handleAddToWishList = (id) => {
+    let token = localStorage.getItem("token");
+    addToWishList(id , token).then((res) => {
+      alert(res.message);
+    });
+  }
+  
+  const handleDelete = (id) => {
+    let token = localStorage.getItem("token");
+    deleteCartItem(id , token).then((res) => {
+      alert(res.message);
+      getCartList(localStorage.getItem("token")).then((res) => {
+        setCartList(res);
+      });
+    });
+    
+  }
 
 
   return (
@@ -74,8 +108,8 @@ const Cart = () => {
                     </Box>
                   </HStack>
                   <HStack m={"10px auto auto auto"} justifyContent={"space-between"}>
-                    <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline'>Add to WishList</Button>
-                    <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline'>Delete</Button>
+                    <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleAddToWishList(elem.productId)}>Add to WishList</Button>
+                    <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleDelete(elem._id)}>Delete</Button>
                     <HStack justifyContent={"center"} w={"40%"}>
                       <Button w={"30%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleQuantity(elem._id , -1)} disabled={elem.quantity === 1}>-</Button>
                       <Text w={"20%"} fontSize={"25px"} fontWeight={"bold"}>{elem.quantity}</Text>
