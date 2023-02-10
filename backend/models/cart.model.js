@@ -16,7 +16,8 @@ const cartSchema = mongoose.Schema({
     quantity : {
         type : Number,
         default : 1,
-    }
+    },
+    time : Number,
 });
 
 const CartModel = mongoose.model("cartitem" , cartSchema);

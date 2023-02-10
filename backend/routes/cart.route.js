@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const { rawListeners } = require("../models/cart.model");
 const CartModel = require("../models/cart.model");
 const ProductModel = require("../models/product.model");
 require('dotenv').config();
@@ -19,16 +20,22 @@ cartRouter.get("/get", async (req,res) => {
     let email = decoded.email;
     try {
         let users = await UserModel.find({email});
-        let user = users[0]; 
+        let user = users[0];
         let cartItems = [];
-        user.cartList.forEach(async (elem) => {
-            let product = await ProductModel.findById({_id:elem});
-            let 
-            cartItems = [...cartItems , product];
+        await user.cartList.map(async (elem) => {
+            try {
+                let cartItem = await CartModel.findById({_id:elem.cartId});
+                cartItems = [...cartItems, cartItem];
+            } catch (error) {
+                res.send({message : "error occured during the getting cart array"});
+            } 
         });
         setTimeout(() => {
-            res.status(200).send(cartItems);
-        },500);
+            cartItems.sort((a,b) => {
+               return Number(b.time) - Number(a.time);
+            });
+            res.send(cartItems);
+        },200)
     } catch (error) {
         res.send(error);
     }
@@ -38,37 +45,40 @@ cartRouter.post("/add" , async(req ,res) => {
     let token = req.headers.authorization;
     let decoded = jwt.verify(token, key);
     let email = decoded.email;
+    console.log(req.body);
     try {
         let users = await UserModel.find({email});
         let user = users[0];
-        let cartItem = new CartModel(req.body);
-        await cartItem.save();
         let cartList = user.cartList;
-        if(cartList.includes(req.body.id)){
-            res.send({message : "This product is already in your cart."})
-        }else{
-            cartList = [...cartList , req.body.id];
-            let updatedUser = await UserModel.findByIdAndUpdate({_id : user._id},{cartList : cartList});
+        let signal = false;
+        cartList.map((elem) => {
+            if(elem.productId === req.body.productId){
+                signal = true;
+            }
+        });
+        if(!signal){
+            let cartItem = new CartModel(req.body);
+            await cartItem.save();
+            cartList = [...cartList , {cartId : cartItem._id , productId : cartItem.productId}];
+            await UserModel.findByIdAndUpdate({_id : user._id},{cartList : cartList});
             res.send({message : "Added to cart Successfully."});
+        }else{
+            res.send({message : "This product is already in your cart."});
         }
-        
-        // let signal = false;
-        
-        // cartList.map((elem) => {
-        //     if(elem.productId === req.body.productId){
-        //         signal = true;
-        //     }
-        // });
-        // if(!signal){
-        //     cartList = [...cartList , req.body];
-        //     let updatedUser = await UserModel.findByIdAndUpdate({_id : user._id},{cartList : cartList});
-        //     res.send({message : "Added to cart Successfully."});
-        // }else{
-        //     res.send({message : "This product is already in your cart."});
-        // }
-        
     } catch (error) {
         res.send({message : "error occured during adding product to cart."});
+    }
+});
+
+cartRouter.patch("/update/:id", async (req , res) => {
+    let id = req.params.id;
+    let val = req.body.val;
+    try {
+        let cartItem = await CartModel.findById({_id:id});
+        await CartModel.findByIdAndUpdate({_id:id},{quantity:cartItem.quantity+val});
+        res.send({message : "Updated the amount"});
+    } catch (error) {
+        res.send({message : "error occured during updating the amount"});
     }
 });
 

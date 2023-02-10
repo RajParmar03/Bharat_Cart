@@ -41,6 +41,7 @@ const SingleProduct = () => {
             }
             cartItem[i] = product[i];
         }
+        cartItem.time = Number(new Date().getTime());
         let token = localStorage.getItem("token");
         addProductToCart(cartItem , token).then((res) => {
             alert(res.message);

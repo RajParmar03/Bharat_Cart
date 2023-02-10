@@ -64,7 +64,7 @@ const Signup = () => {
           <FormLabel>Mobile Number</FormLabel>
           <Input type='number' placeholder='Enter Your Mobile Number...' border={"1px"} ref={mobileInput} />
           <FormLabel>Image Url</FormLabel>
-          <Input type='number' placeholder='Enter Your Image Url...' border={"1px"} ref={imageInput} />
+          <Input type='text' placeholder='Enter Your Image Url...' border={"1px"} ref={imageInput} />
           <FormLabel>Password</FormLabel>
           <Input type='password' placeholder='Create A Strong Password...' border={"1px"} ref={passwordInput} />
           <FormLabel>Confirm Password</FormLabel>
