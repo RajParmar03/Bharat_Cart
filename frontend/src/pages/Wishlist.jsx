@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Grid, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Grid, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,15 @@ const removeItem = async (id, token) => {
     }
   });
   return wishlist.data;
+}
+
+const addProductToCart = async (cartItem, token) => {
+  let ans = await axios.post("http://localhost:1010/cart/add", cartItem, {
+      headers: {
+          Authorization: token,
+      }
+  });
+  return ans.data;
 }
 
 
@@ -50,9 +59,32 @@ const Wishlist = () => {
       getWishList(token).then((res) => {
         setWishList(res);
       });
-    })
+    });
   }
 
+  const handleAddToCart = (product) => {
+    let cartItem = {};
+    for (let i in product) {
+        if (i === "_id") {
+            cartItem["productId"] = product["_id"];
+            continue;
+        }
+        cartItem[i] = product[i];
+    }
+    cartItem.time = Number(new Date().getTime());
+    let token = localStorage.getItem("token");
+    addProductToCart(cartItem , token).then((res) => {
+        alert(res.message);
+        if(res.isAdded){
+          removeItem(product._id, token).then((res) => {
+            alert(res.message);
+            getWishList(token).then((res) => {
+              setWishList(res);
+            });
+          });
+        }
+    });
+}
 
 
 
@@ -62,7 +94,7 @@ const Wishlist = () => {
         {
           wishList.map((elem) => {
             return (
-              <VStack justifyContent={"center"} h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3}>
+              <VStack justifyContent={"center"} h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={2}>
                 <VStack onClick={() => handleSingleProduct(elem._id)} h={"80%"}>
                   <Box h={"50%"}>
                     <img src={image} alt={elem.title} style={{ height: "100%" }} />
@@ -74,7 +106,10 @@ const Wishlist = () => {
                   <Text>Main-Category :- {elem.main_category}</Text>
                   <Text>Sub-Category :- {elem.sub_category}</Text>
                 </VStack>
-                <Button w={"50%"} paddingBottom={"3px"} border={"2px"} fontSize={"22px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleRemove(elem._id)}>Remove</Button>
+                <HStack>
+                  <Button w={"50%"}  border={"2px"} fontSize={"18px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleAddToCart(elem)}>Add To Cart</Button>
+                  <Button w={"50%"}  border={"2px"} fontSize={"18px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleRemove(elem._id)}>Remove</Button>
+                </HStack>
               </VStack>
             )
           })

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, Flex, Grid, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import image from "../bagImage.jpg";
+import { useNavigate } from 'react-router-dom';
 
 const getCartList = async (token) => {
   let cartItems = await axios.get("http://localhost:1010/cart/get", {
@@ -41,13 +42,16 @@ const Cart = () => {
   const [cartList, setCartList] = useState([]);
   const [amount , setAmount] = useState(0);
 
+  const navigate = useNavigate();
+
+
   useEffect(() => {
     let token = localStorage.getItem("token");
     getCartList(token).then((res) => {
       setCartList(res);
     });
   }, []);
-  console.log(cartList);
+
   
   useEffect(() => {
     let total = cartList.reduce((acc , elem) => {
@@ -81,6 +85,10 @@ const Cart = () => {
       });
     });
     
+  }
+
+  const handleCheckout = () => {
+    navigate(`/checkout`);
   }
 
 
@@ -126,7 +134,7 @@ const Cart = () => {
             <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
             <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
             <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
-            <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline'>Proceed To Checkout</Button>
+            <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleCheckout()}>Proceed To Checkout</Button>
           </VStack>
         </Box>
       </Flex>

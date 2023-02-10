@@ -31,6 +31,19 @@ wishlistRouter.get("/get" , async (req , res) => {
     }
 });
 
+wishlistRouter.get("/getwishlist" , async (req , res) => {
+    let token = req.headers.authorization;
+    let decoded = jwt.verify(token, key);
+    let email = decoded.email;
+    try {
+        let users = await UserModel.find({email});
+        let user = users[0];
+        res.send(user.wishList);
+    } catch (error) {
+        res.send({message : "error occured during adding item to your wishlist"});
+    }
+});
+
 
 wishlistRouter.post("/add/:id" , async (req , res) => {
     let id = req.params.id;
