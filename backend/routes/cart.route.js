@@ -59,12 +59,12 @@ cartRouter.post("/add" , async(req ,res) => {
             await cartItem.save();
             cartList = [...cartList , {cartId : cartItem._id , productId : cartItem.productId}];
             await UserModel.findByIdAndUpdate({_id : user._id},{cartList : cartList});
-            res.send({message : "Added to cart Successfully."});
+            res.send({message : "Added to cart Successfully." , isAdded:true});
         }else{
-            res.send({message : "This product is already in your cart."});
+            res.send({message : "This product is already in your cart.", isAdded:false});
         }
     } catch (error) {
-        res.send({message : "error occured during adding product to cart."});
+        res.send({message : "error occured during adding product to cart.", isAdded:false});
     }
 });
 

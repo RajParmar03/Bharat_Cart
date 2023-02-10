@@ -11,6 +11,7 @@ import Wishlist from "../pages/Wishlist";
 import { Box } from '@chakra-ui/react';
 import SelectProducts from '../pages/SelectProducts';
 import SingleProduct from '../pages/SingleProduct';
+import Checkout from '../pages/Checkout';
 
 
 const AllRoutes = () => {
@@ -27,6 +28,7 @@ const AllRoutes = () => {
             <Route path="/wishlist" element={<Wishlist />}></Route>
             <Route path="/user" element={<User />}></Route>
             <Route path="/about" element={<About />}></Route>
+            <Route path="/checkout" element={<Checkout />}></Route>
         </Routes>
     </Box>
   )

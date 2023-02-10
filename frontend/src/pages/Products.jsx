@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import image from "../bagImage.jpg";
 import { BsHeart } from "react-icons/bs";
+import {BsFillHeartFill} from "react-icons/bs";
 
 
 const getData = async (category) => {
@@ -61,6 +62,24 @@ const addToWishList = async (id , token) => {
   return wishListItem.data;
 }
 
+const getWishList = async (token) => {
+  let wishList = await axios.get(`http://localhost:1010/wishlist/getwishlist` , {
+    headers : {
+      Authorization : token,
+    }
+  });
+  return wishList.data;
+}
+
+const removeItem = async (id, token) => {
+  let wishlist = await axios.delete(`http://localhost:1010/wishlist/delete/${id}`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return wishlist.data;
+}
+
 const Products = () => {
 
   const params = useParams();
@@ -69,6 +88,7 @@ const Products = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [currentSubCategory, setCurrentSubCategory] = useState("");
   const [currentSort, setCurrentSort] = useState("");
+  const [wishList , setWishList] = useState([]);
 
   const navigate = useNavigate();
 
@@ -85,9 +105,16 @@ const Products = () => {
         return (subCategories.length > 0 && subCategories.includes(elem.sub_category)) ? subCategories : [...subCategories, elem.sub_category];
       })
     });
-
     setLength(data.length);
   }, [data]);
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    getWishList(token).then((res) => {
+      setWishList(res);
+    });
+  },[]);
+  console.log("this is wishlist" , wishList);
 
   const handleSort = (value) => {
     setCurrentSort(value);
@@ -111,9 +138,22 @@ const Products = () => {
     let token = localStorage.getItem("token");
     addToWishList(id , token).then((res) => {
       alert(res.message);
+      getWishList(token).then((res) => {
+        setWishList(res);
+      });
     });
   }
 
+  const handleRemoveWishlist = (id) => {
+    console.log("in the handle remove wishlist function.");
+    let token = localStorage.getItem("token");
+    removeItem(id, token).then((res) => {
+      alert(res.message);
+      getWishList(token).then((res) => {
+        setWishList(res);
+      });
+    });
+  }
 
   return (
     <>
@@ -140,9 +180,17 @@ const Products = () => {
       <Grid templateColumns='repeat(4, 1fr)' gap={6} m={10} >
         {
           data.map((elem) => {
+            let isAdded = wishList.includes(elem._id);
             return (
               <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3}>
-                <Box marginLeft={"220px"} onClick={() => handleAddToWishList(elem._id)}><BsHeart size={"30px"} /></Box>
+                <Box marginLeft={"220px"} onClick={() => {
+                  return isAdded?handleRemoveWishlist(elem._id):handleAddToWishList(elem._id)
+                }
+                }>
+                  {
+                    isAdded?<BsFillHeartFill size={"30px"}/>:<BsHeart size={"30px"} />
+                  }
+                  </Box>
                 <VStack onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
                   <Box h={"50%"}>
                     <img src={image} alt={elem.title} style={{ height: "100%" }} />

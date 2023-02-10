@@ -91,6 +91,18 @@ userRouter.get("/getuser" , async(req,res) => {
 });
 
 
+userRouter.get("/getAddress" , async (req , res) => {
+    let token = req.headers.authorization;
+    const decoded = jwt.verify(token, key);
+    try {
+        const user = await UserModel.find({email : decoded.email});
+        res.send(user[0].addressList);
+    } catch (error) {
+        res.status(400).send({msg : error});
+    }
+    
+});
+
 // exporting the userRouter.
 module.exports = userRouter;
 

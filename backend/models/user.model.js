@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema({
     role: { type: String, default: 'buyer' },
     cartList : {type : Array, default : []},
     wishList : {type : Array, default : []},
-    orderList : {type : Array, default : []}
+    orderList : {type : Array, default : []},
+    addressList : {type : Array, default : []}
 });
 
 // creating the user model.
