@@ -8,7 +8,7 @@ require('dotenv').config();
 const key = process.env.KEY;
 
 
-const wishlistRouter = express();
+const wishlistRouter = express.Router();
 
 
 wishlistRouter.get("/get" , async (req , res) => {
