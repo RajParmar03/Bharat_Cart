@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const getAddressOfUser = async (token) => {
@@ -37,6 +38,9 @@ const Checkout = () => {
 
     const [addressList, setAddressList] = useState([]);
     const [user, setUser] = useState({});
+
+    const navigate = useNavigate();
+
 
 
     const countryInput = useRef(null);
@@ -92,6 +96,10 @@ const Checkout = () => {
         } else {
             alert("please fill all the field");
         }
+    }
+
+    const handleFinalCheckout = (id) => {
+        navigate(`/payment/${id}`);
     }
 
 
@@ -171,18 +179,18 @@ const Checkout = () => {
                             {
                                 addressList.map((elem) => {
                                     return (
-                                        <>
-                                            <HStack key={elem.street + elem.houseNumber + Math.random()} margin={"20px auto"} justifyContent={"space-between"}>
+                                        <Box key={elem.street + elem.houseNumber + Math.random()}>
+                                            <HStack  margin={"20px auto"} justifyContent={"space-between"}>
                                                 <VStack alignItems={"left"}>
                                                     <Text>Name : {user.name}</Text>
                                                     <Text>address : {elem.houseNo}{", "}{elem.street}{", "}{elem.city}</Text>
                                                     <Text>{elem.state}{", "}{elem.country}{", "}{elem.pincode}</Text>
                                                     <Text>phone no : {user.phone}</Text>
                                                 </VStack>
-                                                <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline'>Use this address</Button>
+                                                <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline' onClick={() => handleFinalCheckout(elem._id)}>Use this address</Button>
                                             </HStack>
                                             <Divider />
-                                        </>
+                                        </Box>
 
                                     )
                                 })
