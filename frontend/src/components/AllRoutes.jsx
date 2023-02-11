@@ -12,6 +12,7 @@ import { Box } from '@chakra-ui/react';
 import SelectProducts from '../pages/SelectProducts';
 import SingleProduct from '../pages/SingleProduct';
 import Checkout from '../pages/Checkout';
+import Payment from '../pages/Payment';
 
 
 const AllRoutes = () => {
@@ -29,6 +30,7 @@ const AllRoutes = () => {
             <Route path="/user" element={<User />}></Route>
             <Route path="/about" element={<About />}></Route>
             <Route path="/checkout" element={<Checkout />}></Route>
+            <Route path="/payment/:id" element={<Payment />}></Route>
         </Routes>
     </Box>
   )
