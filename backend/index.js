@@ -7,6 +7,7 @@ const userRouter = require("./routes/user.route"); // importing userRouter from 
 const productRouter = require("./routes/product.route"); // importing productRouter from the product.route file.
 const cartRouter = require("./routes/cart.route");
 const wishlistRouter = require("./routes/wishlist.route");
+const addressRouter = require("./routes/address.route");
 
 const app = express(); // creating the application using express
 const port = process.env.PORT; // importing the value of the port from the .env
@@ -29,6 +30,8 @@ app.use("/product" , productRouter); // applying the product router with use of 
 app.use("/cart" , cartRouter);
 
 app.use("/wishlist" , wishlistRouter);
+
+app.use("/addresslist" , addressRouter);
 
 
 // this is for creating the server.
