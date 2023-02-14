@@ -176,7 +176,7 @@ export default function CForm({
                     </div>
                 </div>
                 {/* <Button bg="rgb(0,181,181)" color="white" w="100%" colorScheme=>Submit</Button> */}
-                <Button width={"100%"} style={{ margin: "1rem 0" }} size='lg' colorScheme={"whatsapp"} onClick={() => { navigate("/"); alert("Order Confirmed")}}>Payment</Button>
+                <Button width={"100%"} style={{ margin: "1rem 0" }} size='lg' colorScheme={"whatsapp"} onClick={() => { navigate("/orderconfirmation"); alert("Order Confirmed")}}>Payment</Button>
                 
             </div>
         </div>

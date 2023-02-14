@@ -98,8 +98,8 @@ const Checkout = () => {
         }
     }
 
-    const handleFinalCheckout = (id) => {
-        navigate(`/payment/${id}`);
+    const handleFinalCheckout = () => {
+        navigate(`/billing`);
     }
 
 
@@ -187,7 +187,7 @@ const Checkout = () => {
                                                     <Text>{elem.state}{", "}{elem.country}{", "}{elem.pincode}</Text>
                                                     <Text>phone no : {user.phone}</Text>
                                                 </VStack>
-                                                <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline' onClick={() => handleFinalCheckout(elem._id)}>Use this address</Button>
+                                                <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline' onClick={() => handleFinalCheckout()}>Use this address</Button>
                                             </HStack>
                                             <Divider />
                                         </Box>
