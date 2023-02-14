@@ -13,6 +13,8 @@ import SelectProducts from '../pages/SelectProducts';
 import SingleProduct from '../pages/SingleProduct';
 import Checkout from '../pages/Checkout';
 import Payment from '../pages/Payment';
+import Billing from '../pages/Billing';
+import { OrderConfirmation } from '../pages/OrderConfirmation';
 
 
 const AllRoutes = () => {
@@ -31,6 +33,8 @@ const AllRoutes = () => {
             <Route path="/about" element={<About />}></Route>
             <Route path="/checkout" element={<Checkout />}></Route>
             <Route path="/payment/:id" element={<Payment />}></Route>
+            <Route path="/billing" element={<Billing />}></Route>
+            <Route path="/orderconfirmation" element={<OrderConfirmation />}></Route>
         </Routes>
     </Box>
   )

@@ -129,8 +129,8 @@ const Cart = () => {
             })
           }
         </Grid>
-        <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"40%"} h={"400px"} paddingTop={"30px"}>
-          <VStack w={"100%"} h={"70%"}>
+        <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"40%"} h={"300px"} paddingTop={"30px"}>
+          <VStack w={"100%"} h={"100%"}>
             <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
             <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
             <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
