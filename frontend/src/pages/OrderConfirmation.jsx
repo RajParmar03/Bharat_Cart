@@ -9,7 +9,7 @@ export const OrderConfirmation = () => {
         },1500)
         
   return (
-    <>
+    <Box m={"130px auto 30px auto"}>
       <Flex
         flexDirection={"column"}
         justifyContent="center"
@@ -23,6 +23,6 @@ export const OrderConfirmation = () => {
         </Box>
         <h1>Your order has been placed successfully</h1>
       </Flex>
-    </>
+    </Box>
   );
 };

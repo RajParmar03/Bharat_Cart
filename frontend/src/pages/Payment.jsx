@@ -3,6 +3,9 @@ import Card from "./Card";
 import CForm from "./CardForm";
 import "./CardStyle.css";
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 const initialState = {
   cardNumber: "#### #### #### ####",
   cardHolder: "FULL NAME",
@@ -56,7 +59,7 @@ const Payment = () => {
     }, []);
   
     return (
-      <div className="wrapper">
+      <div className="wrapper" m={"130px auto 30px auto"}>
         <CForm
           cardMonth={state.cardMonth}
           cardYear={state.cardYear}

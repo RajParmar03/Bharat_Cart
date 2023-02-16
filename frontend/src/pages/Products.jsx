@@ -9,9 +9,12 @@ import image from "../bagImage.jpg";
 import { BsHeart } from "react-icons/bs";
 import {BsFillHeartFill} from "react-icons/bs";
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 
 const getData = async (category) => {
-  let data = await axios.get(`http://localhost:1010/product?main_category=${category}`);
+  let data = await axios.get(`${baseUrl}/product?main_category=${category}`);
   // console.log(data);
   return data.data;
 }
@@ -20,15 +23,15 @@ const getFilterData = async (main_category, sub_category, sorting) => {
   let data = [];
   if (sorting) {
     if (sub_category) {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}&sub_category=${sub_category}&sort=${sorting}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}&sub_category=${sub_category}&sort=${sorting}`);
     } else {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}&sort=${sorting}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}&sort=${sorting}`);
     }
   } else {
     if (sub_category) {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}&sub_category=${sub_category}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}&sub_category=${sub_category}`);
     } else {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}`);
     }
   }
   return data.data;
@@ -39,22 +42,22 @@ const getSortData = async (main_category, sub_category, sorting) => {
   let data = [];
   if (sorting) {
     if (sub_category) {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}&sub_category=${sub_category}&sort=${sorting}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}&sub_category=${sub_category}&sort=${sorting}`);
     } else {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}&sort=${sorting}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}&sort=${sorting}`);
     }
   } else {
     if (sub_category) {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}&sub_category=${sub_category}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}&sub_category=${sub_category}`);
     } else {
-      data = await axios.get(`http://localhost:1010/product?main_category=${main_category}`);
+      data = await axios.get(`${baseUrl}/product?main_category=${main_category}`);
     }
   }
   return data.data;
 }
 
 const addToWishList = async (id , token) => {
-  let wishListItem = await axios.post(`http://localhost:1010/wishlist/add/${id}`,{},{
+  let wishListItem = await axios.post(`${baseUrl}/wishlist/add/${id}`,{},{
     headers : {
       Authorization : token
     }
@@ -63,7 +66,7 @@ const addToWishList = async (id , token) => {
 }
 
 const getWishList = async (token) => {
-  let wishList = await axios.get(`http://localhost:1010/wishlist/getwishlist` , {
+  let wishList = await axios.get(`${baseUrl}/wishlist/getwishlist` , {
     headers : {
       Authorization : token,
     }
@@ -72,7 +75,7 @@ const getWishList = async (token) => {
 }
 
 const removeItem = async (id, token) => {
-  let wishlist = await axios.delete(`http://localhost:1010/wishlist/delete/${id}`, {
+  let wishlist = await axios.delete(`${baseUrl}/wishlist/delete/${id}`, {
     headers: {
       Authorization: token
     }
@@ -96,17 +99,17 @@ const Products = () => {
   useEffect(() => {
     getData(params.category).then((res) => {
       setData(res);
+      setLength(res.length);
     });
-  }, []);
-
+  }, [params]);
+  
   useEffect(() => {
     data.map((elem) => {
       setSubCategories((subCategories) => {
         return (subCategories.length > 0 && subCategories.includes(elem.sub_category)) ? subCategories : [...subCategories, elem.sub_category];
       })
     });
-    setLength(data.length);
-  }, [data]);
+  }, []);
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -156,7 +159,7 @@ const Products = () => {
   }
 
   return (
-    <>
+    <Box m={"130px auto 30px auto"}>
       <Flex m={10} justifyContent={"space-between"}>
         <Flex justifyContent={"space-between"} w={"30%"}>
           <Select onChange={(e) => handleSort(e.target.value)} placeholder='Price Sort' border={"2px solid orange"} w={"45%"}>
@@ -188,7 +191,7 @@ const Products = () => {
                 }
                 }>
                   {
-                    isAdded?<BsFillHeartFill size={"30px"}/>:<BsHeart size={"30px"} />
+                    isAdded?<BsFillHeartFill size={"30px"} color={"orange"} />:<BsHeart size={"30px"} color={"orange"}/>
                   }
                   </Box>
                 <VStack onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
@@ -207,7 +210,7 @@ const Products = () => {
           })
         }
       </Grid>
-    </>
+    </Box>
   )
 }
 

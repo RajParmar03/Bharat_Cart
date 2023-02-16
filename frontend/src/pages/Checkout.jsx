@@ -6,8 +6,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 const getAddressOfUser = async (token) => {
-    let addressList = await axios.get("http://localhost:1010/addresslist/getAddress", {
+    let addressList = await axios.get(`${baseUrl}/addresslist/getAddress`, {
         headers: {
             Authorization: token,
         }
@@ -16,7 +19,7 @@ const getAddressOfUser = async (token) => {
 }
 
 const postAddress = async (addressObject, token) => {
-    let response = await axios.post("http://localhost:1010/addresslist/add", addressObject, {
+    let response = await axios.post(`${baseUrl}/addresslist/add`, addressObject, {
         headers: {
             Authorization: token,
         }
@@ -25,7 +28,7 @@ const postAddress = async (addressObject, token) => {
 }
 
 const getUser = async (token) => {
-    let user = await axios.get("http://localhost:1010/user/getuser", {
+    let user = await axios.get(`${baseUrl}/user/getuser`, {
         headers: {
             Authorization: token
         }
@@ -104,7 +107,7 @@ const Checkout = () => {
 
 
     return (
-        <Box>
+        <Box m={"130px auto 30px auto"}>
             <Heading marginBottom={"20px"}>Checkout Page</Heading>
             <Divider />
             {

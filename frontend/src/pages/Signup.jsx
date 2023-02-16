@@ -3,6 +3,9 @@ import { Box, Divider, Flex, FormLabel, Heading, Input, Select } from '@chakra-u
 import axios from 'axios';
 import image from "../userImage.png";
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 
 const Signup = () => {
 
@@ -28,7 +31,7 @@ const Signup = () => {
           password: passwordInput.current.value,
           role : roleInput.current.value || "buyer"
         };
-        let ans = await axios.post("http://localhost:1010/user/signup", userObject);
+        let ans = await axios.post(`${baseUrl}/user/signup`, userObject);
         alert(ans.data.message);
       }else{
         alert("please enter all the filled...");
@@ -41,7 +44,7 @@ const Signup = () => {
 
 
   return (
-    <>
+    <Box m={"130px auto 30px auto"}>
       <Heading as={"h1"} size={"2xl"} color="orange" m={"auto auto 30px auto"}>Create A New Account</Heading>
       <Divider />
       <Box m={"30px auto auto auto"} w={"30%"}>
@@ -72,7 +75,7 @@ const Signup = () => {
           <Input m={"20px auto auto auto"} type="submit" value="Sign-Up" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} />
         </form>
       </Box>
-    </>
+    </Box>
   )
 }
 

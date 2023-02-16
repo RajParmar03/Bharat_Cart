@@ -3,7 +3,7 @@ import React from 'react'
 
 const About = () => {
   return (
-    <Box marginTop={10}>
+    <Box m={"130px auto 30px auto"}>
       <Heading as='h1' size='md' noOfLines={1}>
         About
       </Heading>

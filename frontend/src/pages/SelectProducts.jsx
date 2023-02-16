@@ -4,8 +4,11 @@ import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 const getData = async (search) => {
-    let data = await axios.get(`http://localhost:1010/product?search=${search}`);
+    let data = await axios.get(`${baseUrl}/product?search=${search}`);
     // console.log(data);
     return data.data;
 }
@@ -41,7 +44,7 @@ const SelectProducts = () => {
 
     return (
         <>
-            <Flex justifyContent={"space-around"} alignItems={"center"} m={"60px auto 30px auto"} w={"60%"}>
+            <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
                 <Input onChange={(e) => handleChange(e.target.value)} w={"80%"} variant='filled' size='lg' placeholder='Search product here...'></Input>
                 <Button fontSize={"20px"} colorScheme="red" variant='outline' border={"3px solid"}>
                     Search
