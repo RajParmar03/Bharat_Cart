@@ -3,15 +3,19 @@ const express = require("express"); //importing the express from package.
 const bcrypt = require("bcrypt"); // importing the bcrypt from package.
 require('dotenv').config(); // importing the dotenv from package.
 const jwt = require("jsonwebtoken"); // importing jwt from jsonwebtoken
+const cors = require('cors');
 
 
 const UserModel = require("../models/user.model"); // importing UserModel from models folder.
 
 
+const key = process.env.KEY; // importing the key value from .env
+const salt = process.env.SALT; // imporing the salt value from .env
+
 
 const userRouter = express.Router(); // creating the saperate router for the user routes.
-const salt = process.env.SALT; // imporing the salt value from .env
-const key = process.env.KEY; // importing the key value from .env
+
+userRouter.use(cors()); 
 
 
 

@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const CartModel = require("../models/cart.model");
 require('dotenv').config();
+const cors = require('cors');
 
 
 const UserModel = require("../models/user.model");
@@ -11,6 +12,8 @@ const key = process.env.KEY;
 
 
 const cartRouter = express.Router();
+
+cartRouter.use(cors()); 
 
 cartRouter.get("/get", async (req,res) => {
     let token = req.headers.authorization;

@@ -3,10 +3,13 @@ const AddressModel = require("../models/address.model");
 const UserModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
+const cors = require('cors');
 
 const key = process.env.KEY;
 
 const addressRouter = express.Router();
+
+addressRouter.use(cors()); 
 
 
 addressRouter.get("/getAddress" , async (req , res) => {
