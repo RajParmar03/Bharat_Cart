@@ -58,22 +58,14 @@ its Fully Responsive. Bharat Cart is a E-Commerce Website who deals with the clo
 Created Carts, Products, Users, Admin API ( Back-End ).
 
 ## Home Page
-![homePage](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(62).png)
+![homePage](![2023-02-16 (1)](https://user-images.githubusercontent.com/106548934/219315010-3c8c41e0-c0aa-4311-9418-9380726cad90.png))
+
+## All Products Page
+![AllProductsPage](https://github.com/RajParmar03/Bharat_Cart/blob/main/frontend/public/AllProductsPage.png)
 
 ## Products Page
-![ProductsPage](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(64).png)
+![ProductsPage](https://github.com/RajParmar03/Bharat_Cart/blob/main/frontend/public/ProductsPage.png)
 
-## Admin Dashboard Page
-![AdminDashboardPage](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(65).png)
-
-## Admin Products Page
-![AdminProductsPage](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(66).png)
-
-## Login Page
-![login](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(68).png)
-
-## Carousel Page
-![Carousel](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(69).png)
 
 ## Payment Page
 ![Payment](https://github.com/vraj79/faithful-lock-5927/blob/fw20_1138_day-4/frontend/public/project_ss/Screenshot%20(67).png)
