@@ -2,6 +2,9 @@ import React, { useRef } from 'react';
 import { Box, FormLabel, Heading, Input } from '@chakra-ui/react';
 import axios from 'axios';
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 
 
 const Login = () => {
@@ -16,7 +19,7 @@ const Login = () => {
         email : emailInput.current.value,
         password : passwordInput.current.value
       }
-      let ans = await axios.post("http://localhost:1010/user/login" , loginObj);
+      let ans = await axios.post(`${baseUrl}/user/login` , loginObj);
       alert(ans.data.message);
       localStorage.setItem("token",ans.data.token);
     } catch (error) {
@@ -28,7 +31,7 @@ const Login = () => {
 
 
   return (
-    <>
+    <Box m={"130px auto 30px auto"}>
     <Heading as={"h1"} size={"2xl"} color="orange">Login</Heading>
     <Box m={"40px auto auto auto"} w={"30%"}>
       <form onSubmit={(e) => handleLogin(e)}>
@@ -39,7 +42,7 @@ const Login = () => {
         <Input m={"20px auto auto auto"} type="submit" value="Login" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"}  />
       </form>
     </Box>
-    </>
+    </Box>
   )
 }
 

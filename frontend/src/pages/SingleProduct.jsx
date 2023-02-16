@@ -5,14 +5,17 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import image from "../bagImage.jpg";
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
 
 const getProduct = async (id) => {
-    let product = await axios.get(`http://localhost:1010/product/${id}`);
+    let product = await axios.get(`${baseUrl}/product/${id}`);
     return product.data;
 }
 
 const addProductToCart = async (cartItem, token) => {
-    let ans = await axios.post("http://localhost:1010/cart/add", cartItem, {
+    let ans = await axios.post(`${baseUrl}/cart/add`, cartItem, {
         headers: {
             Authorization: token,
         }
@@ -49,7 +52,7 @@ const SingleProduct = () => {
     }
 
     return (
-        <Flex boxShadow="rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px" alignItems={"center"} w={"80%"} h={"600px"} m={"auto"} p={"20px"}>
+        <Flex boxShadow="rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px" alignItems={"center"} w={"80%"} h={"600px"} m={"130px auto 30px auto"} p={"20px"}>
 
             <Box justifyContent={""} borderRight={"1px solid gray"} w={"50%"} h={"100%"}>
                 <Image src={image} alt={product.image1} w={"80%"} m={"auto auto 20px auto"} />

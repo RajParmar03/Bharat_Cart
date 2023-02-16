@@ -4,8 +4,11 @@ import axios from 'axios';
 import image from "../bagImage.jpg";
 import { useNavigate } from 'react-router-dom';
 
+
+let baseUrl = process.env.REACT_APP_BASEURL;
+
 const getCartList = async (token) => {
-  let cartItems = await axios.get("http://localhost:1010/cart/get", {
+  let cartItems = await axios.get(`${baseUrl}/cart/get`, {
     headers: {
       Authorization: token
     }
@@ -14,12 +17,12 @@ const getCartList = async (token) => {
 };
 
 const updateCartList = async (id,val) => {
-  let updatedCart = await axios.patch(`http://localhost:1010/cart/update/${id}`,{val});
+  let updatedCart = await axios.patch(`${baseUrl}/cart/update/${id}`,{val});
   return updatedCart.data;
 }
 
 const deleteCartItem = async (id,token) => {
-  let deletedItem = await axios.delete(`http://localhost:1010/cart/delete/${id}`,{
+  let deletedItem = await axios.delete(`${baseUrl}/cart/delete/${id}`,{
     headers : {
       Authorization : token,
     }
@@ -28,7 +31,7 @@ const deleteCartItem = async (id,token) => {
 }
 
 const addToWishList = async (id , token) => {
-  let wishListItem = await axios.post(`http://localhost:1010/wishlist/add/${id}`,{},{
+  let wishListItem = await axios.post(`${baseUrl}/wishlist/add/${id}`,{},{
     headers : {
       Authorization : token
     }
@@ -93,7 +96,7 @@ const Cart = () => {
 
 
   return (
-    <Box m={"10px 30px"}>
+    <Box m={"130px auto 30px auto"}>
       <Heading textAlign={"left"} m={"auto auto 30px auto"}>Cart List</Heading>
       <Flex>
         <Grid templateColumns='repeat(1, 1fr)' gap={6} m={"auto 30px"} w={"60%"}>

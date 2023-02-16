@@ -6,9 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import image from "../bagImage.jpg";
 
 
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
+
 
 const getWishList = async (token) => {
-  let wishlist = await axios.get("http://localhost:1010/wishlist/get", {
+  let wishlist = await axios.get(`${baseUrl}/wishlist/get`, {
     headers: {
       Authorization: token
     }
@@ -17,7 +21,7 @@ const getWishList = async (token) => {
 }
 
 const removeItem = async (id, token) => {
-  let wishlist = await axios.delete(`http://localhost:1010/wishlist/delete/${id}`, {
+  let wishlist = await axios.delete(`${baseUrl}/wishlist/delete/${id}`, {
     headers: {
       Authorization: token
     }
@@ -26,7 +30,7 @@ const removeItem = async (id, token) => {
 }
 
 const addProductToCart = async (cartItem, token) => {
-  let ans = await axios.post("http://localhost:1010/cart/add", cartItem, {
+  let ans = await axios.post(`${baseUrl}/cart/add`, cartItem, {
       headers: {
           Authorization: token,
       }
@@ -89,7 +93,7 @@ const Wishlist = () => {
 
 
   return (
-    <Box marginTop={10}>
+    <Box m={"130px auto 30px auto"}>
       <Grid templateColumns='repeat(4, 1fr)' gap={6} m={10} >
         {
           wishList.map((elem) => {

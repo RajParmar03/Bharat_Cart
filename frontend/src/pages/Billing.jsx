@@ -4,8 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+let baseUrl = process.env.REACT_APP_BASEURL;
+
 const getCartList = async (token) => {
-  let cartItems = await axios.get("http://localhost:1010/cart/get", {
+  let cartItems = await axios.get(`${baseUrl}/cart/get`, {
     headers: {
       Authorization: token
     }
@@ -52,7 +55,7 @@ const Billing = () => {
 
   return (
     <Box>
-      <Heading m={"auto auto 30px auto"}>Select payment method</Heading>
+      <Heading m={"130px auto 30px auto"}>Select payment method</Heading>
       <Divider />
       <HStack justifyContent={"space-around"} m={" 30px auto 20px auto"}>
         <VStack w={"50%"} h={"300px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
