@@ -3,10 +3,15 @@ const ProductModel = require("../models/product.model");
 const UserModel = require("../models/user.model");
 require('dotenv').config();
 const jwt = require("jsonwebtoken");
+const cors = require('cors');
+
+const key = process.env.KEY;
+
 
 const productRouter = express.Router(); // creating the router for the product.
 
-const key = process.env.KEY;
+productRouter.use(cors()); 
+
 
 // this is the get request for the product.
 productRouter.get("/" , async (req , res) => {

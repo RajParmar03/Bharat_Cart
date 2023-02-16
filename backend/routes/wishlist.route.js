@@ -3,12 +3,15 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
 const ProductModel = require("../models/product.model");
 require('dotenv').config();
+const cors = require('cors');
 
 
 const key = process.env.KEY;
 
 
 const wishlistRouter = express.Router();
+
+wishlistRouter.use(cors()); 
 
 
 wishlistRouter.get("/get" , async (req , res) => {
