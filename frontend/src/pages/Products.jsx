@@ -98,18 +98,21 @@ const Products = () => {
 
   useEffect(() => {
     getData(params.category).then((res) => {
-      setData(res);
-      setLength(res.length);
+      console.log("this is res :- " ,  res);
+      setData(res.data);
+      setLength(res.data.length);
+      setSubCategories(res.sub);
     });
-  }, [params]);
+  }, [params.category]);
   
-  useEffect(() => {
-    data.map((elem) => {
-      setSubCategories((subCategories) => {
-        return (subCategories.length > 0 && subCategories.includes(elem.sub_category)) ? subCategories : [...subCategories, elem.sub_category];
-      })
-    });
-  }, []);
+  // useEffect(() => {
+  //   data.map((elem) => {
+  //     setSubCategories((subCategories) => {
+  //       return (subCategories.length > 0 && subCategories.includes(elem.sub_category)) ? subCategories : [...subCategories, elem.sub_category];
+  //     })
+  //   });
+  // }, [params.category]);
+  console.log(subCategories);
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -117,19 +120,20 @@ const Products = () => {
       setWishList(res);
     });
   },[]);
-  console.log("this is wishlist" , wishList);
 
   const handleSort = (value) => {
     setCurrentSort(value);
     getSortData(params.category, currentSubCategory, value).then((res) => {
-      setData(res);
+      setData(res.data);
+      setLength(res.data.length);
     });
   }
 
   const handleFilter = (value) => {
     setCurrentSubCategory(value);
     getFilterData(params.category, value, currentSort).then((res) => {
-      setData(res);
+      setData(res.data);
+      setLength(res.data.length);
     });
   }
 

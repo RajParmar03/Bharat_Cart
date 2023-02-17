@@ -46,9 +46,6 @@ const SelectProducts = () => {
         <>
             <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
                 <Input onChange={(e) => handleChange(e.target.value)} w={"80%"} variant='filled' size='lg' placeholder='Search product here...'></Input>
-                <Button fontSize={"20px"} colorScheme="red" variant='outline' border={"3px solid"}>
-                    Search
-                </Button>
             </Flex>
             <Divider />
             {

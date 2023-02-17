@@ -33,7 +33,7 @@ const SingleProduct = () => {
         getProduct(params.id).then((res) => {
             setProduct(res);
         });
-    }, []);
+    }, [params.id]);
 
     const handleAddToCart = (product) => {
         let cartItem = {};
