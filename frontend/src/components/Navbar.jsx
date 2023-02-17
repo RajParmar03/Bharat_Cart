@@ -32,7 +32,13 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleFilter = (value) => {
-    setPlaceHolder(`Search for ${value || "BharatCart.in"}`);
+    let newPlaceholder = "";
+    if(value === ""){
+      newPlaceholder += "Search BharatCart.in";
+    }else{
+      newPlaceholder = `Search for ${value}`;
+    }
+    setPlaceHolder(newPlaceholder);
     setMainCategory(value);
     // getFilterData(value,).then((res) => {
     //   setData(res.data);
@@ -95,7 +101,6 @@ const Navbar = () => {
               return <option key={elem + i} value={elem}>{elem}</option>
             })
           }
-          <option value=''>Clear</option>
         </Select>
         <VStack w={"40%"}>
           <HStack w={"100%"}>
@@ -118,7 +123,9 @@ const Navbar = () => {
               <Box style={{
                 position: "fixed",
                 top: "50px",
-              }} zIndex={"1000"} h={"300px"} w={"39%"} p={"10px"} backgroundColor={"white"} border={"1px solid black"} overflow={"auto"}>
+              }} _hover={{
+                cursor:"pointer"
+              }} zIndex={"1000"} h={"300px"} w={"39%"} p={"10px"} backgroundColor={"white"} overflow={"auto"} borderRadius={"5px"} boxShadow= "rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
                 {
                   data.map((elem) => {
                     return <Box m={"5px"} onClick={() => handleSingleProduct(elem._id)} borderRadius={"5px"} p={"10px"} h={"100px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
