@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Heading, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spacer, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Heading, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spacer, Spinner, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { AiFillHome } from "react-icons/ai";
@@ -11,6 +11,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -27,23 +28,20 @@ const Navbar = () => {
   const [mainCategory, setMainCategory] = useState("");
   const [val, setVal] = useState("");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const ID = useRef(null);
 
   const navigate = useNavigate();
 
   const handleFilter = (value) => {
     let newPlaceholder = "";
-    if(value === ""){
+    if (value === "") {
       newPlaceholder += "Search BharatCart.in";
-    }else{
+    } else {
       newPlaceholder = `Search for ${value}`;
     }
     setPlaceHolder(newPlaceholder);
     setMainCategory(value);
-    // getFilterData(value,).then((res) => {
-    //   setData(res.data);
-    //   setLength(res.data.length);
-    // });
   }
 
 
@@ -52,13 +50,16 @@ const Navbar = () => {
       clearTimeout(ID.current);
     }
     if (val !== "") {
+      setLoading(true);
       ID.current = setTimeout(() => {
         getData(mainCategory, val).then((res) => {
           setData(res);
+          setLoading(false);
         });
       }, 1500);
     } else {
       setData([]);
+      setLoading(false)
     }
   }, [val]);
 
@@ -79,7 +80,7 @@ const Navbar = () => {
     navigate(`/singleproduct/${id}`);
   }
 
- 
+
 
 
   return (
@@ -106,16 +107,30 @@ const Navbar = () => {
           <HStack w={"100%"}>
             <Input value={val} onChange={(e) => handleChange(e.target.value)} w={"100%"} backgroundColor={"white"} placeholder={placeHolder} fontWeight={"bold"} border={"2px solid black"} marginTop={data.length ? "10px" : "0px"} />
             {
-              data.length ?
-                <Button style={{
+              loading ?
+                <Spinner size='sm' style={data.length?{
                   position: "relative",
                   right: "45px",
-                  top: "5px"
-                }} variant={"unstyled"} zIndex={"1000"}><GrClose size={"20px"} onClick={() => handleCancel()} /></Button> :
-                <Button style={{
+                  top : "5px"
+                } : {
                   position: "relative",
                   right: "45px",
-                }} variant={"unstyled"} zIndex={"1000"}><GoSearch size={"20px"} /></Button>
+                } } zIndex={"1000"}/>
+                :
+                <>
+                  {
+                    data.length ?
+                      <Button style={{
+                        position: "relative",
+                        right: "45px",
+                        top: "5px"
+                      }} variant={"unstyled"} zIndex={"1000"}><GrClose size={"20px"} onClick={() => handleCancel()} /></Button> :
+                      <Button style={{
+                        position: "relative",
+                        right: "45px",
+                      }} variant={"unstyled"} zIndex={"1000"}><GoSearch size={"20px"} /></Button>
+                  }
+                </>
             }
           </HStack>
           {
@@ -124,8 +139,8 @@ const Navbar = () => {
                 position: "fixed",
                 top: "50px",
               }} _hover={{
-                cursor:"pointer"
-              }} zIndex={"1000"} h={"300px"} w={"39%"} p={"10px"} backgroundColor={"white"} overflow={"auto"} borderRadius={"5px"} boxShadow= "rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
+                cursor: "pointer"
+              }} zIndex={"1000"} h={"300px"} w={"39%"} p={"10px"} backgroundColor={"white"} overflow={"auto"} borderRadius={"5px"} boxShadow="rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
                 {
                   data.map((elem) => {
                     return <Box m={"5px"} onClick={() => handleSingleProduct(elem._id)} borderRadius={"5px"} p={"10px"} h={"100px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
