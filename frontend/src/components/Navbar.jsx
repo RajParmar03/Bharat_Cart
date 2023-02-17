@@ -1,11 +1,12 @@
-import { Box, Button, Divider, Flex, Heading, HStack, Image, Input, Select, Spacer } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Heading, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spacer, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useRef } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiFillHome } from "react-icons/ai";
 import { GrLogin } from "react-icons/gr";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BsBookmarkHeart, BsCartCheck } from "react-icons/bs";
 import { GoSearch } from "react-icons/go";
+import { GrClose } from "react-icons/gr";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -14,7 +15,7 @@ import axios from 'axios';
 let baseUrl = process.env.REACT_APP_BASEURL;
 
 
-const getData = async (mainCategory , search) => {
+const getData = async (mainCategory, search) => {
   let data = await axios.get(`${baseUrl}/product?main_category=${mainCategory}&search=${search}`);
   // console.log(data);
   return data.data;
@@ -28,7 +29,7 @@ const Navbar = () => {
   const [data, setData] = useState([]);
   const ID = useRef(null);
 
-
+  const navigate = useNavigate();
 
   const handleFilter = (value) => {
     setPlaceHolder(`Search for ${value || "BharatCart.in"}`);
@@ -40,21 +41,39 @@ const Navbar = () => {
   }
 
 
-  const handleChange = (value) => {
-    setVal(value);
+  useEffect(() => {
     if (ID.current) {
       clearTimeout(ID.current);
     }
-    if (val) {
+    if (val !== "") {
       ID.current = setTimeout(() => {
-        getData(mainCategory,val).then((res) => {
+        getData(mainCategory, val).then((res) => {
           setData(res);
         });
       }, 1500);
+    } else {
+      setData([]);
     }
+  }, [val]);
+
+
+  const handleChange = (value) => {
+    setVal(value);
   };
 
-  console.log(data);
+
+  const handleCancel = () => {
+    setVal("");
+    setData([]);
+  }
+
+  const handleSingleProduct = (id) => {
+    setVal("");
+    setData([]);
+    navigate(`/singleproduct/${id}`);
+  }
+
+ 
 
 
   return (
@@ -78,7 +97,44 @@ const Navbar = () => {
           }
           <option value=''>Clear</option>
         </Select>
-        <Input onChange={(e) => handleChange(e.target.value)} w={"30%"} backgroundColor={"white"} placeholder={placeHolder} fontWeight={"bold"} border={"2px solid black"} />
+        <VStack w={"40%"}>
+          <HStack w={"100%"}>
+            <Input value={val} onChange={(e) => handleChange(e.target.value)} w={"100%"} backgroundColor={"white"} placeholder={placeHolder} fontWeight={"bold"} border={"2px solid black"} marginTop={data.length ? "10px" : "0px"} />
+            {
+              data.length ?
+                <Button style={{
+                  position: "relative",
+                  right: "45px",
+                  top: "5px"
+                }} variant={"unstyled"} zIndex={"1000"}><GrClose size={"20px"} onClick={() => handleCancel()} /></Button> :
+                <Button style={{
+                  position: "relative",
+                  right: "45px",
+                }} variant={"unstyled"} zIndex={"1000"}><GoSearch size={"20px"} /></Button>
+            }
+          </HStack>
+          {
+            data.length ?
+              <Box style={{
+                position: "fixed",
+                top: "50px",
+              }} zIndex={"1000"} h={"300px"} w={"39%"} p={"10px"} backgroundColor={"white"} border={"1px solid black"} overflow={"auto"}>
+                {
+                  data.map((elem) => {
+                    return <Box m={"5px"} onClick={() => handleSingleProduct(elem._id)} borderRadius={"5px"} p={"10px"} h={"100px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
+                      <HStack h={"100%"}>
+                        <Image h={"70%"} src={"/bagImage.jpg"} marginRight={"15px"}></Image>
+                        <VStack alignItems={"flex-start"} >
+                          <Text overflow={"auto"} textAlign={"left"}>Title :- {elem.title}</Text>
+                          <Text>Category :- {elem.sub_category}</Text>
+                        </VStack>
+                      </HStack>
+                    </Box>
+                  })
+                }
+              </Box> : ""
+          }
+        </VStack>
         <Spacer />
         <HStack>
           <Link to="/cart"><BsCartCheck size={"30px"} /></Link>

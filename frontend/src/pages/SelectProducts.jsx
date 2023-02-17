@@ -55,7 +55,7 @@ const SelectProducts = () => {
                             return (
                                 <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5}>
                                     <Box h={"50px"}>
-                                        <img src={elem.image1} alt={elem.title} style={{ height: "100%" }} />
+                                        <img src={"/bagImage.jpg"} alt={elem.title} style={{ height: "100%" }} />
                                     </Box>
                                     <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
                                     <Text textDecoration="line-through">Value :- {elem.strike}</Text>
