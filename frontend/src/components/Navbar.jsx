@@ -96,7 +96,7 @@ const Navbar = () => {
           <Image src={"/BharatCart2.png"} alt={"BharatCart.png"} h={"50px"} border={"2px solid black"} />
         </Link>
         <Spacer />
-        <Select placeholder='All categories' border={"2px solid black"} w={"10%"} onChange={(e) => handleFilter(e.target.value)}>
+        <Select placeholder='All categories' border={"2px solid black"} _hover={{cursor:"pointer"}} w={"10%"} onChange={(e) => handleFilter(e.target.value)}>
           {
             ["clothing", "Educational", "Footwear", "Gadgets", "Electronics"].map((elem, i) => {
               return <option key={elem + i} value={elem}>{elem}</option>
