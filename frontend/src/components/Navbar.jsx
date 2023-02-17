@@ -56,7 +56,7 @@ const Navbar = () => {
           setData(res);
           setLoading(false);
         });
-      }, 1500);
+      }, 1000);
     } else {
       setData([]);
       setLoading(false)

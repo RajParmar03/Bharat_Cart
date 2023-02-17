@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
 import { GoSearch } from 'react-icons/go';
+import { GrClose } from 'react-icons/gr';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
@@ -44,7 +45,7 @@ const SelectProducts = () => {
                 }).catch((error) => {
                     dispatch(startError);
                 });
-            }, 1500);
+            }, 1000);
         } else {
             setData([]);
             dispatch(stopLoading());
@@ -57,6 +58,11 @@ const SelectProducts = () => {
         setVal(value);
     };
 
+    const handleCancel = () => {
+        setVal("");
+        setData([]);
+    }
+
 
     return (
         <>
@@ -64,7 +70,7 @@ const SelectProducts = () => {
 
 
             <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
-                <Input onChange={(e) => handleChange(e.target.value)} w={"80%"} variant='filled' size='lg' placeholder='Search product here...'></Input>
+                <Input onChange={(e) => handleChange(e.target.value)} value={val} w={"80%"} variant='filled' size='lg' placeholder='Search product here...'></Input>
                 {
                     store.isLoading ?
                         <Spinner size='sm' style={{
@@ -72,10 +78,24 @@ const SelectProducts = () => {
                             right: "100px",
                         }} />
                         :
-                        <Button style={{
-                            position: "relative",
-                            right: "100px",
-                        }} variant={"unstyled"}><GoSearch size={"20px"} /></Button>
+                        <>
+                            {
+                                data.length ?
+                                    <Button style={{
+                                        position: "relative",
+                                        right: "100px",
+
+                                    }} variant={"unstyled"} zIndex={"1000"}><GrClose size={"20px"} onClick={() => handleCancel()} /></Button> :
+                                    <Button style={{
+                                        position: "relative",
+                                        right: "100px",
+                                    }} variant={"unstyled"} zIndex={"1000"}><GoSearch size={"20px"} /></Button>
+                            }
+                        </>
+                    // <Button style={{
+                    //     position: "relative",
+                    //     right: "100px",
+                    // }} variant={"unstyled"}><GoSearch size={"20px"} /></Button>
                 }
             </Flex>
             <Divider />
