@@ -1,15 +1,62 @@
 import { Box, Button, Divider, Flex, Heading, HStack, Image, Input, Select, Spacer } from '@chakra-ui/react';
-import React from 'react'
+import React, { useRef } from 'react'
 import { Link } from 'react-router-dom';
 import { AiFillHome } from "react-icons/ai";
 import { GrLogin } from "react-icons/gr";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BsBookmarkHeart, BsCartCheck } from "react-icons/bs";
 import { GoSearch } from "react-icons/go";
-import {AiOutlineHeart} from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+
+const getData = async (mainCategory , search) => {
+  let data = await axios.get(`${baseUrl}/product?main_category=${mainCategory}&search=${search}`);
+  // console.log(data);
+  return data.data;
+}
 
 
 const Navbar = () => {
+  const [placeHolder, setPlaceHolder] = useState("Search BharatCart.in");
+  const [mainCategory, setMainCategory] = useState("");
+  const [val, setVal] = useState("");
+  const [data, setData] = useState([]);
+  const ID = useRef(null);
+
+
+
+  const handleFilter = (value) => {
+    setPlaceHolder(`Search for ${value || "BharatCart.in"}`);
+    setMainCategory(value);
+    // getFilterData(value,).then((res) => {
+    //   setData(res.data);
+    //   setLength(res.data.length);
+    // });
+  }
+
+
+  const handleChange = (value) => {
+    setVal(value);
+    if (ID.current) {
+      clearTimeout(ID.current);
+    }
+    if (val) {
+      ID.current = setTimeout(() => {
+        getData(mainCategory,val).then((res) => {
+          setData(res);
+        });
+      }, 1500);
+    }
+  };
+
+  console.log(data);
+
+
   return (
     <Box backgroundColor={"orange.300"} style={{
       position: "fixed",
@@ -23,13 +70,15 @@ const Navbar = () => {
           <Image src={"/BharatCart2.png"} alt={"BharatCart.png"} h={"50px"} border={"2px solid black"} />
         </Link>
         <Spacer />
-        <Select placeholder='All categories' border={"2px solid black"} w={"10%"}>
-          <option value="LTH">Low to High</option>
-          <option value="HTL">High to Low</option>
-          <option value="">Clear</option>
+        <Select placeholder='All categories' border={"2px solid black"} w={"10%"} onChange={(e) => handleFilter(e.target.value)}>
+          {
+            ["clothing", "Educational", "Footwear", "Gadgets", "Electronics"].map((elem, i) => {
+              return <option key={elem + i} value={elem}>{elem}</option>
+            })
+          }
+          <option value=''>Clear</option>
         </Select>
-        <Input w={"30%"} backgroundColor={"white"} placeholder={"Search BharatCart.in"} fontWeight={"bold"} border={"2px solid black"} />
-        <Button colorScheme={"black"} border={"2px"} variant={"outline"}><GoSearch size={"25px"} /></Button>
+        <Input onChange={(e) => handleChange(e.target.value)} w={"30%"} backgroundColor={"white"} placeholder={placeHolder} fontWeight={"bold"} border={"2px solid black"} />
         <Spacer />
         <HStack>
           <Link to="/cart"><BsCartCheck size={"30px"} /></Link>
