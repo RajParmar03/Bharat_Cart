@@ -38,6 +38,15 @@ const getUser = async (token) => {
     return user.data;
 }
 
+const markAsDefaultAddress = async(id,token) => {
+    let response = await axios.patch(`${baseUrl}/addresslist/markdefault`, {id}, {
+        headers: {
+            Authorization: token,
+        }
+    });
+    return response.data;
+}
+
 
 const Checkout = () => {
 
@@ -114,8 +123,14 @@ const Checkout = () => {
         }
     }
 
-    const handleFinalCheckout = () => {
-        navigate(`/billing`);
+    const handleFinalCheckout = (id) => {
+        const token = localStorage.getItem("token");
+        markAsDefaultAddress(id,token).then((res) => {
+            alert(res.message);
+            navigate(`/billing`);
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
 
@@ -216,7 +231,7 @@ const Checkout = () => {
                                                                 <Text>{elem.state}{", "}{elem.country}{", "}{elem.pincode}</Text>
                                                                 <Text>phone no : {user.phone}</Text>
                                                             </VStack>
-                                                            <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline' onClick={() => handleFinalCheckout()}>Use this address</Button>
+                                                            <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline' onClick={() => handleFinalCheckout(elem._id)}>Use this address</Button>
                                                         </HStack>
                                                         <Divider />
                                                     </Box>
