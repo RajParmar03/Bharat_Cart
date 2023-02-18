@@ -171,9 +171,6 @@ const Products = () => {
     });
   }
 
-  console.log("this is currentItem", currentItem);
-  console.log("this is loading", loading);
-
   const handleRemoveWishlist = (id) => {
     setCurrentItem(id);
     setLoading(true);

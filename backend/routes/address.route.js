@@ -50,5 +50,26 @@ addressRouter.post("/add" , async (req , res) => {
     } 
 });
 
+addressRouter.patch("/markdefault" , async(req ,res) => {
+    let token = req.headers.authorization;
+    const decoded = jwt.verify(token, key);
+    const email = decoded.email;
+    try {
+        const users = await UserModel.find({email : email});
+        let user = users[0];
+        let addressList = user.addressList;
+        addressList.map( async(elem) => {
+            if(elem == req.body.id){
+                await AddressModel.findByIdAndUpdate({_id : elem},{isDefault : true});
+            }else{
+                await AddressModel.findByIdAndUpdate({_id : elem},{isDefault : false});
+            }
+        });
+        res.send({message : "marked this as current address successfully."});
+    } catch (error) {
+        res.send({message : "error occured during marking the address."});
+    } 
+});
+
 
 module.exports = addressRouter;
