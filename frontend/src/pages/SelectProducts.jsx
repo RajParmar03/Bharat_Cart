@@ -22,6 +22,7 @@ const SelectProducts = () => {
     const [val, setVal] = useState("");
     const [data, setData] = useState([]);
     const ID = useRef(null);
+    const searchRef = useRef(null);
 
     const store = useSelector(store => store);
     const dispatch = useDispatch();
@@ -31,6 +32,10 @@ const SelectProducts = () => {
     const handleCategory = (category) => {
         navigate(`/products/${category}`);
     }
+
+    useEffect(() => {
+        searchRef.current.focus();
+      },[]);
 
     useEffect(() => {
         if (ID.current) {
@@ -70,7 +75,7 @@ const SelectProducts = () => {
 
 
             <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
-                <Input onChange={(e) => handleChange(e.target.value)} value={val} w={"80%"} variant='filled' size='lg' placeholder='Search product here...'></Input>
+                <Input onChange={(e) => handleChange(e.target.value)} value={val} w={"80%"} variant='filled' size='lg' placeholder='Search product here...' ref={searchRef}></Input>
                 {
                     store.isLoading ?
                         <Spinner size='sm' style={{

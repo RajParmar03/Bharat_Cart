@@ -1,13 +1,21 @@
-import React, { useRef } from 'react';
-import { Box, Divider, Flex, FormLabel, Heading, Input, Select } from '@chakra-ui/react';
+import React, { useEffect, useRef } from 'react';
+import { Box, Button, Divider, Flex, FormLabel, Heading, Input, Select } from '@chakra-ui/react';
 import axios from 'axios';
 import image from "../userImage.png";
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { startLoading, stopLoading, startError } from "../Redux/stateManager/stateManager.action";
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
 
 
 const Signup = () => {
+
+  const navigate = useNavigate();
+
+  const store = useSelector(store => store);
+  const dispatch = useDispatch();
 
   const roleInput = useRef(null);
   const nameInput = useRef(null);
@@ -18,26 +26,40 @@ const Signup = () => {
   const mobileInput = useRef(null);
   const imageInput = useRef(null);
 
+  useEffect(() => {
+    nameInput.current.focus();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(startLoading());
     if (passwordInput.current.value === confirmPasswordInput.current.value) {
-      if(nameInput.current.value && userNameInput.current.value && emailInput.current.value && mobileInput.current.value && passwordInput.current.value){
+      if (nameInput.current.value && userNameInput.current.value && emailInput.current.value && mobileInput.current.value && passwordInput.current.value) {
         const userObject = {
-          image : imageInput.current.value || image,
+          image: imageInput.current.value || image,
           name: nameInput.current.value,
           username: userNameInput.current.value,
           email: emailInput.current.value,
           phone: mobileInput.current.value,
           password: passwordInput.current.value,
-          role : roleInput.current.value || "buyer"
+          role: roleInput.current.value || "buyer"
         };
-        let ans = await axios.post(`${baseUrl}/user/signup`, userObject);
-        alert(ans.data.message);
-      }else{
+        try {
+          let ans = await axios.post(`${baseUrl}/user/signup`, userObject);
+          alert(ans.data.message);
+          dispatch(stopLoading());
+          navigate("/login");
+        } catch (error) {
+          alert(error.message);
+          dispatch(startError());
+        }
+      } else {
         alert("please enter all the filled...");
+        dispatch(stopLoading());
       }
     } else {
       alert("Enter the password properly...");
+      dispatch(stopLoading());
     }
 
   }
@@ -72,10 +94,18 @@ const Signup = () => {
           <Input type='password' placeholder='Create A Strong Password...' border={"1px"} ref={passwordInput} />
           <FormLabel>Confirm Password</FormLabel>
           <Input type='password' placeholder='Enter The Same Password Again... ' border={"1px"} ref={confirmPasswordInput} />
-          <Input m={"20px auto auto auto"} type="submit" value="Sign-Up" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} />
+          {
+            store.isLoading?
+
+            <Button m={"20px auto auto auto"} border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} isLoading={true} loadingText={"Signing-up"} spinnerPlacement={"end"}>Sign-Up</Button>
+            :
+            <Input m={"20px auto auto auto"} type="submit" value="Sign-Up" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} />
+          }
         </form>
       </Box>
+      <Flex w={"27%"} m={"30px auto auto auto"} fontSize={"18px"} justifyContent={"space-around"}>Already Have An Account? <Box onClick={() => navigate("/login")} _hover={{ cursor: "pointer", textDecoration: "underline" }} color={"blue.500"}>Log-in</Box>From Here..</Flex>
     </Box>
+
   )
 }
 
