@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
-import { Box, Button, FormLabel, Heading, Input } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, Heading, Input, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading, startError } from "../Redux/stateManager/stateManager.action";
+import { useEffect } from 'react';
 
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -21,6 +22,10 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    emailInput.current.focus();
+  },[]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,7 +51,6 @@ const Login = () => {
     }
   }
 
-
   return (
     <Box m={"130px auto 30px auto"}>
     <Heading as={"h1"} size={"2xl"} color="orange">Login</Heading>
@@ -64,6 +68,7 @@ const Login = () => {
         }
       </form>
     </Box>
+    <Flex w={"24%"} m={"30px auto auto auto"} fontSize={"18px"} justifyContent={"space-around"}>Don't Have An Account? <Box onClick={() => navigate("/signup")} _hover={{cursor:"pointer",textDecoration:"underline"}} color={"blue.500"}>Sign-Up</Box> Here..</Flex>
     </Box>
   )
 }
