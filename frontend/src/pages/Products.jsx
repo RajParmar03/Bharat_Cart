@@ -94,6 +94,8 @@ const Products = () => {
   const [currentSubCategory, setCurrentSubCategory] = useState("");
   const [currentSort, setCurrentSort] = useState("");
   const [wishList, setWishList] = useState([]);
+  const [currentItem, setCurrentItem] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -153,34 +155,39 @@ const Products = () => {
   }
 
   const handleAddToWishList = (id) => {
-    dispatch(startLoading());
+    setCurrentItem(id);
+    setLoading(true);
     let token = localStorage.getItem("token");
     addToWishList(id, token).then((res) => {
       alert(res.message);
       getWishList(token).then((res) => {
         setWishList(res);
-        dispatch(stopLoading());
+        setLoading(false);
       }).catch((error) => {
-        dispatch(startError());
+        setLoading(false);
       });
     }).catch((error) => {
-      dispatch(startError());
+      setLoading(false);
     });
   }
 
+  console.log("this is currentItem", currentItem);
+  console.log("this is loading", loading);
+
   const handleRemoveWishlist = (id) => {
-    dispatch(startLoading());
+    setCurrentItem(id);
+    setLoading(true);
     let token = localStorage.getItem("token");
     removeItem(id, token).then((res) => {
       alert(res.message);
       getWishList(token).then((res) => {
         setWishList(res);
-        dispatch(stopLoading());
+        setLoading(false);
       }).catch((error) => {
-        dispatch(startError());
+        setLoading(false);
       });
     }).catch((error) => {
-      dispatch(startError());
+      setLoading(false);
     });
   }
 
@@ -222,15 +229,36 @@ const Products = () => {
                 let isAdded = wishList.includes(elem._id);
                 return (
                   <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3}>
-                    <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
-                        return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
-                      }
-                      }>
-                      {
-                        isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
-                      }
-                    </Box>
-                    <VStack _hover={{cursor:"pointer"}} onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
+                    {
+                      currentItem == elem._id ?
+                        <>
+                          {
+                            loading ?
+                              <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }}>
+                                <Spinner size='md' zIndex={1000} />
+                              </Box>
+                              :
+                              <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
+                                return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
+                              }
+                              }>
+                                {
+                                  isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
+                                }
+                              </Box>
+                          }
+                        </>
+                        :
+                        <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
+                          return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
+                        }
+                        }>
+                          {
+                            isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
+                          }
+                        </Box>
+                    }
+                    <VStack _hover={{ cursor: "pointer" }} onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
                       <Box h={"50%"}>
                         <img src={image} alt={elem.title} style={{ height: "100%" }} />
                       </Box>

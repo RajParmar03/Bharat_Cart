@@ -46,7 +46,6 @@ cartRouter.post("/add" , async(req ,res) => {
     let token = req.headers.authorization;
     let decoded = jwt.verify(token, key);
     let email = decoded.email;
-    console.log(req.body);
     try {
         let users = await UserModel.find({email});
         let user = users[0];
