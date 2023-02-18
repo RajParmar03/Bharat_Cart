@@ -8,6 +8,7 @@ const productRouter = require("./routes/product.route"); // importing productRou
 const cartRouter = require("./routes/cart.route");
 const wishlistRouter = require("./routes/wishlist.route");
 const addressRouter = require("./routes/address.route");
+const orderlistRouter = require("./routes/orderlist.route");
 
 const app = express(); // creating the application using express
 const port = process.env.PORT; // importing the value of the port from the .env
@@ -33,6 +34,7 @@ app.use("/wishlist" , wishlistRouter);
 
 app.use("/addresslist" , addressRouter);
 
+app.use("/orderlist" , orderlistRouter);
 
 // this is for creating the server.
 app.listen(port , async () => {

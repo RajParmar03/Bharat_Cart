@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Heading, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,12 +39,23 @@ const getUser = async (token) => {
   return user.data;
 }
 
+const getCartList = async (token) => {
+  let cartItems = await axios.get(`${baseUrl}/cart/get`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return cartItems.data;
+};
+
 const Payment = () => {
 
   const [state, setState] = useState(initialState);
   const [currentFocusedElm, setCurrentFocusedElm] = useState(null);
   const [address, setAddress] = useState({});
   const [user, setUser] = useState({});
+  const [cartList, setCartList] = useState([]);
+  const [amount, setAmount] = useState(0);
 
 
 
@@ -77,6 +88,24 @@ const Payment = () => {
       dispatch(startError());
     });
   }, []);
+
+  useEffect(() => {
+    dispatch(startLoading());
+    let token = localStorage.getItem("token");
+    getCartList(token).then((res) => {
+      setCartList(res);
+      dispatch(stopLoading());
+    }).catch((error) => {
+      dispatch(startError());
+    });
+  }, []);
+
+  useEffect(() => {
+    let total = cartList.reduce((acc, elem) => {
+      return acc + elem.price * elem.quantity;
+    }, 0);
+    setAmount(total);
+  }, [cartList]);
 
   const updateStateValues = useCallback(
     (keyName, value) => {
@@ -131,13 +160,21 @@ const Payment = () => {
           </Box>
           :
           <Box h={"400px"} w={"600px"} p={"5px 10px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
-            <VStack alignItems={"left"}>
+            <VStack alignItems={"left"} marginBottom={"10px"}>
+              <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Delivery Address :-</Heading>
               <Text>Name : {user.name}</Text>
               <Text>address : {address.houseNo}{", "}{address.street}{", "}{address.city}</Text>
               <Text>{address.state}{", "}{address.country}{", "}{address.pincode}</Text>
               <Text>phone no : {user.phone}</Text>
             </VStack>
-            <Divider />
+            <hr />
+            <Box marginTop={"10px"}>
+              <VStack w={"100%"} h={"100%"}>
+                <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
+                <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
+                <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
+              </VStack>
+            </Box>
           </Box>
       }
       <Box className="wrapper" >

@@ -1,6 +1,10 @@
 import { Button } from '@chakra-ui/react';
-import React, {useState } from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+
+let baseUrl = process.env.REACT_APP_BASEURL;
+
 
 const currentYear = new Date().getFullYear();
 const monthsArr = Array.from({ length: 12 }, (x, i) => {
@@ -8,6 +12,17 @@ const monthsArr = Array.from({ length: 12 }, (x, i) => {
     return month <= 9 ? '0' + month : month;
 });
 const yearsArr = Array.from({ length: 9 }, (_x, i) => currentYear + i);
+
+
+const addToOrderList = async (token) => {
+    let response = await axios.patch(`${baseUrl}/orderlist/add`, {}, {
+        headers: {
+            Authorization: token,
+        }
+    });
+
+    return response.data;
+}
 
 export default function CForm({
     cardMonth,
@@ -30,7 +45,7 @@ export default function CForm({
         onUpdateState(name, value);
     };
 
- 
+
     const onCardNumberChange = (event) => {
         let { value, name } = event.target;
         let cardNumber = value;
@@ -63,6 +78,22 @@ export default function CForm({
     const onCvvBlur = (event) => {
         onUpdateState('isCardFlipped', false);
     };
+
+    const handlePayment = () => {
+        if (cardHolderRef.current.value && cardHolderRef.current.value && cardDateRef.current.value) {
+            let token = localStorage.getItem("token");
+            addToOrderList(token).then((res) => {
+                alert(res.message);
+                alert("Order Confirmed");
+                navigate("/orderconfirmation");
+            }).catch((error) => {
+                console.log(error);
+            });
+        } else {
+            alert("please provide all the data...");
+        }
+
+    }
 
     return (
         <div className="card-form">
@@ -176,8 +207,8 @@ export default function CForm({
                     </div>
                 </div>
                 {/* <Button bg="rgb(0,181,181)" color="white" w="100%" colorScheme=>Submit</Button> */}
-                <Button width={"100%"} style={{ margin: "1rem 0" }} size='lg' colorScheme={"whatsapp"} onClick={() => { navigate("/orderconfirmation"); alert("Order Confirmed")}}>Payment</Button>
-                
+                <Button width={"100%"} style={{ margin: "1rem 0" }} size='lg' colorScheme={"whatsapp"} onClick={() => handlePayment()}>Payment</Button>
+
             </div>
         </div>
     );
