@@ -64,17 +64,20 @@ userRouter.post("/login" , async (req , res) => {
     
     try {
         const user = await UserModel.find({email});
-        
         const token = jwt.sign({ email : email}, key);
-        bcrypt.compare(password, user[0].password , (err, result) => {
-            if(err){
-                res.status(400).send("error in the bcrypt try part and error is :- " , err);
-            }else if(result){
-                res.status(200).send({message : "You have successfully logged in...",token : token});
-            }else{
-                res.status(400).send("wrong credentials, please try again with right one...");
-            }
-        });
+        if(user.length > 0){
+            bcrypt.compare(password, user[0].password , (err, result) => {
+                if(err){
+                    res.status(400).send("error in the bcrypt try part and error is :- " , err);
+                }else if(result){
+                    res.status(200).send({message : "You have successfully logged in...",token : token});
+                }else{
+                    res.status(400).send({message : "wrong credentials, please try again with right one..."});
+                }
+            });
+        }else{
+            res.status(400).send({message : "wrong credentials, please try again with right one..."});
+        }
     } catch (error) {
         res.status(400).send("error in the bcrypt catch part and error is :- " , error);
     }
