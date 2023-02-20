@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -16,14 +18,37 @@ const getCartList = async (token) => {
   return cartItems.data;
 };
 
+const getUser = async (token) => {
+  let user = await axios.get(`${baseUrl}/user/getuser`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return user.data;
+}
+
+const getAddressOfUser = async (token) => {
+  let addressList = await axios.get(`${baseUrl}/addresslist/getAddress`, {
+    headers: {
+      Authorization: token,
+    }
+  });
+  return addressList.data;
+}
+
 const Billing = () => {
 
 
   const [cartList, setCartList] = useState([]);
   const [amount, setAmount] = useState(0);
   const [ptype, setPtype] = useState("credit");
+  const [address, setAddress] = useState({});
+  const [user, setUser] = useState({});
 
   const navigate = useNavigate();
+
+  const store = useSelector(store => store);
+  const dispatch = useDispatch();
 
 
 
@@ -49,6 +74,32 @@ const Billing = () => {
       navigate("/payment/12");
     }
   }
+
+  useEffect(() => {
+    dispatch(startLoading());
+    getUser(localStorage.getItem("token")).then((res) => {
+      setUser(res);
+      dispatch(stopLoading());
+    }).catch((error) => {
+      dispatch(startError());
+    });
+  }, []);
+
+  useEffect(() => {
+    dispatch(startLoading());
+    let token = localStorage.getItem("token");
+    getAddressOfUser(token).then((res) => {
+      res.map((elem) => {
+        if (elem.isDefault) {
+          setAddress(elem);
+        }
+      });
+      dispatch(stopLoading());
+    }).catch((error) => {
+      dispatch(startError());
+    });
+  }, []);
+
 
 
 
@@ -78,13 +129,30 @@ const Billing = () => {
           </Box>
           <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={() => handlePayment()}>Use this payment method</Button>
         </VStack>
-        <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"40%"} h={"300px"} paddingTop={"30px"} >
+        {/* <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"40%"} h={"300px"} paddingTop={"30px"} >
           <VStack w={"100%"} h={"100%"}>
             <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
             <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
             <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
           </VStack>
-        </Box>
+        </Box> */}
+        <Box h={"400px"} w={"600px"} p={"5px 10px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
+            <VStack alignItems={"left"} marginBottom={"10px"}>
+              <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Delivery Address :-</Heading>
+              <Text>Name : {user.name}</Text>
+              <Text>address : {address.houseNo}{", "}{address.street}{", "}{address.city}</Text>
+              <Text>{address.state}{", "}{address.country}{", "}{address.pincode}</Text>
+              <Text>phone no : {user.phone}</Text>
+            </VStack>
+            <hr />
+            <Box marginTop={"10px"}>
+              <VStack w={"100%"} h={"100%"}>
+                <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
+                <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
+                <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
+              </VStack>
+            </Box>
+          </Box>
       </HStack>
     </Box>
   )
