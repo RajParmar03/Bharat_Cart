@@ -15,6 +15,7 @@ import Checkout from '../pages/Checkout';
 import Payment from '../pages/Payment';
 import Billing from '../pages/Billing';
 import { OrderConfirmation } from '../pages/OrderConfirmation';
+import OrderList from '../pages/OrderList';
 
 
 const AllRoutes = () => {
@@ -34,6 +35,7 @@ const AllRoutes = () => {
             <Route path="/checkout" element={<Checkout />}></Route>
             <Route path="/payment/:id" element={<Payment />}></Route>
             <Route path="/billing" element={<Billing />}></Route>
+            <Route path="/orderlist" element={<OrderList />}></Route>
             <Route path="/orderconfirmation" element={<OrderConfirmation />}></Route>
         </Routes>
     </Box>

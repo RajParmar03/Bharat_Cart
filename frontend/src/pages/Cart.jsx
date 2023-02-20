@@ -135,7 +135,7 @@ const Cart = () => {
 
   return (
     <Box m={"130px auto 30px auto"}>
-      <Heading textAlign={"left"} m={"auto auto 30px auto"}>Cart List</Heading>
+      <Heading textAlign={"left"} m={"auto auto 30px 30px"}>Cart List</Heading>
       <Flex>
         {
           store.isLoading ?
