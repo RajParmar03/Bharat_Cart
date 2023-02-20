@@ -46,6 +46,7 @@ const SingleProduct = () => {
             dispatch(startError());
         });
     }, [params.id]);
+    console.log(product);
 
     const handleAddToCart = (product) => {
         setLoading(true);
