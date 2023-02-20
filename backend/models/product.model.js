@@ -10,7 +10,11 @@ const productSchema = mongoose.Schema({
     price : Number,
     strike : Number,
     stocks : Number,
-    discount : String
+    discount : String,
+    review : {
+        type : Array,
+        default : []
+    }
 });
 
 // creating the product model using product schema.

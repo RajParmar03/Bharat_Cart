@@ -87,6 +87,19 @@ productRouter.get("/:id", async (req,res) => {
     }
 });
 
+productRouter.post("/addreview/:id", async(req ,res) => {
+    let id = req.params.id;
+    try {
+        let product = await ProductModel.findById({_id : id});
+        let review = product.review;
+        let newReview = [...review , req.body];
+        await ProductModel.findByIdAndUpdate({_id : id} , {review : newReview});
+        res.status(200).send({message : "added your review and rating successfully"});
+    } catch (error) {
+        res.status(400).send({message:error});
+    }
+});
+
 
 
 
