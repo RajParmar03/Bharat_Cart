@@ -87,6 +87,8 @@ const OrderList = () => {
 
             let reviewObj = {
                 userId: user._id,
+                userName : user.name,
+                userImage : user.image,
                 rating: ratingRef.current.value,
                 headline: headLineRef.current.value,
                 review: reviewRef.current.value
