@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Heading, Image, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Heading, HStack, Image, Spinner, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import image from "../bagImage.jpg";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
+
+import { FaRegUserCircle } from "react-icons/fa";
+import Star from './Star';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -31,6 +34,7 @@ const SingleProduct = () => {
 
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
+    const [rating , setRating] = useState(2.5);
 
     const store = useSelector(store => store);
     const dispatch = useDispatch();
@@ -46,7 +50,21 @@ const SingleProduct = () => {
             dispatch(startError());
         });
     }, [params.id]);
-    console.log(product);
+
+    useEffect(() => {
+        if(product.review){
+            let numberOfReviews = product.review.length;
+            if(numberOfReviews > 0){
+                let newRating = product.review.reduce((acc , elem) => {
+                    console.log("this is elem.rating" , elem.rating);
+                    return acc + Number(elem.rating);
+                } , 0);
+                console.log("this is newRating" , newRating);
+                setRating(newRating/numberOfReviews);
+            }
+        }
+    }, [product]);
+    console.log(rating);
 
     const handleAddToCart = (product) => {
         setLoading(true);
@@ -83,30 +101,62 @@ const SingleProduct = () => {
                         />
                     </Box>
                     :
-                    <Flex boxShadow="rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px" alignItems={"center"} w={"80%"} h={"600px"} m={"130px auto 30px auto"} p={"20px"}>
+                    <>
+                        <Flex boxShadow="rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px" alignItems={"center"} w={"80%"} h={"600px"} m={"130px auto 30px auto"} p={"20px"}>
 
-                        <Box justifyContent={""} borderRight={"1px solid gray"} w={"50%"} h={"100%"}>
-                            <Image src={image} alt={product.image1} w={"80%"} m={"auto auto 20px auto"} />
-                            {/* <Heading as={"h3"} size={"md"} m={"auto auto 20px auto"} fontWeight={"bold"}>Main Category : {product.main_category}</Heading> */}
-                            {/* <Heading as={"h3"} size={"md"} m={"auto auto 20px auto"} fontWeight={"bold"}>Sub Category : {product.sub_category}</Heading> */}
+                            <Box justifyContent={""} borderRight={"1px solid gray"} w={"50%"} h={"100%"}>
+                                <Image src={image} alt={product.image1} w={"80%"} m={"auto auto 20px auto"} />
+                                {/* <Heading as={"h3"} size={"md"} m={"auto auto 20px auto"} fontWeight={"bold"}>Main Category : {product.main_category}</Heading> */}
+                                {/* <Heading as={"h3"} size={"md"} m={"auto auto 20px auto"} fontWeight={"bold"}>Sub Category : {product.sub_category}</Heading> */}
 
+                            </Box>
+                            <VStack justifyContent={"space-around"} h={"80%"} w={"50%"} p={"10px"}>
+                                <Heading as={"h1"} size={"xl"}>Title : {product.title}</Heading>
+                                <HStack>
+                                <Star stars={rating} size="30px"/>
+                                <Text>( {product.review?product.review.length:0} customer reviews)</Text>
+                                </HStack>
+                                <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Real Price : {product.strike}</Heading>
+                                <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Discount : {product.discount}</Heading>
+                                <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Current Price : {product.price}</Heading>
+                                <Button onClick={() => handleAddToCart(product)} isLoading={loading} loadingText='Adding' spinnerPlacement='end' fontSize={"20px"} fontWeight={"bold"} color={"orange"} p={"20px"} variant='outline' border={"5px solid orange"}>Add to Cart</Button>
+                            </VStack>
+
+                        </Flex>
+                        <Heading textAlign={"left"} marginBottom={"20px"} marginLeft={"20px"}>Reviews of this product.</Heading>
+                        <Box textAlign={"left"}>
+                            {
+                                product.review ?
+                                    <>
+                                        {
+                                            product.review.map((elem,i) => {
+                                                return (
+                                                        <Box key={elem.userId+elem.headline+i} border={"1px solid gray"} borderRadius={"5px"} width={"50%"} marginBottom={"10px"} marginLeft={"20px"} padding={"5px"}>
+                                                            <HStack h={"30px"}>
+                                                                {
+                                                                    elem.userImage?
+                                                                    <Image src={elem.userImage} alt={elem.userName} h={"100%"} border={"1px solid gray"} borderRadius={"100px"}/>
+                                                                    :
+                                                                    <FaRegUserCircle size={"22px"}/>
+                                                                }
+                                                                <Text fontSize={"18px"}>{elem.userName}</Text>
+                                                            </HStack>
+                                                            <HStack>
+                                                                <Star stars={elem.rating} size="18px" />
+                                                                <Text fontWeight={"bold"}>{elem.headline}</Text>
+                                                            </HStack>
+                                                            <Text>{elem.review}</Text>
+                                                        </Box>
+                                                )
+                                            })
+                                        }
+                                    </>
+                                    :
+                                    <>
+                                    </>
+                            }
                         </Box>
-                        <VStack justifyContent={"space-around"} h={"80%"} w={"50%"} p={"10px"}>
-                            <Heading as={"h1"} size={"xl"}>Title : {product.title}</Heading>
-                            <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Real Price : {product.strike}</Heading>
-                            <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Discount : {product.discount}</Heading>
-                            <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Current Price : {product.price}</Heading>
-                            <Button onClick={() => handleAddToCart(product)} isLoading={loading} loadingText='Adding' spinnerPlacement='end' fontSize={"20px"} fontWeight={"bold"} color={"orange"} p={"20px"} variant='outline' border={"5px solid orange"}>Add to Cart</Button>
-                            {/* <Button
-                                isLoading = {loading}
-                                loadingText='Adding'
-                                colorScheme='teal'
-                                variant='outline'
-                                spinnerPlacement='end'
-                            >Add to Cart</Button> */}
-                        </VStack>
-
-                    </Flex>
+                    </>
             }
         </>
     )
