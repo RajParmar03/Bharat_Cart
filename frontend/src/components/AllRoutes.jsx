@@ -16,6 +16,7 @@ import Payment from '../pages/Payment';
 import Billing from '../pages/Billing';
 import { OrderConfirmation } from '../pages/OrderConfirmation';
 import OrderList from '../pages/OrderList';
+import PrivateRoute from '../pages/PrivateRoute';
 
 
 const AllRoutes = () => {
@@ -25,18 +26,18 @@ const AllRoutes = () => {
             <Route path="/" element={<Home />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
             <Route path="/login" element={<Login />}></Route>
-            <Route path="/selectproducts" element={<SelectProducts />}></Route>
-            <Route path="/products/:category" element={<Products />}></Route>
-            <Route path="/singleproduct/:id" element={<SingleProduct />}></Route>
-            <Route path="/cart" element={<Cart />}></Route>
-            <Route path="/wishlist" element={<Wishlist />}></Route>
-            <Route path="/user" element={<User />}></Route>
+            <Route path="/selectproducts" element={<PrivateRoute><SelectProducts /></PrivateRoute>}></Route>
+            <Route path="/products/:category" element={<PrivateRoute><Products /></PrivateRoute>}></Route>
+            <Route path="/singleproduct/:id" element={<PrivateRoute><SingleProduct /></PrivateRoute>}></Route>
+            <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>}></Route>
+            <Route path="/wishlist" element={<PrivateRoute><Wishlist /></PrivateRoute>}></Route>
+            <Route path="/user" element={<PrivateRoute><User /></PrivateRoute>}></Route>
             <Route path="/about" element={<About />}></Route>
-            <Route path="/checkout" element={<Checkout />}></Route>
-            <Route path="/payment/:id" element={<Payment />}></Route>
-            <Route path="/billing" element={<Billing />}></Route>
-            <Route path="/orderlist" element={<OrderList />}></Route>
-            <Route path="/orderconfirmation" element={<OrderConfirmation />}></Route>
+            <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>}></Route>
+            <Route path="/payment/:id" element={<PrivateRoute><Payment /></PrivateRoute>}></Route>
+            <Route path="/billing" element={<PrivateRoute><Billing /></PrivateRoute>}></Route>
+            <Route path="/orderlist" element={<PrivateRoute><OrderList /></PrivateRoute>}></Route>
+            <Route path="/orderconfirmation" element={<PrivateRoute><OrderConfirmation /></PrivateRoute>}></Route>
         </Routes>
     </Box>
   )
