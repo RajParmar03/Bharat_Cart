@@ -56,15 +56,13 @@ const SingleProduct = () => {
             let numberOfReviews = product.review.length;
             if(numberOfReviews > 0){
                 let newRating = product.review.reduce((acc , elem) => {
-                    console.log("this is elem.rating" , elem.rating);
                     return acc + Number(elem.rating);
                 } , 0);
-                console.log("this is newRating" , newRating);
                 setRating(newRating/numberOfReviews);
             }
         }
     }, [product]);
-    console.log(rating);
+   
 
     const handleAddToCart = (product) => {
         setLoading(true);
