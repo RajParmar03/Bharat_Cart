@@ -16,7 +16,9 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
+
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -38,8 +40,8 @@ const getUser = async (token) => {
     return user.data;
 }
 
-const saveReview = async(id, reviewObj) => {
-    let response = await axios.post(`${baseUrl}/product/addreview/${id}`,reviewObj);
+const saveReview = async (id, reviewObj) => {
+    let response = await axios.post(`${baseUrl}/product/addreview/${id}`, reviewObj);
     return response.data;
 }
 
@@ -47,6 +49,7 @@ const OrderList = () => {
 
     const [orderList, setOrderList] = useState([]);
     const [user, setUser] = useState({});
+    const [rating, setRating] = useState(0);
 
     const navigate = useNavigate();
 
@@ -83,12 +86,12 @@ const OrderList = () => {
     }, []);
 
     const handleSubmit = (id) => {
-        if(reviewRef.current.value && ratingRef.current.value && headLineRef.current.value){
+        if (reviewRef.current.value && ratingRef.current.value && headLineRef.current.value) {
 
             let reviewObj = {
                 userId: user._id,
-                userName : user.name,
-                userImage : user.image,
+                userName: user.name,
+                userImage: user.image,
                 rating: ratingRef.current.value,
                 headline: headLineRef.current.value,
                 review: reviewRef.current.value
@@ -100,10 +103,16 @@ const OrderList = () => {
             }).catch((error) => {
                 console.log(error);
             });
-        }else{
+        } else {
             alert("please fill all the fields..");
         }
     }
+
+    const ratingChanged = (newRating) => {
+         ratingRef.current.value = newRating;
+    };
+
+
 
 
 
@@ -159,8 +168,20 @@ const OrderList = () => {
                                                         </Box>
                                                         <FormControl>
                                                             <FormLabel>Overall rating</FormLabel>
-                                                            <Input ref={ratingRef} placeholder="Overall rating" />
+                                                            <Input ref={ratingRef} placeholder="Overall rating" style={{ position: "absolute", top: "-1000%", opacity: 0 }} zIndex={-1} />
                                                         </FormControl>
+                                                        <Box>
+                                                            <ReactStars
+                                                                count={5}
+                                                                onChange={ratingChanged}
+                                                                size={50}
+                                                                isHalf={true}
+                                                                emptyIcon={<i className="far fa-star"></i>}
+                                                                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                                                fullIcon={<i className="fa fa-star"></i>}
+                                                                activeColor="#ffd700"
+                                                            />
+                                                        </Box>
 
                                                         <FormControl mt={4}>
                                                             <FormLabel>Add a headline</FormLabel>
