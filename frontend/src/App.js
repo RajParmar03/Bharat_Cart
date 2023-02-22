@@ -6,19 +6,42 @@ import AllRoutes from './components/AllRoutes';
 import Footer from './components/Footer';
 import { Divider } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SellerNavbar from './components/SellerNavbar';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { loginState } from './Redux/authManager/authManager.action';
+
+let baseUrl = process.env.REACT_APP_BASEURL;
+
+const getUser = async (token) => {
+  let user = await axios.get(`${baseUrl}/user/getuser`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return user.data;
+}
+
 
 function App() {
-  const userManager = useSelector(store => store.userManager);
+  const dispatch = useDispatch();
 
   const [isSeller , setIsSeller] = useState(false);
 
   useEffect(() => { 
-    setIsSeller(userManager.user.role === "seller"?true:false);
-  },[userManager.user]);
-
-  console.log("this is usermanager" , userManager.user);
+    getUser(localStorage.getItem("token")).then((res) => {
+      if(res.role === "seller"){
+        dispatch(loginState(res));
+        setIsSeller(true);
+      }else{
+        dispatch(loginState(res));
+        setIsSeller(false);
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+  },[]);
 
   return (
     <div className="App">

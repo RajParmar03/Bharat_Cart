@@ -123,6 +123,8 @@ const SelectProducts = () => {
                                     data.map((elem) => {
                                         return (
                                             <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5}>
+                                                <Box onClick={() => navigate(`/singleproduct/${elem._id}`)}>
+
                                                 <Box h={"50px"}>
                                                     <img src={"/bagImage.jpg"} alt={elem.title} style={{ height: "100%" }} />
                                                 </Box>
@@ -133,6 +135,7 @@ const SelectProducts = () => {
                                                 <Text>Discount :- {elem.discount}</Text>
                                                 <Text>Main-Category :- {elem.main_category}</Text>
                                                 <Text>Sub-Category :- {elem.sub_category}</Text>
+                                                </Box>
                                                 <Button>Add to Cart</Button>
                                             </VStack>
                                         )

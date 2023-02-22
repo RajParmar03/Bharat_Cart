@@ -41,6 +41,11 @@ const addToWishList = async (id, token) => {
   return wishListItem.data;
 }
 
+const updateProductstock = async(productId , amount) => {
+  let response = await axios.patch(`${baseUrl}/product/updatestock/${productId}` , {amount});
+  return response.data;
+}
+
 
 const Cart = () => {
 
@@ -81,14 +86,19 @@ const Cart = () => {
     setTotalProducts(numberOfProducts);
   }, [cartList]);
 
-  const handleQuantity = (id, val) => {
+  const handleQuantity = (id,productId,val) => {
     setCurrentItemId(id);
     setUpdateLoading(true);
     updateCartList(id, val).then((res) => {
       alert(res.message);
-      getCartList(localStorage.getItem("token")).then((res) => {
-        setCartList(res);
-        setUpdateLoading(false);
+      updateProductstock(productId , -val).then((res) => {
+        alert(res.message);
+        getCartList(localStorage.getItem("token")).then((res) => {
+          setCartList(res);
+          setUpdateLoading(false);
+        }).catch((error) => {
+          setUpdateLoading(false);
+        });
       }).catch((error) => {
         setUpdateLoading(false);
       });
@@ -110,15 +120,20 @@ const Cart = () => {
     });
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = (id, productId) => {
     setCurrentItemId(id);
     setDeleteLoading(true);
     let token = localStorage.getItem("token");
     deleteCartItem(id, token).then((res) => {
       alert(res.message);
-      getCartList(localStorage.getItem("token")).then((res) => {
-        setCartList(res);
-        setDeleteLoading(false);
+      updateProductstock(productId , 1).then((res) => {
+        alert(res.message);
+        getCartList(localStorage.getItem("token")).then((res) => {
+          setCartList(res);
+          setDeleteLoading(false);
+        }).catch((error) => {
+          setDeleteLoading(false);
+        });
       }).catch((error) => {
         setDeleteLoading(false);
       });
@@ -154,7 +169,7 @@ const Cart = () => {
                 cartList.map((elem) => {
                   return (
                     <Box key={elem.title + elem.price + Math.random()} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5}>
-                      <HStack justifyContent={"space-around"} paddingBottom={"10px"} marginBottom={"20px"} borderBottom={"1px solid gray"}>
+                      <HStack justifyContent={"space-around"} paddingBottom={"10px"} marginBottom={"20px"} borderBottom={"1px solid gray"} onClick={() => navigate(`/singleproduct/${elem.productId}`)}>
                         <Box w={"25%"}>
                           <img src={image} alt={elem.title} style={{ width: "100%" }} />
                         </Box>
@@ -177,9 +192,9 @@ const Cart = () => {
                         }
                         {
                           currentItemId === elem._id ?
-                            <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' isLoading={deleteLoading} loadingText={"Deleting"} spinnerPlacement={"end"} onClick={() => handleDelete(elem._id)}>Delete</Button>
+                            <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' isLoading={deleteLoading} loadingText={"Deleting"} spinnerPlacement={"end"} onClick={() => handleDelete(elem._id, elem.productId)}>Delete</Button>
                             :
-                            <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleDelete(elem._id)}>Delete</Button>
+                            <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleDelete(elem._id, elem.productId)}>Delete</Button>
                         }
                         <HStack justifyContent={"center"} w={"40%"}>
                           <button style={{
@@ -187,7 +202,7 @@ const Cart = () => {
                             border: "2px solid black",
                             fontSize: "20px",
                             fontWeight: "bold"
-                          }} onClick={() => handleQuantity(elem._id, -1)} disabled={elem.quantity === 1}>-</button>
+                          }} onClick={() => handleQuantity(elem._id,elem.productId, -1)} disabled={elem.quantity === 1}>-</button>
                           {
                             currentItemId === elem._id ?
                               <>
@@ -208,7 +223,7 @@ const Cart = () => {
                             border: "2px solid black",
                             fontSize: "20px",
                             fontWeight: "bold"
-                          }} onClick={() => handleQuantity(elem._id, 1)}>+</button>
+                          }} onClick={() => handleQuantity(elem._id,elem.productId,1)}>+</button>
                         </HStack>
                       </HStack>
                     </Box>

@@ -11,6 +11,14 @@ const productSchema = mongoose.Schema({
     strike : Number,
     stocks : Number,
     discount : String,
+    sellerId : {
+        type : String,
+        default : "123456789"
+    },
+    sellerName : {
+        type : String,
+        default : "rjbusiness"
+    },
     review : {
         type : Array,
         default : []
