@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import { Spinner } from '@chakra-ui/react';
+import {useNavigate} from "react-router-dom";
 
 
 
@@ -72,6 +73,8 @@ const Home = () => {
   const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(startLoading());
     getData("clothing").then((res) => {
@@ -122,6 +125,10 @@ const Home = () => {
     });
   }, []);
 
+  const handleCardClick = (id) => {
+    navigate(`/singleproduct/${id}`)
+  }
+
 
   return (
     <>
@@ -143,32 +150,32 @@ const Home = () => {
             </Box>
             <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
             <Box p={"20px"}>
-              <Slider sliderList={clothingArr} />
+              <Slider sliderList={clothingArr} handleCardClick={handleCardClick} />
             </Box>
             <Flex h={"500px"} w={"100%"} m={"20px auto"}>
               <Image src={"/watchPoster.jpg"} alt={"bag"} h={"100%"} w={"70%"} m={"auto"} />
               <Image src={"/watchPoster2.jpg"} alt={"bag"} h={"100%"} w={"30%"} m={"auto"} />
             </Flex>
             <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={educationalArr} />
+            <Slider sliderList={educationalArr} handleCardClick={handleCardClick}/>
             <Flex h={"500px"} w={"100%"} m={"20px auto"}>
               <Image src={"/shoesPoster.jpg"} alt={"bag"} h={"100%"} w={"40%"} m={"auto"} />
               <Image src={"/shoesPoster2.jpg"} alt={"bag"} h={"100%"} w={"60%"} m={"auto"} />
             </Flex>
             <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={electronicsArr} />
+            <Slider sliderList={electronicsArr} handleCardClick={handleCardClick}/>
             <Flex h={"500px"} w={"100%"} m={"20px auto"}>
               <Image src={"/laptopPoster4.jpg"} alt={"bag"} h={"100%"} w={"70%"} m={"auto"} />
               <Image src={"/laptopPoster.jpg"} alt={"bag"} h={"100%"} w={"30%"} m={"auto"} />
             </Flex>
             <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={footwearArr} />
+            <Slider sliderList={footwearArr} handleCardClick={handleCardClick}/>
             <Flex h={"500px"} w={"100%"} m={"20px auto"}>
               <Image src={"/jeansPoster.jpg"} alt={"bag"} h={"100%"} w={"60%"} m={"auto"} />
               <Image src={"/jeansPoster4.jpg"} alt={"bag"} h={"100%"} w={"40%"} m={"auto"} />
             </Flex>
             <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={gadgetArr} />
+            <Slider sliderList={gadgetArr} handleCardClick={handleCardClick}/>
           </Box>
       }
     </>
