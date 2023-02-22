@@ -84,6 +84,35 @@ userRouter.post("/login" , async (req , res) => {
     
 });
 
+userRouter.post("/sellerlogin" , async (req , res) => {
+    const {email , password} = req.body;
+    
+    try {
+        const user = await UserModel.find({email});
+        const token = jwt.sign({ email : email}, key);
+        if(user.length > 0){
+            bcrypt.compare(password, user[0].password , (err, result) => {
+                if(err){
+                    res.status(400).send("error in the bcrypt try part and error is :- " , err);
+                }else if(result){
+                    if(user[0].role === "seller"){
+                        res.status(200).send({message : "You have successfully logged in...",token : token,user : user[0]});
+                    }else{
+                        res.status(400).send({message : "wrong credentials, please try again with right one..."});
+                    }
+                }else{
+                    res.status(400).send({message : "wrong credentials, please try again with right one..."});
+                }
+            });
+        }else{
+            res.status(400).send({message : "wrong credentials, please try again with right one..."});
+        }
+    } catch (error) {
+        res.status(400).send("error in the bcrypt catch part and error is :- " , error);
+    }
+    
+});
+
 
 userRouter.get("/getuser" , async(req,res) => {
     let token = req.headers.authorization;

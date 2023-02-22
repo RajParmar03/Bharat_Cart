@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading, startError } from "../Redux/stateManager/stateManager.action";
 import {useNavigate} from "react-router"
 import { logoutState } from '../Redux/authManager/authManager.action';
+import { removeUserState } from '../Redux/userManager/userManager.action';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -45,6 +46,7 @@ const User = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(logoutState());
+    dispatch(removeUserState());
     alert("logout successfully..");
     navigate("/login");
   }
