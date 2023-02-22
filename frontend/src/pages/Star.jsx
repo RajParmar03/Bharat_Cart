@@ -4,6 +4,8 @@ import { Flex } from '@chakra-ui/react';
 
 const Star = ({stars , size}) => {
 
+    stars = stars || 2.5;
+
     let ratingStars = Array.from({length : 5} , (elem , index) => {
         let number = index + 0.5;
         return (
