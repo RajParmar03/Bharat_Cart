@@ -28,6 +28,12 @@ const addProductToCart = async (cartItem, token) => {
     return ans.data;
 }
 
+const updateProductstock = async(productId , amount) => {
+    let response = await axios.patch(`${baseUrl}/product/updatestock/${productId}` , {amount});
+    return response.data;
+  }
+  
+
 const SingleProduct = () => {
 
     const params = useParams();
@@ -78,8 +84,13 @@ const SingleProduct = () => {
         let token = localStorage.getItem("token");
         addProductToCart(cartItem, token).then((res) => {
             alert(res.message);
-            setLoading(false);
-            navigate("/cart");
+            updateProductstock(cartItem.productId , -1).then((res) => {
+                alert(res.message);
+                setLoading(false);
+                navigate("/cart");
+            }).catch((error) => {
+                setLoading(false);
+            });
         }).catch((error) => {
             setLoading(false);
         });
@@ -117,6 +128,7 @@ const SingleProduct = () => {
                                 <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Real Price : {product.strike}</Heading>
                                 <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Discount : {product.discount}</Heading>
                                 <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Current Price : {product.price}</Heading>
+                                <Text fontSize={"20px"}>Stock : {product.stocks}</Text>
                                 <Button onClick={() => handleAddToCart(product)} isLoading={loading} loadingText='Adding' spinnerPlacement='end' fontSize={"20px"} fontWeight={"bold"} color={"orange"} p={"20px"} variant='outline' border={"5px solid orange"}>Add to Cart</Button>
                             </VStack>
 

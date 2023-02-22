@@ -4,6 +4,7 @@ const UserModel = require("../models/user.model");
 require('dotenv').config();
 const jwt = require("jsonwebtoken");
 const cors = require('cors');
+const { findById } = require("../models/product.model");
 
 const key = process.env.KEY;
 
@@ -87,7 +88,7 @@ productRouter.get("/:id", async (req,res) => {
     }
 });
 
-productRouter.post("/addreview/:id", async(req ,res) => {
+productRouter.patch("/addreview/:id", async(req ,res) => {
     let id = req.params.id;
     try {
         let product = await ProductModel.findById({_id : id});
@@ -97,6 +98,40 @@ productRouter.post("/addreview/:id", async(req ,res) => {
         res.status(200).send({message : "added your review and rating successfully"});
     } catch (error) {
         res.status(400).send({message:error});
+    }
+});
+
+productRouter.post("/add" , async(req , res) => {
+    let token = req.headers.authorization;
+    let decoded = jwt.verify(token , key);
+    let email = decoded.email;
+    let productObj = req.body;
+    try {
+        let users = await UserModel.find({email : email});
+        let user = users[0];
+        productObj.sellerName = user.name;
+        productObj.sellerId = user._id;
+        let newProduct = new ProductModel(productObj);
+        await newProduct.save();
+        let productsList = user.products;
+        productsList = [...productsList , newProduct._id];
+        await UserModel.findByIdAndUpdate({_id:user._id} , {products : productsList});
+        res.status(200).send({message : "Product added successfully..."});
+    } catch (error) {
+        res.status(400).send({message : "failed to add the product."});
+    }
+});
+
+productRouter.patch("/updatestock/:productId" , async (req , res) => {
+    let productId = req.params.productId;
+    let amount = req.body.amount;
+    try {
+        let product = await ProductModel.findById({_id : productId});
+        let newStock = product.stocks + amount;
+        await ProductModel.findByIdAndUpdate({_id : productId} , {stocks : newStock});
+        res.status(200).send({message : "successfully updated product stock."})
+    } catch (error) {
+        res.status(400).send({message : "failed in updating product stock."});
     }
 });
 

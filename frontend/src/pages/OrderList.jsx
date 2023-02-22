@@ -41,7 +41,7 @@ const getUser = async (token) => {
 }
 
 const saveReview = async (id, reviewObj) => {
-    let response = await axios.post(`${baseUrl}/product/addreview/${id}`, reviewObj);
+    let response = await axios.patch(`${baseUrl}/product/addreview/${id}`, reviewObj);
     return response.data;
 }
 
