@@ -17,6 +17,8 @@ import Billing from '../pages/Billing';
 import { OrderConfirmation } from '../pages/OrderConfirmation';
 import OrderList from '../pages/OrderList';
 import PrivateRoute from '../pages/PrivateRoute';
+import SellerLogin from '../pages/SellerLogin';
+import SellerDashBoard from '../pages/SellerDashBoard';
 
 
 const AllRoutes = () => {
@@ -26,6 +28,8 @@ const AllRoutes = () => {
             <Route path="/" element={<Home />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="/seller-login" element={<SellerLogin />}></Route>
+            <Route path="/sellerdashboard" element={<SellerDashBoard />}></Route>
             <Route path="/selectproducts" element={<PrivateRoute><SelectProducts /></PrivateRoute>}></Route>
             <Route path="/products/:category" element={<PrivateRoute><Products /></PrivateRoute>}></Route>
             <Route path="/singleproduct/:id" element={<PrivateRoute><SingleProduct /></PrivateRoute>}></Route>

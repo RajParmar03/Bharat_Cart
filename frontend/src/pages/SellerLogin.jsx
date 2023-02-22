@@ -15,7 +15,7 @@ let baseUrl = process.env.REACT_APP_BASEURL;
 
 
 
-const Login = () => {
+const SellerLogin = () => {
 
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
@@ -39,13 +39,13 @@ const Login = () => {
           email : emailInput.current.value,
           password : passwordInput.current.value
         }
-        let ans = await axios.post(`${baseUrl}/user/login` , loginObj);
+        let ans = await axios.post(`${baseUrl}/user/sellerlogin` , loginObj);
         alert(ans.data.message);
         localStorage.setItem("token",ans.data.token);
         dispatch(loginState());
         dispatch(stopLoading());
         dispatch(addUserState(ans.data.user));
-        navigate("/");
+        navigate("/sellerdashboard");
       } catch (error) {
         alert(error.message);
         dispatch(startError());
@@ -58,7 +58,7 @@ const Login = () => {
 
   return (
     <Box m={"130px auto 30px auto"}>
-    <Heading as={"h1"} size={"2xl"} color="orange">Login</Heading>
+    <Heading as={"h1"} size={"2xl"} color="orange">Login to Seller Account</Heading>
     <Box m={"40px auto auto auto"} w={"30%"}>
       <form onSubmit={(e) => handleLogin(e)}>
         <FormLabel>Email / User Name / Mobile Number</FormLabel>
@@ -78,4 +78,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default SellerLogin;
