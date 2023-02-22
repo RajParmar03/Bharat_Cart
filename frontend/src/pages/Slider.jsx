@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/effect-coverflow";
 
 
-const Slider = ({sliderList}) => {
+const Slider = ({sliderList , handleCardClick}) => {
 
   const slideCount = useBreakpointValue({ sm:2,base: 1,md:3,lg: 4 })
   const isDesktop = useBreakpointValue({ base: false,md:true, lg: true })
@@ -26,7 +26,7 @@ const Slider = ({sliderList}) => {
         loop={true}
       >
         {sliderList.map((elem) => (
-          <SwiperSlide key={elem._id}>
+          <SwiperSlide key={elem._id} onClick={() => handleCardClick(elem._id)}>
             <Image width={"100%"} src={"/bagImage.jpg"} alt={elem.name} />
             <p>{elem.title}</p>
           </SwiperSlide>
