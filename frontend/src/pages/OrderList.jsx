@@ -53,7 +53,7 @@ const OrderList = () => {
 
     const navigate = useNavigate();
 
-    const store = useSelector(store => store);
+    const loadingManager = useSelector(store => store.loadingManager);
     const dispatch = useDispatch();
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -120,7 +120,7 @@ const OrderList = () => {
         <Box m={"130px auto 30px auto"}>
             <Heading textAlign={"left"} m={"auto auto 30px 30px"}>Order List</Heading>
             {
-                store.isLoading ?
+                loadingManager.isLoading ?
                     <Box w={"60%"}>
                         <Spinner
                             thickness='5px'

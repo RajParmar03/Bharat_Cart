@@ -59,7 +59,7 @@ const Payment = () => {
 
 
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
 
@@ -148,7 +148,7 @@ const Payment = () => {
   return (
     <>
       {
-        store.isLoading ?
+        loadingManager.isLoading ?
           <Box m={"130px auto 30px auto"}>
             <Spinner
               thickness='5px'

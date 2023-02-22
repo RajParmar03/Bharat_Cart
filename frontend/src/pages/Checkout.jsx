@@ -55,7 +55,7 @@ const Checkout = () => {
 
     const navigate = useNavigate();
 
-    const store = useSelector(store => store);
+    const loadingManager = useSelector(store => store.loadingManager);
     const dispatch = useDispatch();
 
 
@@ -138,7 +138,7 @@ const Checkout = () => {
         <Box m={"130px auto 30px auto"}>
             <Heading marginBottom={"20px"}>Checkout Page</Heading>
             {
-                store.isLoading ?
+                loadingManager.isLoading ?
                     <Box m={"130px auto 30px auto"}>
                         <Spinner
                             thickness='5px'

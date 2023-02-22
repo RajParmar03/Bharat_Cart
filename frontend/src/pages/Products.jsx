@@ -99,7 +99,7 @@ const Products = () => {
 
   const navigate = useNavigate();
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
 
@@ -211,7 +211,7 @@ const Products = () => {
         </Box>
       </Flex>
       {
-        store.isLoading ?
+        loadingManager.isLoading ?
           <Spinner
             thickness='5px'
             speed='0.5s'
