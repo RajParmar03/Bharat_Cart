@@ -10,6 +10,7 @@ import image from "../bagImage.jpg";
 import { BsHeart } from "react-icons/bs";
 import { BsFillHeartFill } from "react-icons/bs";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
+import Star from './Star';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -260,6 +261,7 @@ const Products = () => {
                         <img src={image} alt={elem.title} style={{ height: "100%" }} />
                       </Box>
                       <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
+                      <Star stars={elem.review.rating} size="18px" />
                       <Text textDecoration="line-through">Value :- {elem.strike}</Text>
                       <Text>Price :- {elem.price}</Text>
                       {/* <Text>Discount :- {elem.discount}</Text> */}

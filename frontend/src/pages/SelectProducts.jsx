@@ -7,6 +7,7 @@ import { GrClose } from 'react-icons/gr';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
+import Star from './Star';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -126,6 +127,7 @@ const SelectProducts = () => {
                                                     <img src={"/bagImage.jpg"} alt={elem.title} style={{ height: "100%" }} />
                                                 </Box>
                                                 <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
+                                                <Star stars={elem.review.rating} size="18px" />
                                                 <Text textDecoration="line-through">Value :- {elem.strike}</Text>
                                                 <Text>Price :- {elem.price}</Text>
                                                 <Text>Discount :- {elem.discount}</Text>
