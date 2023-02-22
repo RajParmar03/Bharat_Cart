@@ -24,7 +24,7 @@ const SelectProducts = () => {
     const ID = useRef(null);
     const searchRef = useRef(null);
 
-    const store = useSelector(store => store);
+    const loadingManager = useSelector(store => store.loadingManager);
     const dispatch = useDispatch();
 
 
@@ -77,7 +77,7 @@ const SelectProducts = () => {
             <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
                 <Input onChange={(e) => handleChange(e.target.value)} value={val} w={"80%"} variant='filled' size='lg' placeholder='Search product here...' ref={searchRef}></Input>
                 {
-                    store.isLoading ?
+                    loadingManager.isLoading ?
                         <Spinner size='sm' style={{
                             position: "relative",
                             right: "100px",
@@ -105,7 +105,7 @@ const SelectProducts = () => {
             </Flex>
             <Divider />
             {
-                store.isLoading ?
+                loadingManager.isLoading ?
                     <Spinner
                         thickness='5px'
                         speed='0.5s'

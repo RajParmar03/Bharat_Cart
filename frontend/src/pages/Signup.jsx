@@ -14,7 +14,7 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
   const roleInput = useRef(null);
@@ -95,7 +95,7 @@ const Signup = () => {
           <FormLabel>Confirm Password</FormLabel>
           <Input type='password' placeholder='Enter The Same Password Again... ' border={"1px"} ref={confirmPasswordInput} />
           {
-            store.isLoading?
+            loadingManager.isLoading?
 
             <Button m={"20px auto auto auto"} border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} isLoading={true} loadingText={"Signing-up"} spinnerPlacement={"end"}>Sign-Up</Button>
             :

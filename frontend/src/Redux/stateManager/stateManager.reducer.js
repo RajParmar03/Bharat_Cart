@@ -6,7 +6,7 @@ const InitalState = {
  
 };
 
-export const Reducer = (state = InitalState,action) => {
+export const loadingReducer = (state = InitalState,action) => {
   const {type} = action;
 
   switch(type) {

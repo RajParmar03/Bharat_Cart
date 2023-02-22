@@ -54,7 +54,7 @@ const Cart = () => {
 
   const navigate = useNavigate();
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
 
@@ -138,7 +138,7 @@ const Cart = () => {
       <Heading textAlign={"left"} m={"auto auto 30px 30px"}>Cart List</Heading>
       <Flex>
         {
-          store.isLoading ?
+          loadingManager.isLoading ?
             <Box w={"60%"}>
               <Spinner
                 thickness='5px'

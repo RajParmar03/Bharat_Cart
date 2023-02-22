@@ -1,4 +1,4 @@
-import { Radio, Stack, Box, Divider, Heading, RadioGroup, Button, VStack, Text, HStack } from '@chakra-ui/react';
+import { Radio, Stack, Box, Divider, Heading, RadioGroup, Button, VStack, Text, HStack, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
@@ -47,7 +47,7 @@ const Billing = () => {
 
   const navigate = useNavigate();
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
 
@@ -68,9 +68,9 @@ const Billing = () => {
   }, [cartList]);
 
   const handlePayment = () => {
-    if(ptype === "cash"){
+    if (ptype === "cash") {
       navigate("/orderconfirmation");
-    }else if(ptype === "credit"){
+    } else if (ptype === "credit") {
       navigate("/payment/12");
     }
   }
@@ -116,7 +116,7 @@ const Billing = () => {
             <Stack justifyContent={"space-around"} h={"150px"}>
               <HStack>
                 <label>
-                   <input type={"radio"} name="payment" value={"credit"} onChange={(e) => setPtype(e.target.value)} />
+                  <input type={"radio"} name="payment" value={"credit"} onChange={(e) => setPtype(e.target.value)} />
                   Pay with Debit/Credit/ATM Cards</label>
               </HStack>
               <HStack>
@@ -129,30 +129,38 @@ const Billing = () => {
           </Box>
           <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={() => handlePayment()}>Use this payment method</Button>
         </VStack>
-        {/* <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"40%"} h={"300px"} paddingTop={"30px"} >
-          <VStack w={"100%"} h={"100%"}>
-            <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
-            <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
-            <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
-          </VStack>
-        </Box> */}
-        <Box h={"400px"} w={"600px"} p={"5px 10px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
-            <VStack alignItems={"left"} marginBottom={"10px"}>
-              <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Delivery Address :-</Heading>
-              <Text>Name : {user.name}</Text>
-              <Text>address : {address.houseNo}{", "}{address.street}{", "}{address.city}</Text>
-              <Text>{address.state}{", "}{address.country}{", "}{address.pincode}</Text>
-              <Text>phone no : {user.phone}</Text>
-            </VStack>
-            <hr />
-            <Box marginTop={"10px"}>
-              <VStack w={"100%"} h={"100%"}>
-                <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
-                <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
-                <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
-              </VStack>
-            </Box>
+        {
+          loadingManager.isLoading ?
+          <>
+           <Box m={"130px auto 30px auto"} h={"400px"} w={"600px"} p={"5px 10px"}  >
+            <Spinner
+              thickness='5px'
+              speed='0.5s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='xl'
+            />
           </Box>
+          </>
+          :
+          <Box h={"400px"} w={"600px"} p={"5px 10px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
+          <VStack alignItems={"left"} marginBottom={"10px"}>
+            <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Delivery Address :-</Heading>
+            <Text>Name : {user.name}</Text>
+            <Text>address : {address.houseNo}{", "}{address.street}{", "}{address.city}</Text>
+            <Text>{address.state}{", "}{address.country}{", "}{address.pincode}</Text>
+            <Text>phone no : {user.phone}</Text>
+          </VStack>
+          <hr />
+          <Box marginTop={"10px"}>
+            <VStack w={"100%"} h={"100%"}>
+              <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
+              <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
+              <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
+            </VStack>
+          </Box>
+        </Box>
+        }
       </HStack>
     </Box>
   )

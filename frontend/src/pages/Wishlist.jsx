@@ -55,7 +55,7 @@ const Wishlist = () => {
   const navigate = useNavigate();
 
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
   const dispatch = useDispatch();
 
 
@@ -142,7 +142,7 @@ const Wishlist = () => {
         <Heading textAlign={"right"} _hover={{ cursor: "pointer" }} as={"h3"} size={"md"} w={"97%"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are in your wishlist.</Heading>
       </Box>
       {
-        store.isLoading ?
+        loadingManager.isLoading ?
           <Box m={"30px auto 130px auto"} >
             <Spinner
               thickness='5px'

@@ -1,16 +1,9 @@
-import { Box, Button, Divider, Heading, Text } from '@chakra-ui/react';
+import { Box, Divider, Heading, Text } from '@chakra-ui/react';
 import React from 'react'
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { startError, startLoading, stopError, stopLoading } from '../Redux/stateManager/stateManager.action';
+
 
 const About = () => {
 
-  const store = useSelector(store => store);
-
-  const dispatch = useDispatch();
-
-  console.log(store);
   return (
     <Box m={"130px auto 30px auto"}>
       <Heading marginBottom={"30px"}>About Us</Heading>

@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading, startError } from "../Redux/stateManager/stateManager.action";
 import { useEffect } from 'react';
+import { loginState } from '../Redux/authManager/authManager.action';
 
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -18,8 +19,10 @@ const Login = () => {
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
 
-  const store = useSelector(store => store);
+  const loadingManager = useSelector(store => store.loadingManager);
+  const authManager = useSelector(store => store.authManager);
   const dispatch = useDispatch();
+  console.log(authManager);
 
   const navigate = useNavigate();
 
@@ -39,6 +42,7 @@ const Login = () => {
         let ans = await axios.post(`${baseUrl}/user/login` , loginObj);
         alert(ans.data.message);
         localStorage.setItem("token",ans.data.token);
+        dispatch(loginState());
         dispatch(stopLoading());
         navigate("/");
       } catch (error) {
@@ -61,7 +65,7 @@ const Login = () => {
         <FormLabel>Password</FormLabel>
         <Input type='password' placeholder='Enter Your Password...' border={"1px"} ref={passwordInput}/>
         {
-          store.isLoading?
+          loadingManager.isLoading?
           <Button m={"20px auto auto auto"} border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} isLoading={true} loadingText={"logging in"} spinnerPlacement={"end"}></Button>
           :
           <Input m={"20px auto auto auto"} type="submit" value="Login" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"}  />
