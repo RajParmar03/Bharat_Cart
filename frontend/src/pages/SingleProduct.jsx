@@ -9,6 +9,7 @@ import { startError, startLoading, stopLoading } from '../Redux/stateManager/sta
 
 import { FaRegUserCircle } from "react-icons/fa";
 import Star from './Star';
+import Navbar from '../components/Navbar';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -98,6 +99,7 @@ const SingleProduct = () => {
 
     return (
         <>
+            <Navbar />
             {
                 loadingManager.isLoading ?
                     <Box m={"130px auto 30px auto"}>

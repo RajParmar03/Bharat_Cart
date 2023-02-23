@@ -11,6 +11,8 @@ import { BsHeart } from "react-icons/bs";
 import { BsFillHeartFill } from "react-icons/bs";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import Star from './Star';
+import Navbar from "../components/Navbar";
+
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -190,91 +192,94 @@ const Products = () => {
   }
 
   return (
-    <Box m={"130px auto 30px auto"}>
-      <Flex m={10} justifyContent={"space-between"}>
-        <Flex justifyContent={"space-between"} w={"30%"}>
-          <Select onChange={(e) => handleSort(e.target.value)} _hover={{ cursor: "pointer" }} placeholder='Price Sort' border={"2px solid orange"} w={"45%"}>
-            <option value="LTH">Low to High</option>
-            <option value="HTL">High to Low</option>
-            <option value="">Clear</option>
-          </Select>
-          <Select onChange={(e) => handleFilter(e.target.value)} _hover={{ cursor: "pointer" }} placeholder='Category Filter' border={"2px solid orange"} w={"45%"}>
-            {
-              subCategories.map((elem, i) => {
-                return <option key={elem + i} value={elem}>{elem}</option>
-              })
-            }
-            <option value=''>Clear</option>
-          </Select>
+    <>
+      <Navbar />
+      <Box m={"130px auto 30px auto"}>
+        <Flex m={10} justifyContent={"space-between"}>
+          <Flex justifyContent={"space-between"} w={"30%"}>
+            <Select onChange={(e) => handleSort(e.target.value)} _hover={{ cursor: "pointer" }} placeholder='Price Sort' border={"2px solid orange"} w={"45%"}>
+              <option value="LTH">Low to High</option>
+              <option value="HTL">High to Low</option>
+              <option value="">Clear</option>
+            </Select>
+            <Select onChange={(e) => handleFilter(e.target.value)} _hover={{ cursor: "pointer" }} placeholder='Category Filter' border={"2px solid orange"} w={"45%"}>
+              {
+                subCategories.map((elem, i) => {
+                  return <option key={elem + i} value={elem}>{elem}</option>
+                })
+              }
+              <option value=''>Clear</option>
+            </Select>
+          </Flex>
+          <Box>
+            <Heading _hover={{ cursor: "pointer" }} as={"h3"} size={"md"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are found.</Heading>
+          </Box>
         </Flex>
-        <Box>
-          <Heading _hover={{ cursor: "pointer" }} as={"h3"} size={"md"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are found.</Heading>
-        </Box>
-      </Flex>
-      {
-        loadingManager.isLoading ?
-          <Spinner
-            thickness='5px'
-            speed='0.5s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
-          />
-          :
-          <Grid templateColumns='repeat(4, 1fr)' gap={6} m={10} >
-            {
-              data.map((elem) => {
-                let isAdded = wishList.includes(elem._id);
-                return (
-                  <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3}>
-                    {
-                      currentItem == elem._id ?
-                        <>
-                          {
-                            loading ?
-                              <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }}>
-                                <Spinner size='md' zIndex={1000} />
-                              </Box>
-                              :
-                              <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
-                                return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
-                              }
-                              }>
-                                {
-                                  isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
+        {
+          loadingManager.isLoading ?
+            <Spinner
+              thickness='5px'
+              speed='0.5s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='xl'
+            />
+            :
+            <Grid templateColumns='repeat(4, 1fr)' gap={6} m={10} >
+              {
+                data.map((elem) => {
+                  let isAdded = wishList.includes(elem._id);
+                  return (
+                    <VStack h={"500px"} key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={3}>
+                      {
+                        currentItem == elem._id ?
+                          <>
+                            {
+                              loading ?
+                                <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }}>
+                                  <Spinner size='md' zIndex={1000} />
+                                </Box>
+                                :
+                                <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
+                                  return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
                                 }
-                              </Box>
+                                }>
+                                  {
+                                    isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
+                                  }
+                                </Box>
+                            }
+                          </>
+                          :
+                          <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
+                            return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
                           }
-                        </>
-                        :
-                        <Box marginLeft={"220px"} _hover={{ cursor: "pointer" }} onClick={() => {
-                          return isAdded ? handleRemoveWishlist(elem._id) : handleAddToWishList(elem._id)
-                        }
-                        }>
-                          {
-                            isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
-                          }
+                          }>
+                            {
+                              isAdded ? <BsFillHeartFill size={"30px"} color={"orange"} /> : <BsHeart size={"30px"} color={"orange"} />
+                            }
+                          </Box>
+                      }
+                      <VStack _hover={{ cursor: "pointer" }} onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
+                        <Box h={"50%"}>
+                          <img src={image} alt={elem.title} style={{ height: "100%" }} />
                         </Box>
-                    }
-                    <VStack _hover={{ cursor: "pointer" }} onClick={() => handleSingleProduct(elem._id)} h={"95%"}>
-                      <Box h={"50%"}>
-                        <img src={image} alt={elem.title} style={{ height: "100%" }} />
-                      </Box>
-                      <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
-                      <Star stars={elem.review.rating} size="18px" />
-                      <Text textDecoration="line-through">Value :- {elem.strike}</Text>
-                      <Text>Price :- {elem.price}</Text>
-                      {/* <Text>Discount :- {elem.discount}</Text> */}
-                      <Text>Main-Category :- {elem.main_category}</Text>
-                      <Text>Sub-Category :- {elem.sub_category}</Text>
+                        <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
+                        <Star stars={elem.review.rating} size="18px" />
+                        <Text textDecoration="line-through">Value :- {elem.strike}</Text>
+                        <Text>Price :- {elem.price}</Text>
+                        {/* <Text>Discount :- {elem.discount}</Text> */}
+                        <Text>Main-Category :- {elem.main_category}</Text>
+                        <Text>Sub-Category :- {elem.sub_category}</Text>
+                      </VStack>
                     </VStack>
-                  </VStack>
-                )
-              })
-            }
-          </Grid>
-      }
-    </Box>
+                  )
+                })
+              }
+            </Grid>
+        }
+      </Box>
+    </>
   )
 }
 

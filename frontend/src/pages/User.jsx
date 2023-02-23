@@ -8,6 +8,7 @@ import { startLoading, stopLoading, startError } from "../Redux/stateManager/sta
 import {useNavigate} from "react-router"
 import { logoutState } from '../Redux/authManager/authManager.action';
 import { removeUserState } from '../Redux/userManager/userManager.action';
+import Navbar from '../components/Navbar';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -53,6 +54,7 @@ const User = () => {
 
   return (
     <>
+      <Navbar />
       {
         loadingManager.isLoading ?
           <Box m={"130px auto 30px auto"} w={"35%"} >
