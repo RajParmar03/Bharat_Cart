@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import { Spinner } from '@chakra-ui/react';
 import {useNavigate} from "react-router-dom";
+import Navbar from "../components/Navbar";
+
 
 
 
@@ -132,6 +134,7 @@ const Home = () => {
 
   return (
     <>
+      <Navbar />
       {
         loadingManager.isLoading ?
           <Box m={"150px auto 400px auto"}>

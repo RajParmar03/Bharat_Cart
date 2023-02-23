@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import Star from './Star';
+import Navbar from "../components/Navbar";
+
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -74,7 +76,7 @@ const SelectProducts = () => {
         <>
 
 
-
+            <Navbar />
             <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
                 <Input onChange={(e) => handleChange(e.target.value)} value={val} w={"80%"} variant='filled' size='lg' placeholder='Search product here...' ref={searchRef}></Input>
                 {

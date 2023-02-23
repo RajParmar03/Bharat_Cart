@@ -8,6 +8,8 @@ import { startError, startLoading, stopLoading } from '../Redux/stateManager/sta
 import Card from "./Card";
 import CForm from "./CardForm";
 import "./CardStyle.css";
+import Navbar from "../components/Navbar";
+
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -147,6 +149,7 @@ const Payment = () => {
 
   return (
     <>
+    <Navbar />
       {
         loadingManager.isLoading ?
           <Box m={"130px auto 30px auto"}>
