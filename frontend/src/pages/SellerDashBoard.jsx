@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, FormLabel, Grid, Input, Text, useDisclosure, VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import SellerNavbar from "../components/SellerNavbar";
+import { useNavigate } from 'react-router-dom';
 
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -26,9 +27,29 @@ const addProduct = async (token, productObj) => {
     return response.data;
 }
 
+const getUser = async (token) => {
+    let user = await axios.get(`${baseUrl}/user/getuser`, {
+        headers: {
+            Authorization: token
+        }
+    });
+    return user.data;
+}
+
+
+
+
+
 const SellerDashBoard = () => {
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+    const navigate = useNavigate();
+
+    let [user, setUser] = useState({});
+    let [productsLength , setProductsLength] = useState(0);
+    
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const mainCategoryRef = React.useRef(null);
     const addCategoryDivRef = React.useRef(null);
@@ -39,6 +60,22 @@ const SellerDashBoard = () => {
     const actualValueRef = React.useRef(null);
     const sellingPriceRef = React.useRef(null);
     const availableStokeRef = React.useRef(null);
+
+    useEffect(() => {
+        let token = localStorage.getItem("token");
+        if (token) {
+            getUser(localStorage.getItem("token")).then((res) => {
+                setUser(res);
+                setProductsLength(res.products.length);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, []);
+
+
+
+ 
 
     const handleAddProduct = () => {
         if (mainCategoryRef.current.value && subCategoryRef.current.value && productTitleRef.current.value && firstImageRef.current.value && secondImageRef.current.value && actualValueRef.current.value && sellingPriceRef.current.value && availableStokeRef.current.value) {
@@ -57,11 +94,9 @@ const SellerDashBoard = () => {
                 price: sellingPriceRef.current.value,
                 strike: actualValueRef.current.value,
                 stocks: availableStokeRef.current.value,
-                discount: discount
-            }
-
-
-
+                discount: discount,
+                Product_add_time : Number(new Date().getTime())
+            };
             addProduct(token, productObj).then((res) => {
                 alert(res.message);
                 onClose();
@@ -73,23 +108,30 @@ const SellerDashBoard = () => {
         }
     }
 
+    const handleGetProducts = () => {
+        navigate("/sellerproducts");
+    }
 
     return (
+
         <>
             <SellerNavbar />
             <Box m={"100px auto 30px auto"}>
                 <Grid templateColumns='repeat(2, 1fr)' gap={6} m={10} h={"400px"} w={"60%"}>
-                    <VStack border={"1px solid orange"} borderRadius={"5px"}>
+                    <VStack border={"1px solid orange"} borderRadius={"5px"} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Total Sold Product</Text>
                         <Text fontSize={"60px"}>0</Text>
                     </VStack>
 
-                    <VStack border={"1px solid orange"} borderRadius={"5px"}>
+                    <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => handleGetProducts()} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Number of products</Text>
-                        <Text fontSize={"60px"}>0</Text>
+                        <Text fontSize={"60px"}>{productsLength}</Text>
                     </VStack>
 
-                    <Box border={"1px solid orange"} borderRadius={"5px"}></Box>
+                    <VStack border={"1px solid orange"} borderRadius={"5px"} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
+                        <Text fontSize={"20px"} borderBottom={"1px"}>Total Revenue Generated</Text>
+                        <Text fontSize={"60px"}>0</Text>
+                    </VStack>
                     <VStack border={"1px solid orange"} borderRadius={"5px"} justifyContent={"center"} _hover={{ cursor: "pointer" }} ref={addCategoryDivRef} onClick={() => onOpen()}>
                         <Box fontSize={"60px"} p={0} m={0}>+</Box>
                         <Text fontSize={"20px"}>Want to Add new Product.</Text>
@@ -103,7 +145,7 @@ const SellerDashBoard = () => {
                     >
                         <ModalOverlay />
                         <ModalContent>
-                            <ModalHeader>Create your account</ModalHeader>
+                            <ModalHeader>Enter Product Details</ModalHeader>
                             <ModalCloseButton />
                             <ModalBody pb={6}>
                                 <FormControl>
@@ -160,6 +202,7 @@ const SellerDashBoard = () => {
                 </Grid>
             </Box>
         </>
+
     )
 }
 
