@@ -13,6 +13,14 @@ const cartSchema = mongoose.Schema({
     strike : Number,
     stocks : Number,
     discount : String,
+    sellerId : {
+        type : String,
+        default : "123456789"
+    },
+    sellerName : {
+        type : String,
+        default : "rjbusiness"
+    },
     quantity : {
         type : Number,
         default : 1,
