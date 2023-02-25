@@ -22,7 +22,12 @@ const productSchema = mongoose.Schema({
     review : {
         type : Array,
         default : []
+    },
+    Product_add_time : {
+        type : Number,
+        default : 0
     }
+
 });
 
 // creating the product model using product schema.

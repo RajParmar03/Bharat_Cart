@@ -19,6 +19,8 @@ import OrderList from '../pages/OrderList';
 import PrivateRoute from '../pages/PrivateRoute';
 import SellerLogin from '../pages/SellerLogin';
 import SellerDashBoard from '../pages/SellerDashBoard';
+import PrivateRouteSeller from "../pages/PrivateRouterSeller";
+import SellerProducts from '../pages/SellerProducts';
 
 
 const AllRoutes = () => {
@@ -30,6 +32,7 @@ const AllRoutes = () => {
             <Route path="/login" element={<Login />}></Route>
             <Route path="/seller-login" element={<SellerLogin />}></Route>
             <Route path="/sellerdashboard" element={<SellerDashBoard />}></Route>
+            <Route path="/sellerproducts" element={<SellerProducts />}></Route>
             <Route path="/selectproducts" element={<PrivateRoute><SelectProducts /></PrivateRoute>}></Route>
             <Route path="/products/:category" element={<PrivateRoute><Products /></PrivateRoute>}></Route>
             <Route path="/singleproduct/:id" element={<PrivateRoute><SingleProduct /></PrivateRoute>}></Route>

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt"); // importing the bcrypt from package.
 require('dotenv').config(); // importing the dotenv from package.
 const jwt = require("jsonwebtoken"); // importing jwt from jsonwebtoken
 const cors = require('cors');
+const ProductModel = require("../models/product.model");
 
 
 const UserModel = require("../models/user.model"); // importing UserModel from models folder.
@@ -124,6 +125,30 @@ userRouter.get("/getuser" , async(req,res) => {
         res.status(400).send({msg : error});
     }
     
+}); 
+
+userRouter.get("/getproducts", async (req,res) => {
+    let token = req.headers.authorization;
+    let decoded = jwt.verify(token, key);
+    let email = decoded.email;
+    try {
+        let users = await UserModel.find({email});
+        let user = users[0];
+        let productsList = [];
+        await user.products.map(async (elem) => {
+            try {
+                let product = await ProductModel.findById({_id:elem});
+                productsList = [...productsList, product];
+            } catch (error) {
+                res.send({message : "error occured during the getting products array"});
+            } 
+        });
+        setTimeout(() => {
+            res.send(productsList);
+        },200)
+    } catch (error) {
+        res.send(error);
+    }
 });
 
 

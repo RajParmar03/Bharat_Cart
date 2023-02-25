@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema({
     orderList : {type : Array, default : []},
     addressList : {type : Array, default : []},
     products : {type : Array , default : []},
+    sold : {type : Array , default : []},
 });
 
 // creating the user model.

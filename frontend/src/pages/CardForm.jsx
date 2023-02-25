@@ -14,7 +14,7 @@ const monthsArr = Array.from({ length: 12 }, (x, i) => {
 const yearsArr = Array.from({ length: 9 }, (_x, i) => currentYear + i);
 
 
-const addToOrderList = async (token) => {
+const handleProducts = async (token) => {
     let response = await axios.patch(`${baseUrl}/orderlist/add`, {}, {
         headers: {
             Authorization: token,
@@ -82,13 +82,15 @@ export default function CForm({
     const handlePayment = () => {
         if (cardHolderRef.current.value && cardHolderRef.current.value && cardDateRef.current.value) {
             let token = localStorage.getItem("token");
-            addToOrderList(token).then((res) => {
+
+            handleProducts(token).then((res) => {
                 alert(res.message);
                 alert("Order Confirmed");
                 navigate("/orderconfirmation");
             }).catch((error) => {
                 console.log(error);
             });
+
         } else {
             alert("please provide all the data...");
         }
