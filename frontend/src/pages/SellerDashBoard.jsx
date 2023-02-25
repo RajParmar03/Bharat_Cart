@@ -36,6 +36,16 @@ const getUser = async (token) => {
     return user.data;
 }
 
+const getRevenue = async (token) => {
+    let Revenue = await axios.get(`${baseUrl}/admin/getrevenue`, {
+        headers: {
+            Authorization: token
+        }
+    });
+    // console.log("this is revenue" , Revenue);
+    return Revenue.data;
+}
+
 
 
 
@@ -48,6 +58,8 @@ const SellerDashBoard = () => {
 
     let [user, setUser] = useState({});
     let [productsLength , setProductsLength] = useState(0);
+    let [soldProuctLength , setSoldProductLength] = useState(0);
+    let [revenue , setRevenue] = useState(0);
     
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -67,11 +79,23 @@ const SellerDashBoard = () => {
             getUser(localStorage.getItem("token")).then((res) => {
                 setUser(res);
                 setProductsLength(res.products.length);
+                setSoldProductLength(res.sold.length);
             }).catch((error) => {
                 console.log(error);
             });
         }
     }, []);
+
+    useEffect(() => {
+        let token = localStorage.getItem("token");
+        if (token) {
+            getRevenue(token).then((res) => {
+                setRevenue(res.ans);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    } , [])
 
 
 
@@ -99,6 +123,11 @@ const SellerDashBoard = () => {
             };
             addProduct(token, productObj).then((res) => {
                 alert(res.message);
+                getUser(localStorage.getItem("token")).then((res) => {
+                    setProductsLength(res.products.length);
+                }).catch((error) => {
+                    console.log(error);
+                });
                 onClose();
             }).catch((error) => {
                 console.log(error);
@@ -120,7 +149,7 @@ const SellerDashBoard = () => {
                 <Grid templateColumns='repeat(2, 1fr)' gap={6} m={10} h={"400px"} w={"60%"}>
                     <VStack border={"1px solid orange"} borderRadius={"5px"} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Total Sold Product</Text>
-                        <Text fontSize={"60px"}>0</Text>
+                        <Text fontSize={"60px"}>{soldProuctLength}</Text>
                     </VStack>
 
                     <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => handleGetProducts()} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
@@ -130,7 +159,7 @@ const SellerDashBoard = () => {
 
                     <VStack border={"1px solid orange"} borderRadius={"5px"} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Total Revenue Generated</Text>
-                        <Text fontSize={"60px"}>0</Text>
+                        <Text fontSize={"60px"}>{revenue}</Text>
                     </VStack>
                     <VStack border={"1px solid orange"} borderRadius={"5px"} justifyContent={"center"} _hover={{ cursor: "pointer" }} ref={addCategoryDivRef} onClick={() => onOpen()}>
                         <Box fontSize={"60px"} p={0} m={0}>+</Box>

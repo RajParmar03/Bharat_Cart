@@ -39,23 +39,26 @@ orderlistRouter.get("/get", async (req, res) => {
 });
 
 orderlistRouter.patch("/add", async (req, res) => {
+    console.log("in the /orderlist/add");
     let token = req.headers.authorization;
     let decoded = jwt.verify(token, key);
     let email = decoded.email;
     try {
         let users = await UserModel.find({ email });
         let user = users[0];
+        console.log("this is user" , user);
         let userCart = user.cartList;
-        userCart.map(async (elem) => {
+        console.log("this is usercart" , userCart);
+        userCart.forEach(async (elem) => {
             let currentProduct = await CartModel.findById({ _id: elem.cartId });
+            console.log("this is curent cart product" , currentProduct);
             let sellerId = currentProduct.sellerId;
             let seller = await UserModel.findById({ _id: sellerId });
-            let newProducts = [...seller.products, { productId: elem.productID, 
-                                                     time: Number(new Date().getTime()),
-                                                     quantity: currentProduct.quantity }];
-            await UserModel.findByIdAndUpdate({_id : sellerId} , {products : newProducts});
+            console.log("this is seller" , seller);
+            let newProducts = [...seller.sold, { productId: elem.productId, time: Number(new Date().getTime()),quantity: currentProduct.quantity }];
+            await UserModel.findByIdAndUpdate({_id : sellerId} , {sold : newProducts});
         });
-        let newOrderList = user.cartList;
+        let newOrderList = [...user.orderList , ...user.cartList];
         await UserModel.findByIdAndUpdate({ _id: user._id }, { cartList: [], orderList: newOrderList });
         setTimeout(() => {
             res.send({ message: "added item to your orderlist successfully" });

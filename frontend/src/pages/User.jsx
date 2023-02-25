@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Heading, Image, Spinner, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Image, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
@@ -69,9 +69,10 @@ const User = () => {
 
           :
         <>
-          <Box m={"130px auto auto auto"} textAlign={'right'} w={"90%"}>
-            <Button onClick={() => handleLogout()}>Log-out</Button>
-          </Box>
+          <VStack m={"130px auto auto auto"} alignItems={"right"} w={"90%"}>
+            <Button w={"10%"} onClick={() => handleLogout()}>Log-out</Button>
+            <Button w={"10%"} onClick={() => navigate("/orderlist")}>Order-List</Button>
+          </VStack>
           <Box m={"auto auto 30px auto"} p={"30px"} w={"35%"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
             <Image src={user.image} alt="user" border={"5px solid orange"} borderRadius={"100px"} w={"50%"} m={"auto auto 30px auto"} boxShadow="rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px" />
             <Text fontSize={"22px"} fontWeight={"bold"}><span style={{ color: "orange", fontSize: "25px" }}>Name</span> : {user.name}</Text>

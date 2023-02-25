@@ -127,6 +127,7 @@ const SingleProduct = () => {
                                 <Star stars={rating} size="30px"/>
                                 <Text>( {product.review?product.review.length:0} customer reviews)</Text>
                                 </HStack>
+                                <Text fontSize={"20px"}>Sold By  : {product.sellerName}</Text>
                                 <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Real Price : {product.strike}</Heading>
                                 <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Discount : {product.discount}</Heading>
                                 <Heading as={"h3"} size={"md"} fontWeight={"bold"}>Current Price : {product.price}</Heading>
