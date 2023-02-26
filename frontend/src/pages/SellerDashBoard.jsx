@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Grid, Input, list, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Grid, Input, list, Spinner, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import {
     Modal,
@@ -12,6 +12,8 @@ import {
 import axios from 'axios';
 import SellerNavbar from "../components/SellerNavbar";
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -62,6 +64,9 @@ const getSoldList = async (token) => {
 const SellerDashBoard = () => {
 
 
+    const loadingManager = useSelector(store => store.loadingManager);
+    const dispatch = useDispatch();
+
 
     const navigate = useNavigate();
 
@@ -84,19 +89,23 @@ const SellerDashBoard = () => {
     const availableStokeRef = React.useRef(null);
 
     useEffect(() => {
+        dispatch(startLoading());
         let token = localStorage.getItem("token");
         if (token) {
             getUser(localStorage.getItem("token")).then((res) => {
                 setUser(res);
                 setProductsLength(res.products.length);
                 setSoldProductLength(res.sold.length);
+                dispatch(stopLoading());
             }).catch((error) => {
                 console.log(error);
+                dispatch(startError());
             });
         }
     }, []);
-
+    
     useEffect(() => {
+        dispatch(startLoading());
         let token = localStorage.getItem("token");
         if (token) {
             getSoldList(token).then((res) => {
@@ -105,8 +114,10 @@ const SellerDashBoard = () => {
                     return acc + elem.productPrice*elem.quantity;
                 } , 0);
                 setRevenue(revenue);
+                dispatch(stopLoading());
             }).catch((error) => {
                 console.log(error);
+                dispatch(startError());
             });
         }
     } , []);
@@ -158,17 +169,17 @@ const SellerDashBoard = () => {
                 <Grid templateColumns='repeat(2, 1fr)' gap={6} m={10} h={"400px"} w={"60%"}>
                     <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => navigate("/sellersoldproducts")} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Total Sold Product</Text>
-                        <Text fontSize={"60px"}>{soldProuctLength}</Text>
+                        <Text fontSize={"60px"}>{loadingManager.isLoading?<Spinner size='sm' /> : soldProuctLength}</Text>
                     </VStack>
 
                     <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => navigate("/sellerproducts")} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Number of products</Text>
-                        <Text fontSize={"60px"}>{productsLength}</Text>
+                        <Text fontSize={"60px"}>{loadingManager.isLoading?<Spinner size='sm' /> : productsLength}</Text>
                     </VStack>
 
                     <VStack border={"1px solid orange"} borderRadius={"5px"} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Total Revenue Generated</Text>
-                        <Text fontSize={"60px"}>{revenue}</Text>
+                        <Text fontSize={"60px"}>{loadingManager.isLoading?<Spinner size='sm' /> : revenue}</Text>
                     </VStack>
                     <VStack border={"1px solid orange"} borderRadius={"5px"} justifyContent={"center"} _hover={{ cursor: "pointer" }} ref={addCategoryDivRef} onClick={() => onOpen()}>
                         <Box fontSize={"60px"} p={0} m={0}>+</Box>

@@ -15,6 +15,7 @@ import {
     FormControl,
     FormLabel,
     Input,
+    Spinner,
 } from '@chakra-ui/react'
 import axios from 'axios';
 import SellerNavbar from '../components/SellerNavbar';
@@ -75,15 +76,15 @@ const getSoldList = async (token) => {
         }
     });
     return soldList.data;
-} 
+}
 
 
 const SellerSoldProducts = () => {
 
     let [user, setUser] = useState({});
     let [productsList, setProductsList] = useState([]);
-    let [soldList , setSoldList] = useState([]);
-    let [revenue , setRevenue] = useState(0);
+    let [soldList, setSoldList] = useState([]);
+    let [revenue, setRevenue] = useState(0);
 
 
 
@@ -125,15 +126,15 @@ const SellerSoldProducts = () => {
         if (token) {
             getSoldList(token).then((res) => {
                 setSoldList(res);
-                let revenue = res.reduce((acc , elem) => {
-                    return acc + elem.productPrice*elem.quantity;
-                } , 0);
+                let revenue = res.reduce((acc, elem) => {
+                    return acc + elem.productPrice * elem.quantity;
+                }, 0);
                 setRevenue(revenue);
             }).catch((error) => {
                 console.log(error);
             });
         }
-    } , []);
+    }, []);
 
 
 
@@ -168,13 +169,21 @@ const SellerSoldProducts = () => {
                                                 <Td>{elem.product.sub_category}</Td>
                                                 <Td>{elem.product.price}</Td>
                                                 <Td>{elem.quantity}</Td>
-                                                <Td>{elem.quantity*elem.product.price}</Td>
+                                                <Td>{elem.quantity * elem.product.price}</Td>
                                                 <Td>{new Date(elem.time).toUTCString()}</Td>
                                             </Tr>
                                         )
                                     })
                                     :
-                                    <></>
+                                    <Box w={"60%"}>
+                                        <Spinner
+                                            thickness='5px'
+                                            speed='0.5s'
+                                            emptyColor='gray.200'
+                                            color='blue.500'
+                                            size='xl'
+                                        />
+                                    </Box>
                             }
 
                         </Tbody>
