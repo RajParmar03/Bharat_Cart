@@ -15,6 +15,7 @@ import {
     FormControl,
     FormLabel,
     Input,
+    Spinner,
 } from '@chakra-ui/react'
 import axios from 'axios';
 import SellerNavbar from '../components/SellerNavbar';
@@ -30,6 +31,8 @@ import {
     ModalCloseButton,
     Button
 } from '@chakra-ui/react';
+import { useSelector, useDispatch } from "react-redux";
+import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -74,6 +77,9 @@ const SellerProducts = () => {
     let [user, setUser] = useState({});
     let [productsList, setProductsList] = useState([]);
 
+    const loadingManager = useSelector(store => store.loadingManager);
+    const dispatch = useDispatch();
+
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const mainCategoryRef = React.useRef(null);
@@ -89,11 +95,14 @@ const SellerProducts = () => {
 
 
     useEffect(() => {
+        dispatch(startLoading());
         let token = localStorage.getItem("token");
         getProductsList(token).then((res) => {
             setProductsList(res);
+            dispatch(stopLoading());
         }).catch((error) => {
             console.log(error);
+            dispatch(startError());
         });
     }, []);
     useEffect(() => {
@@ -183,132 +192,143 @@ const SellerProducts = () => {
     return (
         <>
             <SellerNavbar />
-            <Box m={"100px auto 30px auto"}>
-                <TableContainer>
-                    <Table variant='simple'>
-                        <TableCaption>Imperial to metric conversion factors</TableCaption>
-                        <Thead>
-                            <Tr>
-                                <Th>Sr. NO</Th>
-                                <Th>Product Title</Th>
-                                <Th>Main Category</Th>
-                                <Th>Sub Category</Th>
-                                <Th>Actual Value</Th>
-                                <Th>Selling Price</Th>
-                                <Th>Discount</Th>
-                                <Th>Stoke</Th>
-                                <Th>image1</Th>
-                                <Th>image2</Th>
-                                <Th>Edit</Th>
-                                <Th>Delete</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {
-                                productsList.length > 0 ?
-                                    productsList.map((elem, i) => {
-                                        return (
-                                            <Tr key={elem.title + elem.main_category + i}>
-                                                <Td>{i + 1}</Td>
-                                                <Td>{elem.title}</Td>
-                                                <Td>{elem.main_category}</Td>
-                                                <Td>{elem.sub_category}</Td>
-                                                <Td>{elem.strike}</Td>
-                                                <Td>{elem.price}</Td>
-                                                <Td>{elem.discount}</Td>
-                                                <Td>{elem.stocks}</Td>
-                                                <Td><Image src={elem.image1} /></Td>
-                                                <Td><Image src={elem.image2} /></Td>
-                                                <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "blue" }} onClick={() => onOpen()}><MdOutlineModeEditOutline /></Td>
-                                                <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "red" }} onClick={() => handleDelete(elem._id)}><RiDeleteBin6Line /></Td>
-                                                <Modal
-                                                    initialFocusRef={mainCategoryRef}
-                                                    finalFocusRef={addCategoryDivRef}
-                                                    isOpen={isOpen}
-                                                    onClose={onClose}
-                                                    scrollBehavior={"inside"}
-                                                >
-                                                    <ModalOverlay />
-                                                    <ModalContent>
-                                                        <ModalHeader>Enter Product Details</ModalHeader>
-                                                        <ModalCloseButton />
-                                                        <ModalBody pb={6}>
-                                                            <FormControl>
-                                                                <FormLabel>Main Category</FormLabel>
-                                                                <Input type={"text"} ref={mainCategoryRef} placeholder='Main Category' />
-                                                            </FormControl>
+            {
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Sub Category</FormLabel>
-                                                                <Input type={"text"} ref={subCategoryRef} placeholder='Sub Category' />
-                                                            </FormControl>
+                <Box m={"100px auto 30px auto"}>
+                    <TableContainer>
+                        <Table variant='simple'>
+                            <TableCaption>Imperial to metric conversion factors</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Th>Sr. NO</Th>
+                                    <Th>Product Title</Th>
+                                    <Th>Main Category</Th>
+                                    <Th>Sub Category</Th>
+                                    <Th>Actual Value</Th>
+                                    <Th>Selling Price</Th>
+                                    <Th>Discount</Th>
+                                    <Th>Stoke</Th>
+                                    <Th>image1</Th>
+                                    <Th>image2</Th>
+                                    <Th>Edit</Th>
+                                    <Th>Delete</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {
+                                    productsList.length > 0 ?
+                                        productsList.map((elem, i) => {
+                                            return (
+                                                <Tr key={elem.title + elem.main_category + i}>
+                                                    <Td>{i + 1}</Td>
+                                                    <Td>{elem.title}</Td>
+                                                    <Td>{elem.main_category}</Td>
+                                                    <Td>{elem.sub_category}</Td>
+                                                    <Td>{elem.strike}</Td>
+                                                    <Td>{elem.price}</Td>
+                                                    <Td>{elem.discount}</Td>
+                                                    <Td>{elem.stocks}</Td>
+                                                    <Td><Image src={elem.image1} /></Td>
+                                                    <Td><Image src={elem.image2} /></Td>
+                                                    <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "blue" }} onClick={() => onOpen()}><MdOutlineModeEditOutline /></Td>
+                                                    <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "red" }} onClick={() => handleDelete(elem._id)}><RiDeleteBin6Line /></Td>
+                                                    <Modal
+                                                        initialFocusRef={mainCategoryRef}
+                                                        finalFocusRef={addCategoryDivRef}
+                                                        isOpen={isOpen}
+                                                        onClose={onClose}
+                                                        scrollBehavior={"inside"}
+                                                    >
+                                                        <ModalOverlay />
+                                                        <ModalContent>
+                                                            <ModalHeader>Enter Product Details</ModalHeader>
+                                                            <ModalCloseButton />
+                                                            <ModalBody pb={6}>
+                                                                <FormControl>
+                                                                    <FormLabel>Main Category</FormLabel>
+                                                                    <Input type={"text"} ref={mainCategoryRef} placeholder='Main Category' />
+                                                                </FormControl>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Product Title</FormLabel>
-                                                                <Input type={"text"} ref={productTitleRef} placeholder='Product Title' />
-                                                            </FormControl>
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>Sub Category</FormLabel>
+                                                                    <Input type={"text"} ref={subCategoryRef} placeholder='Sub Category' />
+                                                                </FormControl>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>First Image Of Product</FormLabel>
-                                                                <Input type={"text"} ref={firstImageRef} placeholder='First Image Of Product' />
-                                                            </FormControl>
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>Product Title</FormLabel>
+                                                                    <Input type={"text"} ref={productTitleRef} placeholder='Product Title' />
+                                                                </FormControl>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Second Image Of Product</FormLabel>
-                                                                <Input type={"text"} ref={secondImageRef} placeholder='Second Image Of Product' />
-                                                            </FormControl>
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>First Image Of Product</FormLabel>
+                                                                    <Input type={"text"} ref={firstImageRef} placeholder='First Image Of Product' />
+                                                                </FormControl>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Actual Value Of Product</FormLabel>
-                                                                <Input type={"number"} ref={actualValueRef} placeholder='Actual Value Of Product' />
-                                                            </FormControl>
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>Second Image Of Product</FormLabel>
+                                                                    <Input type={"text"} ref={secondImageRef} placeholder='Second Image Of Product' />
+                                                                </FormControl>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Selling Price Of Product</FormLabel>
-                                                                <Input type={"number"} ref={sellingPriceRef} placeholder='Selling Price Of Product' />
-                                                            </FormControl>
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>Actual Value Of Product</FormLabel>
+                                                                    <Input type={"number"} ref={actualValueRef} placeholder='Actual Value Of Product' />
+                                                                </FormControl>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Available Stoke Of this Product</FormLabel>
-                                                                <Input type={"number"} ref={availableStokeRef} placeholder='Available Stoke Of this Product' />
-                                                            </FormControl>
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>Selling Price Of Product</FormLabel>
+                                                                    <Input type={"number"} ref={sellingPriceRef} placeholder='Selling Price Of Product' />
+                                                                </FormControl>
+
+                                                                <FormControl mt={4}>
+                                                                    <FormLabel>Available Stoke Of this Product</FormLabel>
+                                                                    <Input type={"number"} ref={availableStokeRef} placeholder='Available Stoke Of this Product' />
+                                                                </FormControl>
 
 
-                                                        </ModalBody>
+                                                            </ModalBody>
 
-                                                        <ModalFooter>
-                                                            <Button colorScheme='blue' mr={3} onClick={() => handleEdit(elem._id)}>
-                                                                Update
-                                                            </Button>
-                                                            <Button onClick={onClose}>Cancel</Button>
-                                                        </ModalFooter>
-                                                    </ModalContent>
-                                                </Modal>
-                                            </Tr>
-                                        )
-                                    })
-                                    :
-                                    <></>
-                            }
+                                                            <ModalFooter>
+                                                                <Button colorScheme='blue' mr={3} onClick={() => handleEdit(elem._id)}>
+                                                                    Update
+                                                                </Button>
+                                                                <Button onClick={onClose}>Cancel</Button>
+                                                            </ModalFooter>
+                                                        </ModalContent>
+                                                    </Modal>
+                                                </Tr>
+                                            )
+                                        })
+                                        :
+                                        <Box w={"60%"}>
+                                            <Spinner
+                                                thickness='5px'
+                                                speed='0.5s'
+                                                emptyColor='gray.200'
+                                                color='blue.500'
+                                                size='xl'
+                                            />
+                                        </Box>
+                                }
 
-                        </Tbody>
-                        <Tfoot>
-                            <Tr>
-                                <Th>Total</Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                                <Th></Th>
-                            </Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-            </Box>
+                            </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th>Total</Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
+                </Box>
+            }
         </>
     )
 }
