@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Spacer, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Image, Spacer, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,9 +8,9 @@ let baseUrl = process.env.REACT_APP_BASEURL;
 
 const getUser = async (token) => {
   let user = await axios.get(`${baseUrl}/user/getuser`, {
-      headers: {
-          Authorization: token
-      }
+    headers: {
+      Authorization: token
+    }
   });
   return user.data;
 }
@@ -40,10 +40,15 @@ const SellerNavbar = () => {
         </Text>
       </Box>
       <Spacer />
-      <Flex h={"100%"} w={"7%"} justifyContent={"space-around"} alignItems={"center"} _hover={{ cursor: "pointer" }}>
-        <Image h={"80%"} src={user.image} alt={"seller image"} />
-        <Text fontSize={"20px"}>{user.name}</Text>
-      </Flex>
+      {
+        user.role === "seller"?
+        <Flex h={"100%"} w={"7%"} justifyContent={"space-around"} alignItems={"center"} _hover={{ cursor: "pointer" }}>
+          <Image h={"80%"} src={user.image} alt={"seller image"} />
+          <Text fontSize={"20px"}>{user.name}</Text>
+        </Flex>
+        :
+        <Button onClick = {() => navigate("/seller-login")}>Login</Button>
+      }
     </Flex>
   )
 }

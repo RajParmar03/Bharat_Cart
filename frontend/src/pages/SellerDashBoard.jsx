@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Grid, Input, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Grid, Input, list, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import {
     Modal,
@@ -46,6 +46,15 @@ const getRevenue = async (token) => {
     return Revenue.data;
 }
 
+const getSoldList = async (token) => {
+    let soldList = await axios.get(`${baseUrl}/admin/getsoldlist`, {
+        headers: {
+            Authorization: token
+        }
+    });
+    return soldList.data;
+} 
+
 
 
 
@@ -60,6 +69,7 @@ const SellerDashBoard = () => {
     let [productsLength , setProductsLength] = useState(0);
     let [soldProuctLength , setSoldProductLength] = useState(0);
     let [revenue , setRevenue] = useState(0);
+    let [soldList , setSoldList] = useState([]);
     
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -89,13 +99,17 @@ const SellerDashBoard = () => {
     useEffect(() => {
         let token = localStorage.getItem("token");
         if (token) {
-            getRevenue(token).then((res) => {
-                setRevenue(res.ans);
+            getSoldList(token).then((res) => {
+                setSoldList(res);
+                let revenue = res.reduce((acc , elem) => {
+                    return acc + elem.productPrice*elem.quantity;
+                } , 0);
+                setRevenue(revenue);
             }).catch((error) => {
                 console.log(error);
             });
         }
-    } , [])
+    } , []);
 
 
 
@@ -136,23 +150,18 @@ const SellerDashBoard = () => {
             alert("please provide all the details...");
         }
     }
-
-    const handleGetProducts = () => {
-        navigate("/sellerproducts");
-    }
-
     return (
 
         <>
             <SellerNavbar />
             <Box m={"100px auto 30px auto"}>
                 <Grid templateColumns='repeat(2, 1fr)' gap={6} m={10} h={"400px"} w={"60%"}>
-                    <VStack border={"1px solid orange"} borderRadius={"5px"} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
+                    <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => navigate("/sellersoldproducts")} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Total Sold Product</Text>
                         <Text fontSize={"60px"}>{soldProuctLength}</Text>
                     </VStack>
 
-                    <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => handleGetProducts()} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
+                    <VStack border={"1px solid orange"} borderRadius={"5px"} onClick={() => navigate("/sellerproducts")} _hover={{ cursor: "pointer" }} justifyContent={"center"}>
                         <Text fontSize={"20px"} borderBottom={"1px"}>Number of products</Text>
                         <Text fontSize={"60px"}>{productsLength}</Text>
                     </VStack>

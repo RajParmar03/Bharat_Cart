@@ -80,14 +80,36 @@ adminRouter.get("/getrevenue", async (req, res) => {
         let user = users[0];
         let revenue = 0;
         // console.log(user , user.sold);
-        user.sold.map(async (elem) => {
+        user.sold.forEach(async (elem) => {
             let product = await ProductModel.findById({_id : elem.productId});
             // console.log("this is product" , product);
             revenue  =  revenue +  (product.price*elem.quantity);
             console.log("this is revenue" , revenue);
-        });
-        console.log("this is revenue outside the loop" , revenue);
+        })
+        // .then(() => {
+            console.log("this is revenue outside the loop" , revenue);
+        // });
         res.status(200).send({ans : revenue});
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+adminRouter.get("/getsoldlist", async (req, res) => {
+    let token = req.headers.authorization;
+    let decoded = jwt.verify(token, key);
+    let email = decoded.email;
+    try {
+        let users = await UserModel.find({ email });
+        let user = users[0];
+        let soldList = [];
+        user.sold.forEach(async (elem) => {
+            let product = await ProductModel.findById({_id : elem.productId});
+            soldList = [...soldList , {product : product , productPrice : product.price , quantity : elem.quantity , time : elem.time}];
+        });
+        setTimeout(() => {
+            res.status(200).send(soldList);
+        } , 500);
     } catch (error) {
         res.status(400).send(error);
     }

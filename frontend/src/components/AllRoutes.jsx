@@ -21,6 +21,9 @@ import SellerLogin from '../pages/SellerLogin';
 import SellerDashBoard from '../pages/SellerDashBoard';
 import PrivateRouteSeller from "../pages/PrivateRouterSeller";
 import SellerProducts from '../pages/SellerProducts';
+import SellerSoldProducts from '../pages/SellerSoldProducts';
+import NotFound from '../pages/NotFound';
+import SellerHome from '../pages/SellerHome';
 
 
 const AllRoutes = () => {
@@ -30,9 +33,11 @@ const AllRoutes = () => {
             <Route path="/" element={<Home />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="/sellerhome" element={<SellerHome />}></Route>
             <Route path="/seller-login" element={<SellerLogin />}></Route>
-            <Route path="/sellerdashboard" element={<SellerDashBoard />}></Route>
-            <Route path="/sellerproducts" element={<SellerProducts />}></Route>
+            <Route path="/sellerdashboard" element={<PrivateRouteSeller><SellerDashBoard /></PrivateRouteSeller>}></Route>
+            <Route path="/sellerproducts" element={<PrivateRouteSeller><SellerProducts /></PrivateRouteSeller>}></Route>
+            <Route path="/sellersoldproducts" element={<PrivateRouteSeller><SellerSoldProducts /></PrivateRouteSeller>}></Route>
             <Route path="/selectproducts" element={<PrivateRoute><SelectProducts /></PrivateRoute>}></Route>
             <Route path="/products/:category" element={<PrivateRoute><Products /></PrivateRoute>}></Route>
             <Route path="/singleproduct/:id" element={<PrivateRoute><SingleProduct /></PrivateRoute>}></Route>
@@ -45,6 +50,7 @@ const AllRoutes = () => {
             <Route path="/billing" element={<PrivateRoute><Billing /></PrivateRoute>}></Route>
             <Route path="/orderlist" element={<PrivateRoute><OrderList /></PrivateRoute>}></Route>
             <Route path="/orderconfirmation" element={<PrivateRoute><OrderConfirmation /></PrivateRoute>}></Route>
+            <Route path='*' element={<NotFound />}/>
         </Routes>
     </Box>
   )
