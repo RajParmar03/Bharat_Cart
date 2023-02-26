@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Box, Button, Flex, FormLabel, Heading, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, Heading, Image, Input, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -61,7 +61,10 @@ const Login = () => {
     <>
       <Navbar />
       <Box m={"130px auto 30px auto"}>
-        <Heading as={"h1"} size={"2xl"} color="orange">Login</Heading>
+        <Box borderBottom={"2px solid orange"} borderTop={"2px solid orange"} marginBottom={"30px"}>
+        <Image src={"/BharatCart2.png"} alt={"bharat-cart"} h={"70px"} m={"auto"} />
+        </Box>
+        <Text fontSize={"40px"} textAlign={"center"} color={"orange.400"}>Login To Your Existing Account</Text>
         <Box m={"40px auto auto auto"} w={"30%"}>
           <form onSubmit={(e) => handleLogin(e)}>
             <FormLabel>Email / User Name / Mobile Number</FormLabel>
@@ -72,11 +75,11 @@ const Login = () => {
               loadingManager.isLoading ?
                 <Button m={"20px auto auto auto"} border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} isLoading={true} loadingText={"logging in"} spinnerPlacement={"end"}></Button>
                 :
-                <Input m={"20px auto auto auto"} type="submit" value="Login" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} />
+                <Input m={"20px auto auto auto"} type="submit" value="Login" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} _hover={{cursor:"pointer"}}/>
             }
           </form>
         </Box>
-        <Flex w={"24%"} m={"30px auto auto auto"} fontSize={"18px"} justifyContent={"space-around"}>Don't Have An Account? <Box onClick={() => navigate("/signup")} _hover={{ cursor: "pointer", textDecoration: "underline" }} color={"blue.500"}>Sign-Up</Box> Here..</Flex>
+        <Flex w={"24%"} m={"30px auto auto auto"} fontSize={"18px"} justifyContent={"space-around"}>Don't Have An Account? <Box onClick={() => navigate("/signup")} _hover={{ cursor: "pointer", textDecoration: "underline" , color:"orange" }} color={"blue.500"}>Sign-up</Box> Here..</Flex>
       </Box>
     </>
   )

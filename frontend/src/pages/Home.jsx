@@ -6,7 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import { Spinner } from '@chakra-ui/react';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 
@@ -135,9 +135,9 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      {
+      {/* {
         loadingManager.isLoading ?
-          <Box m={"150px auto 400px auto"}>
+          <Box m={"200px auto 400px auto"} w={"30%"} textAlign={"center"}>
             <Spinner
               thickness='5px'
               speed='0.5s'
@@ -146,41 +146,115 @@ const Home = () => {
               size='xl'
             />
           </Box>
-          :
-          <Box m={"130px auto 30px auto"}>
-            <Box h={"500px"} w={"100%"} m={"20px auto"}>
-              <Image src={"https://images.dailyobjects.com/marche/assets/images/other/backpack-desktops.jpg?tr=cm-pad_crop,v-2,w-1349,dpr-1"} alt={"bag"} h={"100%"} w={"100%"} m={"auto"} />
+          : */}
+      <Box m={"125px auto 30px auto"}>
+        <Box h={"300px"} w={"100%"} m={"20px auto"}>
+          <Image src={"https://images.dailyobjects.com/marche/assets/images/other/backpack-desktops.jpg?tr=cm-pad_crop,v-2,w-1349,dpr-1"} alt={"bag"} h={"100%"} w={"100%"} m={"auto"} />
+        </Box>
+        <Text fontSize={"30px"} textAlign={"center"}>Shop For Clothes.</Text>
+        {
+          loadingManager.isLoading ?
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
             </Box>
-            <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
+            :
             <Box p={"20px"}>
               <Slider sliderList={clothingArr} handleCardClick={handleCardClick} />
             </Box>
-            <Flex h={"500px"} w={"100%"} m={"20px auto"}>
-              <Image src={"/watchPoster.jpg"} alt={"bag"} h={"100%"} w={"70%"} m={"auto"} />
-              <Image src={"/watchPoster2.jpg"} alt={"bag"} h={"100%"} w={"30%"} m={"auto"} />
-            </Flex>
-            <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={educationalArr} handleCardClick={handleCardClick}/>
-            <Flex h={"500px"} w={"100%"} m={"20px auto"}>
-              <Image src={"/shoesPoster.jpg"} alt={"bag"} h={"100%"} w={"40%"} m={"auto"} />
-              <Image src={"/shoesPoster2.jpg"} alt={"bag"} h={"100%"} w={"60%"} m={"auto"} />
-            </Flex>
-            <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={electronicsArr} handleCardClick={handleCardClick}/>
-            <Flex h={"500px"} w={"100%"} m={"20px auto"}>
-              <Image src={"/laptopPoster4.jpg"} alt={"bag"} h={"100%"} w={"70%"} m={"auto"} />
-              <Image src={"/laptopPoster.jpg"} alt={"bag"} h={"100%"} w={"30%"} m={"auto"} />
-            </Flex>
-            <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={footwearArr} handleCardClick={handleCardClick}/>
-            <Flex h={"500px"} w={"100%"} m={"20px auto"}>
-              <Image src={"/jeansPoster.jpg"} alt={"bag"} h={"100%"} w={"60%"} m={"auto"} />
-              <Image src={"/jeansPoster4.jpg"} alt={"bag"} h={"100%"} w={"40%"} m={"auto"} />
-            </Flex>
-            <Text fontSize={"30px"} textAlign={"left"}>Shop Through category.</Text>
-            <Slider sliderList={gadgetArr} handleCardClick={handleCardClick}/>
-          </Box>
-      }
+
+        }
+        <Flex h={"500px"} w={"100%"} m={"20px auto"}>
+          <Image src={"/watchPoster.jpg"} alt={"bag"} h={"100%"} w={"70%"} m={"auto"} />
+          <Image src={"/watchPoster2.jpg"} alt={"bag"} h={"100%"} w={"30%"} m={"auto"} />
+        </Flex>
+        <Text fontSize={"30px"} textAlign={"center"}>Shop For Stationary.</Text>
+        {
+          loadingManager.isLoading ?
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Box>
+            :
+            <Box p={"20px"}>
+              <Slider sliderList={educationalArr} handleCardClick={handleCardClick} />
+            </Box>
+        }
+        <Flex h={"500px"} w={"100%"} m={"20px auto"}>
+          <Image src={"/shoesPoster.jpg"} alt={"bag"} h={"100%"} w={"40%"} m={"auto"} />
+          <Image src={"/shoesPoster2.jpg"} alt={"bag"} h={"100%"} w={"60%"} m={"auto"} />
+        </Flex>
+        <Text fontSize={"30px"} textAlign={"center"}>Shop For Electronics.</Text>
+        {
+          loadingManager.isLoading ?
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Box>
+            :
+            <Box p={"20px"}>
+              <Slider sliderList={electronicsArr} handleCardClick={handleCardClick} />
+            </Box>
+        }
+        <Flex h={"500px"} w={"100%"} m={"20px auto"}>
+          <Image src={"/laptopPoster4.jpg"} alt={"bag"} h={"100%"} w={"70%"} m={"auto"} />
+          <Image src={"/laptopPoster.jpg"} alt={"bag"} h={"100%"} w={"30%"} m={"auto"} />
+        </Flex>
+        <Text fontSize={"30px"} textAlign={"center"}>Shop For Footwear.</Text>
+        {
+          loadingManager.isLoading ?
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Box>
+            :
+            <Box p={"20px"}>
+              <Slider sliderList={footwearArr} handleCardClick={handleCardClick} />
+            </Box>
+        }
+        <Flex h={"500px"} w={"100%"} m={"20px auto"}>
+          <Image src={"/jeansPoster.jpg"} alt={"bag"} h={"100%"} w={"60%"} m={"auto"} />
+          <Image src={"/jeansPoster4.jpg"} alt={"bag"} h={"100%"} w={"40%"} m={"auto"} />
+        </Flex>
+        <Text fontSize={"30px"} textAlign={"center"}>Shop For Gadgets.</Text>
+        {
+          loadingManager.isLoading ?
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Box>
+            :
+            <Box p={"20px"}>
+              <Slider sliderList={gadgetArr} handleCardClick={handleCardClick} />
+            </Box>
+        }
+      </Box>
+      {/* } */}
     </>
   )
 }
