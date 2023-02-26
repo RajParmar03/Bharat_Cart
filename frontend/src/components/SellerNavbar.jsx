@@ -80,7 +80,7 @@ const SellerNavbar = () => {
                       {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
                       <Tbody>
                         <Tr>
-                          <Td color={"orange.400"}>Seler userName</Td>
+                          <Td color={"orange.400"}>Seller userName</Td>
                           <Td>{user.username}</Td>
                           
                         </Tr>

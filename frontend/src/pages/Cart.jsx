@@ -6,6 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import Navbar from '../components/Navbar';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
 
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -153,11 +164,11 @@ const Cart = () => {
     <>
       <Navbar />
       <Box m={"130px auto 30px auto"}>
-        <Heading textAlign={"left"} m={"auto auto 30px 30px"}>Cart List</Heading>
+        <Text textAlign={"left"} m={"auto auto 30px 30px"} fontSize={"30px"} color={"orange"}>CART LIST</Text>
         <Flex>
           {
             loadingManager.isLoading ?
-              <Box w={"60%"}>
+              <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
                 <Spinner
                   thickness='5px'
                   speed='0.5s'
@@ -167,17 +178,17 @@ const Cart = () => {
                 />
               </Box>
               :
-              <Grid templateColumns='repeat(1, 1fr)' gap={6} m={"auto 30px"} w={"60%"}>
+              <Grid templateColumns='repeat(1, 1fr)' gap={6} m={"auto 30px"} w={"50%"}>
                 {
                   cartList.map((elem) => {
                     return (
-                      <Box key={elem.title + elem.price + Math.random()} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5}>
+                      <Box key={elem.title + elem.price + Math.random()} /*boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px"*/ border={"1px solid gray"} p={5}>
                         <HStack justifyContent={"space-around"} paddingBottom={"10px"} marginBottom={"20px"} borderBottom={"1px solid gray"} onClick={() => navigate(`/singleproduct/${elem.productId}`)}>
                           <Box w={"25%"}>
                             <img src={image} alt={elem.title} style={{ width: "100%" }} />
                           </Box>
                           <Box textAlign={"left"} w={"60%"}>
-                            <Heading as="h3" size='lg'>Title :- {elem.title}</Heading>
+                            <Text fontSize={"25px"}>Title :- {elem.title}</Text>
                             <Text textDecoration="line-through" fontSize={"md"}>Value :- {elem.strike}</Text>
                             <Text fontSize={"md"}>Discount :- {elem.discount}</Text>
                             <Text fontSize={"lg"}>Price :- {elem.price}</Text>
@@ -189,15 +200,15 @@ const Cart = () => {
                         <HStack m={"10px auto auto auto"} justifyContent={"space-between"}>
                           {
                             currentItemId === elem.productId ?
-                              <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' isLoading={wishListLoading} loadingText={"Adding"} spinnerPlacement={"end"} onClick={() => handleAddToWishList(elem.productId)}>Add to WishList</Button>
+                              <Button w={"50%"} border={"2px"} fontSize={"18px"} colorScheme="orange" variant='outline' isLoading={wishListLoading} loadingText={"Adding"} spinnerPlacement={"end"} onClick={() => handleAddToWishList(elem.productId)}>Add to WishList</Button>
                               :
-                              <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleAddToWishList(elem.productId)}>Add to WishList</Button>
+                              <Button w={"50%"} border={"2px"} fontSize={"18px"} colorScheme="orange" variant='outline' onClick={() => handleAddToWishList(elem.productId)}>Add to WishList</Button>
                           }
                           {
                             currentItemId === elem._id ?
-                              <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' isLoading={deleteLoading} loadingText={"Deleting"} spinnerPlacement={"end"} onClick={() => handleDelete(elem._id, elem.productId)}>Delete</Button>
+                              <Button w={"50%"} border={"2px"} fontSize={"18px"} colorScheme="orange" variant='outline' isLoading={deleteLoading} loadingText={"Deleting"} spinnerPlacement={"end"} onClick={() => handleDelete(elem._id, elem.productId)}>Delete</Button>
                               :
-                              <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleDelete(elem._id, elem.productId)}>Delete</Button>
+                              <Button w={"50%"} border={"2px"} fontSize={"18px"} colorScheme="orange" variant='outline' onClick={() => handleDelete(elem._id, elem.productId)}>Delete</Button>
                           }
                           <HStack justifyContent={"center"} w={"40%"}>
                             <button style={{
@@ -219,7 +230,7 @@ const Cart = () => {
                                   }
                                 </>
                                 :
-                                <Text w={"20%"} fontSize={"25px"} fontWeight={"bold"}>{elem.quantity}</Text>
+                                <Text w={"20%"} textAlign={"center"} fontSize={"30px"}>{elem.quantity}</Text>
                             }
                             <button style={{
                               padding: "5px 20px",
@@ -235,12 +246,24 @@ const Cart = () => {
                 }
               </Grid>
           }
-          <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"40%"} h={"300px"} paddingTop={"30px"}>
+          <Box /*boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px"*/ border={"1px solid gray"} w={"40%"} h={"300px"} paddingTop={"10px"}>
             <VStack w={"100%"} h={"100%"}>
-              <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
-              <Text fontSize={"2xl"}>Total Product :- {totalProducts} </Text>
-              <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
-              <Button w={"50%"} border={"2px"} fontSize={"20px"} fontWeight={"bold"} colorScheme="orange" variant='outline' onClick={() => handleCheckout()}>Proceed To Checkout</Button>
+              <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Cart Summary</Text>
+              <TableContainer>
+                <Table variant='simple'>
+                  <Tbody>
+                    <Tr>
+                      <Td fontSize={"20px"}>Total Products : </Td>
+                      <Td fontSize={"20px"}>{totalProducts}</Td>
+                    </Tr>
+                    <Tr>
+                      <Td fontSize={"20px"}>Total Amount : </Td>
+                      <Td fontSize={"20px"}>{amount}</Td>
+                    </Tr>
+                  </Tbody>
+                </Table>
+              </TableContainer>
+              <Button w={"50%"} border={"2px"} fontSize={"18px"} colorScheme="orange" variant='outline' onClick={() => handleCheckout()}>Proceed To Checkout</Button>
             </VStack>
           </Box>
         </Flex>

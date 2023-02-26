@@ -171,19 +171,19 @@ const Navbar = () => {
       <Divider />
       <Flex h={"50px"} alignItems="center" backgroundColor={"orange.100"} justifyContent={"space-around"}>
         <Spacer />
-        <Link to="/selectproducts"><HStack w={"120px"}><Text>All Products</Text></HStack></Link>
+        <Link to="/selectproducts"><HStack w={"120px"}><Text fontSize={"20px"}>All Products</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/clothing"><HStack w={"100px"}><Text>Clothing</Text></HStack></Link>
+        <Link to="/products/clothing"><HStack w={"100px"}><Text fontSize={"20px"}>Clothing</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Educational"><HStack w={"100px"}><Text>Educational</Text></HStack></Link>
+        <Link to="/products/Educational"><HStack w={"100px"}><Text fontSize={"20px"}>Educational</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Footwear"><HStack w={"100px"}><Text>Footwear</Text></HStack></Link>
+        <Link to="/products/Footwear"><HStack w={"100px"}><Text fontSize={"20px"}>Footwear</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Gadgets"><HStack w={"100px"}><Text>Gadgets</Text></HStack></Link>
+        <Link to="/products/Gadgets"><HStack w={"100px"}><Text fontSize={"20px"}>Gadgets</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Electronics"><HStack w={"100px"}><Text>Electronics</Text></HStack></Link>
+        <Link to="/products/Electronics"><HStack w={"100px"}><Text fontSize={"20px"}>Electronics</Text></HStack></Link>
         <Spacer />
-        <Link to="/about"><HStack w={"100px"}><Text>About Us</Text></HStack></Link>
+        <Link to="/about"><HStack w={"100px"}><Text fontSize={"20px"}>About Us</Text></HStack></Link>
         <Spacer />
       </Flex>
     </Box>

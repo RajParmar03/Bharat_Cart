@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControl, FormLabel, Heading, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, FormControl, FormLabel, Heading, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useRef } from 'react';
 import { useState } from 'react';
@@ -7,6 +7,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import Navbar from "../components/Navbar";
+import {
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+  } from '@chakra-ui/react'
 
 
 
@@ -49,11 +60,26 @@ const markAsDefaultAddress = async (id, token) => {
     return response.data;
 }
 
+const getCartList = async (token) => {
+    let cartItems = await axios.get(`${baseUrl}/cart/get`, {
+      headers: {
+        Authorization: token
+      }
+    });
+    return cartItems.data;
+  };
+
 
 const Checkout = () => {
 
     const [addressList, setAddressList] = useState([]);
     const [user, setUser] = useState({});
+    const [totalProducts, setTotalProducts] = useState(0);
+    const [amount, setAmount] = useState(0);
+    const [cartList, setCartList] = useState([]);
+
+
+
 
     const navigate = useNavigate();
 
@@ -98,6 +124,28 @@ const Checkout = () => {
         });
     }, []);
 
+    useEffect(() => {
+        dispatch(startLoading());
+        let token = localStorage.getItem("token");
+        getCartList(token).then((res) => {
+          setCartList(res);
+          dispatch(stopLoading());
+        }).catch((error) => {
+          dispatch(startError());
+        });
+      }, []);
+
+    useEffect(() => {
+        let total = cartList.reduce((acc, elem) => {
+          return acc + elem.price * elem.quantity;
+        }, 0);
+        setAmount(total);
+        let numberOfProducts = cartList.reduce((acc, elem) => {
+          return acc + elem.quantity;
+        }, 0);
+        setTotalProducts(numberOfProducts);
+      }, [cartList]);
+
 
     const handleSaveAddress = (e) => {
         e.preventDefault();
@@ -140,7 +188,7 @@ const Checkout = () => {
         <>
             <Navbar />
             <Box m={"130px auto 30px auto"}>
-                <Heading marginBottom={"20px"}>Checkout Page</Heading>
+                <Text fontSize={"30px"} textAlign={"left"} w={"95%"} m={"auto auto 20px auto"} color={"orange"}>Choose Your Address</Text>
                 {
                     loadingManager.isLoading ?
                         <Box m={"130px auto 30px auto"}>
@@ -155,156 +203,182 @@ const Checkout = () => {
                         :
                         <>
                             <Divider />
-                            {
+                            <Flex>
 
-                                !addressList.length ?
-                                    <>
-                                        <Box>
-                                            <Heading m={"30px auto"} as={"h2"} size={"lg"} color={"orange"}>There is no address of yours, please provide one</Heading>
-                                            <Button w={"170px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="blue" variant='outline' onClick={onOpen} >+Add New Address</Button>
-                                            <Modal
-                                                initialFocusRef={initialRef}
-                                                finalFocusRef={finalRef}
-                                                isOpen={isOpen}
-                                                onClose={onClose}
-                                                size={"3xl"}
-                                            >
-                                                <ModalOverlay bg='blackAlpha.300'
-                                                    backdropFilter='blur(10px) hue-rotate(90deg)' />
-                                                <ModalContent>
-                                                    <ModalHeader color={"orange"}>Enter Address Details</ModalHeader>
-                                                    <ModalCloseButton />
-                                                    <ModalBody pb={6}>
-                                                        <HStack justifyContent={"space-between"}>
-                                                            <VStack>
 
-                                                                <FormControl mt={4}>
-                                                                    <FormLabel>Flat, House no., Building, Company, Apartment</FormLabel>
-                                                                    <Input type='text' placeholder='Enter Your House no...' border={"1px"} ref={houseNoInput} />
-                                                                </FormControl>
-                                                                <FormControl mt={4}>
-                                                                    <FormLabel>Area, Street, Sector, Village</FormLabel>
-                                                                    <Input type='text' placeholder='Enter street name...' border={"1px"} ref={streetInput} />
-                                                                </FormControl>
-                                                                <FormControl mt={4}>
-                                                                    <FormLabel>Town/City</FormLabel>
-                                                                    <Input type='text' placeholder='Enter Your city name...' border={"1px"} ref={cityInput} />
-                                                                </FormControl>
-                                                            </VStack>
-                                                            <VStack w={"300px"}>
-                                                                <FormControl mt={4}>
-                                                                    <FormLabel>State</FormLabel>
-                                                                    <Input type='text' placeholder='Create Your state name...' border={"1px"} ref={stateInput} />
-                                                                </FormControl>
-                                                                <FormControl mt={4}>
-                                                                    <FormLabel>Country/Region</FormLabel>
-                                                                    <Input type='text' placeholder='Enter Your Country name...' border={"1px"} ref={countryInput} />
-                                                                </FormControl>
-                                                                <FormControl mt={4}>
-                                                                    <FormLabel>Pincode</FormLabel>
-                                                                    <Input type='number' placeholder='Enter Your pincode...' border={"1px"} ref={pincodeInput} />
-                                                                </FormControl>
-                                                            </VStack>
-                                                        </HStack>
-                                                        <HStack marginTop={"20px"}>
-                                                            <input type='checkbox' placeholder='Enter The Same Password Again... ' border={"1px"} ref={isDefaultInput} />
-                                                            <FormLabel>Make this my default address</FormLabel>
-                                                        </HStack>
-                                                    </ModalBody>
-                                                    <ModalFooter>
-                                                        <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={(e) => handleSaveAddress(e)}>
-                                                            Save Address
-                                                        </Button>
-                                                        <Button onClick={onClose}>Cancel</Button>
-                                                    </ModalFooter>
-                                                </ModalContent>
-                                            </Modal>
-                                        </Box>
-                                    </>
-                                    :
-                                    <>
-                                        <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" w={"45%"} p={"10px 30px"} m={"30px auto 30px auto"} textAlign={"start"}>
-                                            {
-                                                addressList.map((elem) => {
-                                                    return (
-                                                        <Box key={elem.street + elem.houseNumber + Math.random()}>
-                                                            <HStack margin={"20px auto"} justifyContent={"space-between"}>
-                                                                <VStack alignItems={"left"}>
-                                                                    <Text>Name : {user.name}</Text>
-                                                                    <Text>address : {elem.houseNo}{", "}{elem.street}{", "}{elem.city}</Text>
-                                                                    <Text>{elem.state}{", "}{elem.country}{", "}{elem.pincode}</Text>
-                                                                    <Text>phone no : {user.phone}</Text>
+                                {
+
+                                    !addressList.length ?
+                                        <>
+                                            <Box>
+                                                <Heading m={"30px auto"} as={"h2"} size={"lg"} color={"orange"}>There is no address of yours, please provide one</Heading>
+                                                <Button w={"170px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="blue" variant='outline' onClick={onOpen} >+Add New Address</Button>
+                                                <Modal
+                                                    initialFocusRef={initialRef}
+                                                    finalFocusRef={finalRef}
+                                                    isOpen={isOpen}
+                                                    onClose={onClose}
+                                                    size={"3xl"}
+                                                >
+                                                    <ModalOverlay bg='blackAlpha.300'
+                                                        backdropFilter='blur(10px) hue-rotate(90deg)' />
+                                                    <ModalContent>
+                                                        <ModalHeader color={"orange"}>Enter Address Details</ModalHeader>
+                                                        <ModalCloseButton />
+                                                        <ModalBody pb={6}>
+                                                            <HStack justifyContent={"space-between"}>
+                                                                <VStack>
+
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Flat, House no., Building, Company, Apartment</FormLabel>
+                                                                        <Input type='text' placeholder='Enter Your House no...' border={"1px"} ref={houseNoInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Area, Street, Sector, Village</FormLabel>
+                                                                        <Input type='text' placeholder='Enter street name...' border={"1px"} ref={streetInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Town/City</FormLabel>
+                                                                        <Input type='text' placeholder='Enter Your city name...' border={"1px"} ref={cityInput} />
+                                                                    </FormControl>
                                                                 </VStack>
-                                                                <Button w={"150px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="yellow" variant='outline' onClick={() => handleFinalCheckout(elem._id)}>Use this address</Button>
+                                                                <VStack w={"300px"}>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>State</FormLabel>
+                                                                        <Input type='text' placeholder='Create Your state name...' border={"1px"} ref={stateInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Country/Region</FormLabel>
+                                                                        <Input type='text' placeholder='Enter Your Country name...' border={"1px"} ref={countryInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Pincode</FormLabel>
+                                                                        <Input type='number' placeholder='Enter Your pincode...' border={"1px"} ref={pincodeInput} />
+                                                                    </FormControl>
+                                                                </VStack>
                                                             </HStack>
-                                                            <Divider />
-                                                        </Box>
+                                                            <HStack marginTop={"20px"}>
+                                                                <input type='checkbox' placeholder='Enter The Same Password Again... ' border={"1px"} ref={isDefaultInput} />
+                                                                <FormLabel>Make this my default address</FormLabel>
+                                                            </HStack>
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={(e) => handleSaveAddress(e)}>
+                                                                Save Address
+                                                            </Button>
+                                                            <Button onClick={onClose}>Cancel</Button>
+                                                        </ModalFooter>
+                                                    </ModalContent>
+                                                </Modal>
+                                            </Box>
+                                        </>
+                                        :
+                                        <>
+                                            <VStack w={"60%"}  m={"30px auto 30px auto"} textAlign={"start"}>
 
-                                                    )
-                                                })
-                                            }
-                                        </Box>
-                                        <Button w={"170px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="blue" variant='outline' onClick={onOpen} >+Add New Address</Button>
-                                        <Modal
-                                            initialFocusRef={initialRef}
-                                            finalFocusRef={finalRef}
-                                            isOpen={isOpen}
-                                            onClose={onClose}
-                                            size={"3xl"}
-                                        >
-                                            <ModalOverlay bg='blackAlpha.300'
-                                                backdropFilter='blur(10px) hue-rotate(90deg)' />
-                                            <ModalContent>
-                                                <ModalHeader color={"orange"}>Enter Address Details</ModalHeader>
-                                                <ModalCloseButton />
-                                                <ModalBody pb={6}>
-                                                    <HStack justifyContent={"space-between"}>
-                                                        <VStack>
+                                                <Box border={"1px solid gray"} w={"100%"} p={"10px 60px"} marginBottom={"30px"} textAlign={"start"}>
+                                                    {
+                                                        addressList.map((elem) => {
+                                                            return (
+                                                                <Box key={elem.street + elem.houseNumber + Math.random()}>
+                                                                    <HStack margin={"20px auto"} justifyContent={"space-between"}>
+                                                                        <VStack alignItems={"left"}>
+                                                                            <Text>Name : {user.name}</Text>
+                                                                            <Text>address : {elem.houseNo}{", "}{elem.street}{", "}{elem.city}</Text>
+                                                                            <Text>{elem.state}{", "}{elem.country}{", "}{elem.pincode}</Text>
+                                                                            <Text>phone no : {user.phone}</Text>
+                                                                        </VStack>
+                                                                        <Button w={"150px"} border={"2px"} fontSize={"16px"} colorScheme="orange" variant='outline' onClick={() => handleFinalCheckout(elem._id)}>Use this address</Button>
+                                                                    </HStack>
+                                                                    <Divider />
+                                                                </Box>
 
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Flat, House no., Building, Company, Apartment</FormLabel>
-                                                                <Input type='text' placeholder='Enter Your House no...' border={"1px"} ref={houseNoInput} />
-                                                            </FormControl>
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Area, Street, Sector, Village</FormLabel>
-                                                                <Input type='text' placeholder='Enter street name...' border={"1px"} ref={streetInput} />
-                                                            </FormControl>
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Town/City</FormLabel>
-                                                                <Input type='text' placeholder='Enter Your city name...' border={"1px"} ref={cityInput} />
-                                                            </FormControl>
-                                                        </VStack>
-                                                        <VStack w={"300px"}>
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>State</FormLabel>
-                                                                <Input type='text' placeholder='Create Your state name...' border={"1px"} ref={stateInput} />
-                                                            </FormControl>
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Country/Region</FormLabel>
-                                                                <Input type='text' placeholder='Enter Your Country name...' border={"1px"} ref={countryInput} />
-                                                            </FormControl>
-                                                            <FormControl mt={4}>
-                                                                <FormLabel>Pincode</FormLabel>
-                                                                <Input type='number' placeholder='Enter Your pincode...' border={"1px"} ref={pincodeInput} />
-                                                            </FormControl>
-                                                        </VStack>
-                                                    </HStack>
-                                                    <HStack marginTop={"20px"}>
-                                                        <input type='checkbox' placeholder='Enter The Same Password Again... ' border={"1px"} ref={isDefaultInput} />
-                                                        <FormLabel>Make this my default address</FormLabel>
-                                                    </HStack>
-                                                </ModalBody>
-                                                <ModalFooter>
-                                                    <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={(e) => handleSaveAddress(e)}>
-                                                        Save Address
-                                                    </Button>
+                                                            )
+                                                        })
+                                                    }
+                                                </Box>
+                                                <Button w={"170px"} border={"2px"} fontSize={"16px"} fontWeight={"bold"} colorScheme="blue" variant='outline' onClick={onOpen} >+Add New Address</Button>
+                                                <Modal
+                                                    initialFocusRef={initialRef}
+                                                    finalFocusRef={finalRef}
+                                                    isOpen={isOpen}
+                                                    onClose={onClose}
+                                                    size={"3xl"}
+                                                >
+                                                    <ModalOverlay bg='blackAlpha.300'
+                                                        backdropFilter='blur(10px) hue-rotate(90deg)' />
+                                                    <ModalContent>
+                                                        <ModalHeader color={"orange"}>Enter Address Details</ModalHeader>
+                                                        <ModalCloseButton />
+                                                        <ModalBody pb={6}>
+                                                            <HStack justifyContent={"space-between"}>
+                                                                <VStack>
 
-                                                    <Button onClick={onClose}>Cancel</Button>
-                                                </ModalFooter>
-                                            </ModalContent>
-                                        </Modal>
-                                    </>
-                            }
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Flat, House no., Building, Company, Apartment</FormLabel>
+                                                                        <Input type='text' placeholder='Enter Your House no...' border={"1px"} ref={houseNoInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Area, Street, Sector, Village</FormLabel>
+                                                                        <Input type='text' placeholder='Enter street name...' border={"1px"} ref={streetInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Town/City</FormLabel>
+                                                                        <Input type='text' placeholder='Enter Your city name...' border={"1px"} ref={cityInput} />
+                                                                    </FormControl>
+                                                                </VStack>
+                                                                <VStack w={"300px"}>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>State</FormLabel>
+                                                                        <Input type='text' placeholder='Create Your state name...' border={"1px"} ref={stateInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Country/Region</FormLabel>
+                                                                        <Input type='text' placeholder='Enter Your Country name...' border={"1px"} ref={countryInput} />
+                                                                    </FormControl>
+                                                                    <FormControl mt={4}>
+                                                                        <FormLabel>Pincode</FormLabel>
+                                                                        <Input type='number' placeholder='Enter Your pincode...' border={"1px"} ref={pincodeInput} />
+                                                                    </FormControl>
+                                                                </VStack>
+                                                            </HStack>
+                                                            <HStack marginTop={"20px"}>
+                                                                <input type='checkbox' placeholder='Enter The Same Password Again... ' border={"1px"} ref={isDefaultInput} />
+                                                                <FormLabel>Make this my default address</FormLabel>
+                                                            </HStack>
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={(e) => handleSaveAddress(e)}>
+                                                                Save Address
+                                                            </Button>
+
+                                                            <Button onClick={onClose}>Cancel</Button>
+                                                        </ModalFooter>
+                                                    </ModalContent>
+                                                </Modal>
+                                            </VStack>
+                                            <Box  m={"30px auto 30px auto"} border={"1px solid gray"} w={"30%"} h={"300px"} paddingTop={"10px"}>
+                                                <VStack w={"100%"} h={"100%"}>
+                                                    <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Cart Summary</Text>
+                                                    <TableContainer>
+                                                        <Table variant='simple'>
+                                                            <Tbody>
+                                                                <Tr>
+                                                                    <Td fontSize={"20px"}>Total Products : </Td>
+                                                                    <Td fontSize={"20px"}>{totalProducts}</Td>
+                                                                </Tr>
+                                                                <Tr>
+                                                                    <Td fontSize={"20px"}>Total Amount : </Td>
+                                                                    <Td fontSize={"20px"}>{amount}</Td>
+                                                                </Tr>
+                                                            </Tbody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                </VStack>
+                                            </Box>
+                                        </>
+                                }
+                            </Flex>
                         </>
                 }
             </Box >
