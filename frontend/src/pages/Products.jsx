@@ -212,18 +212,20 @@ const Products = () => {
             </Select>
           </Flex>
           <Box>
-            <Heading _hover={{ cursor: "pointer" }} as={"h3"} size={"md"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are found.</Heading>
+            <Text fontSize={"25px"} _hover={{ cursor: "pointer" }}>Total <span style={{ color: 'orange' }}>{length}</span> Products are found.</Text>
           </Box>
         </Flex>
         {
           loadingManager.isLoading ?
-            <Spinner
-              thickness='5px'
-              speed='0.5s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            />
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Box>
             :
             <Grid templateColumns='repeat(4, 1fr)' gap={6} m={10} >
               {

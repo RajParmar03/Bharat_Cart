@@ -84,14 +84,14 @@ const Navbar = () => {
 
 
   return (
-    <Box backgroundColor={"orange.300"} style={{
+    <Box backgroundColor={"orange.400"} style={{
       position: "fixed",
       top: "0",
       width: "100%",
       overflow: "auto",
     }} zIndex={"1000"}>
 
-      <HStack h={"50px"} alignItems="center" paddingLeft={"30px"} paddingTop={"10px"} paddingRight={"30px"} marginBottom={"10px"} backgroundColor={"orange.300"} justifyContent={"space-around"}>
+      <HStack h={"60px"} alignItems="center" paddingLeft={"30px"} paddingTop={"10px"} paddingRight={"30px"} marginBottom={"10px"} backgroundColor={"orange.400"} justifyContent={"space-around"}>
         <Link to="/">
           <Image src={"/BharatCart2.png"} alt={"BharatCart.png"} h={"50px"} border={"2px solid black"} />
         </Link>
@@ -171,19 +171,19 @@ const Navbar = () => {
       <Divider />
       <Flex h={"50px"} alignItems="center" backgroundColor={"orange.100"} justifyContent={"space-around"}>
         <Spacer />
-        <Link to="/selectproducts"><HStack w={"120px"}><Heading as='h3' size='md'>All Products</Heading></HStack></Link>
+        <Link to="/selectproducts"><HStack w={"120px"}><Text>All Products</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/clothing"><HStack w={"100px"}><Heading as='h3' size='md'>Clothing</Heading></HStack></Link>
+        <Link to="/products/clothing"><HStack w={"100px"}><Text>Clothing</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Educational"><HStack w={"100px"}><Heading as='h3' size='md'>Educational</Heading></HStack></Link>
+        <Link to="/products/Educational"><HStack w={"100px"}><Text>Educational</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Footwear"><HStack w={"100px"}><Heading as='h3' size='md'>Footwear</Heading></HStack></Link>
+        <Link to="/products/Footwear"><HStack w={"100px"}><Text>Footwear</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Gadgets"><HStack w={"100px"}><Heading as='h3' size='md'>Gadgets</Heading></HStack></Link>
+        <Link to="/products/Gadgets"><HStack w={"100px"}><Text>Gadgets</Text></HStack></Link>
         <Spacer />
-        <Link to="/products/Electronics"><HStack w={"100px"}><Heading as='h3' size='md'>Electronics</Heading></HStack></Link>
+        <Link to="/products/Electronics"><HStack w={"100px"}><Text>Electronics</Text></HStack></Link>
         <Spacer />
-        <Link to="/about"><HStack w={"100px"}><Heading as='h3' size='md'>About Us</Heading></HStack></Link>
+        <Link to="/about"><HStack w={"100px"}><Text>About Us</Text></HStack></Link>
         <Spacer />
       </Flex>
     </Box>

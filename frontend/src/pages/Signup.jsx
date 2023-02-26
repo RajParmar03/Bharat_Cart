@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Box, Button, Divider, Flex, FormLabel, Heading, Input, Select } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, FormLabel, Heading, Image, Input, Select } from '@chakra-ui/react';
 import axios from 'axios';
 import image from "../userImage.png";
 import { useNavigate } from 'react-router-dom';
@@ -68,15 +68,18 @@ const Signup = () => {
 
   return (
     <>
-      <Box m={"130px auto 30px auto"}>
-        <Heading as={"h1"} size={"2xl"} color="orange" m={"auto auto 30px auto"}>Create A New Account</Heading>
-        <Divider />
+      <Box m={"30px auto 30px auto"}>
+        <Box borderBottom={"2px solid orange"} borderTop={"2px solid orange"} marginBottom={"30px"}>
+          <Image src={"/BharatCart2.png"} alt={"bharat-cart"} h={"70px"} m={"auto"} />
+        </Box>
+        <Heading as={"h1"} size={"2xl"} textAlign={"center"} color="orange" m={"auto auto 30px auto"}>Create A New Account</Heading>
+        <hr />
         <Box m={"30px auto auto auto"} w={"30%"}>
           <form onSubmit={(e) => handleSubmit(e)}>
             <Flex justifyContent={"flex-end"}>
               <Box w={"40%"}>
                 <FormLabel color={"orange"}>Select Role</FormLabel>
-                <Select placeholder='Select role' ref={roleInput} border={"2px solid orange"}>
+                <Select placeholder='Select role' ref={roleInput} border={"2px solid orange"} _hover={{cursor:"pointer"}}>
                   <option value='seller'>Want to Start Selling My Products</option>
                   <option value='buyer'>Want to Buy Some Products</option>
                 </Select>
@@ -101,11 +104,11 @@ const Signup = () => {
 
                 <Button m={"20px auto auto auto"} border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} isLoading={true} loadingText={"Signing-up"} spinnerPlacement={"end"}>Sign-Up</Button>
                 :
-                <Input m={"20px auto auto auto"} type="submit" value="Sign-Up" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} />
+                <Input m={"20px auto auto auto"} type="submit" value="Sign-Up" border={"2px solid orange"} fontSize={"20px"} color={"orange.400"} fontWeight={"bold"} _hover={{cursor:"pointer"}} />
             }
           </form>
         </Box>
-        <Flex w={"27%"} m={"30px auto auto auto"} fontSize={"18px"} justifyContent={"space-around"}>Already Have An Account? <Box onClick={() => navigate("/login")} _hover={{ cursor: "pointer", textDecoration: "underline" }} color={"blue.500"}>Log-in</Box>From Here..</Flex>
+        <Flex w={"27%"} m={"30px auto auto auto"} fontSize={"18px"} justifyContent={"space-around"}>Already Have An Account? <Box onClick={() => navigate("/login")} _hover={{ cursor: "pointer", textDecoration: "underline" ,color:"orange" }} color={"blue.500"}>Log-in</Box>From Here..</Flex>
       </Box>
     </>
   )

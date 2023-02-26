@@ -10,7 +10,7 @@ const About = () => {
   return (
     <>
       <Navbar />
-      <Box m={"130px auto 30px auto"}>
+      <Box m={"140px auto 30px auto"}>
         <Heading marginBottom={"30px"} textAlign={"center"}>About Us</Heading>
         <Divider />
         <Text w={"50%"} m={"30px auto"} textAlign={"center"} fontSize={"20px"}>

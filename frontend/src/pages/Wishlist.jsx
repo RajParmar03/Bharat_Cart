@@ -141,11 +141,11 @@ const Wishlist = () => {
 
       <Box m={"130px auto 30px auto"} >
         <Box>
-          <Heading textAlign={"right"} _hover={{ cursor: "pointer" }} as={"h3"} size={"md"} w={"97%"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are in your wishlist.</Heading>
+          <Text fontSize={"25px"} textAlign={"right"} _hover={{ cursor: "pointer" }} w={"97%"}>Total <span style={{ color: 'orange' }}>{length}</span> Products are in your wishlist.</Text>
         </Box>
         {
           loadingManager.isLoading ?
-            <Box m={"30px auto 130px auto"} >
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
               <Spinner
                 thickness='5px'
                 speed='0.5s'

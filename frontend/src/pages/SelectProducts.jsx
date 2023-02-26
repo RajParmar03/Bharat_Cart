@@ -38,7 +38,7 @@ const SelectProducts = () => {
 
     useEffect(() => {
         searchRef.current.focus();
-      },[]);
+    }, []);
 
     useEffect(() => {
         if (ID.current) {
@@ -77,7 +77,7 @@ const SelectProducts = () => {
 
 
             <Navbar />
-            <Flex justifyContent={"space-around"} alignItems={"center"} m={"130px auto 30px auto"} w={"60%"}>
+            <Flex justifyContent={"space-around"} alignItems={"center"} m={"140px auto 30px auto"} w={"60%"}>
                 <Input onChange={(e) => handleChange(e.target.value)} value={val} w={"80%"} variant='filled' size='lg' placeholder='Search product here...' ref={searchRef}></Input>
                 {
                     loadingManager.isLoading ?
@@ -109,13 +109,15 @@ const SelectProducts = () => {
             <Divider />
             {
                 loadingManager.isLoading ?
-                    <Spinner
-                        thickness='5px'
-                        speed='0.5s'
-                        emptyColor='gray.200'
-                        color='blue.500'
-                        size='xl'
-                    />
+                    <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+                        <Spinner
+                            thickness='5px'
+                            speed='0.5s'
+                            emptyColor='gray.200'
+                            color='blue.500'
+                            size='xl'
+                        />
+                    </Box>
                     :
                     <Box>
 
@@ -124,21 +126,20 @@ const SelectProducts = () => {
                                 {
                                     data.map((elem) => {
                                         return (
-                                            <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5}>
+                                            <VStack key={elem.title + elem.price} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" p={5} _hover={{ cursor: "pointer" }}>
                                                 <Box onClick={() => navigate(`/singleproduct/${elem._id}`)}>
 
-                                                <Box h={"50px"}>
-                                                    <img src={"/bagImage.jpg"} alt={elem.title} style={{ height: "100%" }} />
+                                                    <Box h={"100px"}>
+                                                        <img src={"/bagImage.jpg"} alt={elem.title} style={{ height: "100%" , margin:"auto" }}  />
+                                                    </Box>
+                                                    <Text fontSize={"20px"} as="h3" size='md'>Title :- {elem.title}</Text>
+                                                    <Star stars={elem.review.rating} size="18px" />
+                                                    <Text textDecoration="line-through">Value :- {elem.strike}</Text>
+                                                    <Text>Price :- {elem.price}</Text>
+                                                    <Text>Discount :- {elem.discount}</Text>
+                                                    <Text>Main-Category :- {elem.main_category}</Text>
+                                                    <Text>Sub-Category :- {elem.sub_category}</Text>
                                                 </Box>
-                                                <Heading as="h3" size='md'>Title :- {elem.title}</Heading>
-                                                <Star stars={elem.review.rating} size="18px" />
-                                                <Text textDecoration="line-through">Value :- {elem.strike}</Text>
-                                                <Text>Price :- {elem.price}</Text>
-                                                <Text>Discount :- {elem.discount}</Text>
-                                                <Text>Main-Category :- {elem.main_category}</Text>
-                                                <Text>Sub-Category :- {elem.sub_category}</Text>
-                                                </Box>
-                                                <Button>Add to Cart</Button>
                                             </VStack>
                                         )
                                     })
@@ -146,16 +147,16 @@ const SelectProducts = () => {
                             </Grid>
                                 :
                                 <Box m={"60px auto auto auto"} w={"70%"} h={"300px"}>
-                                    <Heading as={"h1"} size="xl" textAlign={"left"} m={"auto auto 30px 100px"}>Search Products via Category...</Heading>
-                                    <Grid templateColumns='repeat(3, 1fr)' m={"auto"} p={"10px"} w={"70%"} gap={"50px"} h={"80%"}>
-                                        <Flex onClick={() => handleCategory("clothing")} borderRadius={"20px"} border={"7px solid orange"} fontSize={"25px"} fontWeight={"bold"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset">Clothing</Flex>
-                                        <Flex onClick={() => handleCategory("Educational")} borderRadius={"20px"} border={"7px solid orange"} fontSize={"25px"} fontWeight={"bold"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"> Educational
-                                        </Flex>
-                                        <Flex onClick={() => handleCategory("Footwear")} borderRadius={"20px"} border={"7px solid orange"} fontSize={"25px"} fontWeight={"bold"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset">Footwear
-                                        </Flex>
-                                        <Flex onClick={() => handleCategory("Gadgets")} borderRadius={"20px"} border={"7px solid orange"} fontSize={"25px"} fontWeight={"bold"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset">Gadgets
-                                        </Flex>
-                                        <Flex onClick={() => handleCategory("Electronics")} borderRadius={"20px"} border={"7px solid orange"} fontSize={"25px"} fontWeight={"bold"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset">Electronics</Flex>
+                                    <Text fontSize={"30px"} textAlign={"left"} m={"auto auto 30px 100px"}>Search Products via Category...</Text>
+                                    <Grid templateColumns='repeat(1, 1fr)' m={"auto"} p={"10px"} w={"70%"} gap={"2px"} h={"80%"}>
+                                        <Text onClick={() => handleCategory("clothing")} w={"40%"} borderRadius={"2px"} border={"0px solid orange"} fontSize={"20px"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} _hover={{ cursor: "pointer", color: "orange", fontSize: "22px" }} color={"blue.600"}>Search for clothes...</Text>
+                                        <Text onClick={() => handleCategory("Educational")} w={"40%"} borderRadius={"2px"} border={"0px solid orange"} fontSize={"20px"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} _hover={{ cursor: "pointer", color: "orange", fontSize: "22px" }} color={"blue.600"}>Search for stationary...
+                                        </Text>
+                                        <Text onClick={() => handleCategory("Footwear")} w={"40%"} borderRadius={"2px"} border={"0px solid orange"} fontSize={"20px"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} _hover={{ cursor: "pointer", color: "orange", fontSize: "22px" }} color={"blue.600"}>Search for footwear...
+                                        </Text>
+                                        <Text onClick={() => handleCategory("Gadgets")} w={"40%"} borderRadius={"2px"} border={"0px solid orange"} fontSize={"20px"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} _hover={{ cursor: "pointer", color: "orange", fontSize: "22px" }} color={"blue.600"}>Search for gadgets...
+                                        </Text>
+                                        <Text onClick={() => handleCategory("Electronics")} w={"40%"} borderRadius={"2px"} border={"0px solid orange"} fontSize={"20px"} textAlign={"centre"} justifyContent={"center"} alignItems={"center"} h={"100%"} _hover={{ cursor: "pointer", color: "orange", fontSize: "22px" }} color={"blue.600"}>Search for electronics...</Text>
                                     </Grid>
                                 </Box>
                         }
