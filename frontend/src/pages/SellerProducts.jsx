@@ -76,6 +76,7 @@ const SellerProducts = () => {
 
     let [user, setUser] = useState({});
     let [productsList, setProductsList] = useState([]);
+    let [editId, setEditId] = useState("");
 
     const loadingManager = useSelector(store => store.loadingManager);
     const dispatch = useDispatch();
@@ -129,8 +130,11 @@ const SellerProducts = () => {
             console.log(error);
         });
     };
-
-    const handleEdit = (id) => {
+    const openModal = (id) => {
+        onOpen();
+        setEditId(id);
+    }
+    const handleEdit = () => {
         let updateObj = {};
         let inputArr = [mainCategoryRef.current.value, subCategoryRef.current.value, productTitleRef.current.value, firstImageRef.current.value, secondImageRef.current.value, actualValueRef.current.value, sellingPriceRef.current.value, availableStokeRef.current.value]
         for (let i = 0; i < inputArr.length; i++) {
@@ -176,7 +180,7 @@ const SellerProducts = () => {
             }
         }
         let token = localStorage.getItem("token");
-        updateProduct(id, updateObj).then((res) => {
+        updateProduct(editId, updateObj).then((res) => {
             alert(res.message);
             getProductsList(token).then((res) => {
                 setProductsList(res);
@@ -230,7 +234,7 @@ const SellerProducts = () => {
                                                     <Td>{elem.stocks}</Td>
                                                     <Td><Image src={elem.image1} /></Td>
                                                     <Td><Image src={elem.image2} /></Td>
-                                                    <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "blue" }} onClick={() => onOpen()}><MdOutlineModeEditOutline /></Td>
+                                                    <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "blue" }} onClick={() => openModal(elem._id)}><MdOutlineModeEditOutline /></Td>
                                                     <Td _hover={{ cursor: "pointer", fontSize: "20px", color: "red" }} onClick={() => handleDelete(elem._id)}><RiDeleteBin6Line /></Td>
                                                     <Modal
                                                         initialFocusRef={mainCategoryRef}
@@ -288,7 +292,7 @@ const SellerProducts = () => {
                                                             </ModalBody>
 
                                                             <ModalFooter>
-                                                                <Button colorScheme='blue' mr={3} onClick={() => handleEdit(elem._id)}>
+                                                                <Button colorScheme='blue' mr={3} onClick={() => handleEdit()}>
                                                                     Update
                                                                 </Button>
                                                                 <Button onClick={onClose}>Cancel</Button>
