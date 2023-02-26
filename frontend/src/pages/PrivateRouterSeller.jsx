@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import SellerLogin from "./SellerLogin";
-
+import SellerLogin from './SellerLogin';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
 
@@ -17,36 +16,28 @@ const getUser = async (token) => {
 }
 
 
-const PrivateRouterSeller = (props) => {
+const PrivateRoute = (props) => {
 
-  let [isSeller, setIsSeller] = useState(false);
-  useEffect(() => {
-    let token = localStorage.getItem("token");
-    if (token) {
-      getUser(localStorage.getItem("token")).then((res) => {
-        if (res.role === "seller") {
-          setIsSeller(true);
-        } else {
-          setIsSeller(false);
+    let [isSeller , setIsSeller] = useState(false);
+    useEffect(() => {
+        let token = localStorage.getItem("token");
+        if(token){
+            getUser(localStorage.getItem("token")).then((res) => {
+                if(res.role === "seller"){
+                    setIsSeller(true);
+                }else{
+                    setIsSeller(false);
+                }
+            }).catch((error) => {
+                console.log(error);
+                setIsSeller(false);
+              });
         }
-      }).catch((error) => {
-        console.log(error);
-        setIsSeller(false);
-      });
+    }, []);
+    if(!isSeller){
+        return <SellerLogin />;
     }
-  }, []);
-
-  return (
-    <>
-      {
-        isSeller ?
-          <SellerLogin />
-          :
-          props.children
-      }
-    </>
-  );
-
+    return props.children;
 }
 
-export default PrivateRouterSeller;
+export default PrivateRoute;

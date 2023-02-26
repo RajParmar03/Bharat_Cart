@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 let baseUrl = process.env.REACT_APP_BASEURL;
@@ -14,15 +15,32 @@ const monthsArr = Array.from({ length: 12 }, (x, i) => {
 const yearsArr = Array.from({ length: 9 }, (_x, i) => currentYear + i);
 
 
-const handleProducts = async (token) => {
-    let response = await axios.patch(`${baseUrl}/orderlist/add`, {}, {
+
+
+const getCartList = async (token) => {
+    let cartItems = await axios.get(`${baseUrl}/cart/get`, {
         headers: {
-            Authorization: token,
+            Authorization: token
         }
     });
+    return cartItems.data; 
+};
 
+const addToSold = async (cartItem, sellerId) => {
+    console.log("in this function add to sold", cartItem, sellerId);
+    let response = await axios.patch(`${baseUrl}/orderlist/addtosold/${sellerId}`, cartItem);
     return response.data;
-}
+};
+
+const addToOrderList = async (token) => {
+    console.log("this is token" , token);
+    let response = await axios.patch(`${baseUrl}/orderlist/add`,{}, {
+        headers: {
+            Authorization: token
+        }
+    });
+    return response.data;
+};
 
 export default function CForm({
     cardMonth,
@@ -37,6 +55,7 @@ export default function CForm({
     children
 }) {
     const [cardNumber, setCardNumber] = useState('');
+    const [sellerObject, setSellerObjject] = useState({});
     const navigate = useNavigate();
 
     const handleFormChange = (event) => {
@@ -79,23 +98,81 @@ export default function CForm({
         onUpdateState('isCardFlipped', false);
     };
 
+    // const handlePayment2 = () => {
+    //     if (cardHolderRef.current.value && cardHolderRef.current.value && cardDateRef.current.value) {
+    //         let token = localStorage.getItem("token");
+
+    //         handleProducts(token).then((res) => {
+    //             alert(res.message);
+    //             alert("Order Confirmed");
+    //             navigate("/orderconfirmation");
+    //         }).catch((error) => {
+    //             console.log(error);
+    //         });
+
+    //     } else {
+    //         alert("please provide all the data...");
+    //     }
+
+    // }
+
     const handlePayment = () => {
         if (cardHolderRef.current.value && cardHolderRef.current.value && cardDateRef.current.value) {
             let token = localStorage.getItem("token");
 
-            handleProducts(token).then((res) => {
-                alert(res.message);
-                alert("Order Confirmed");
-                navigate("/orderconfirmation");
+            getCartList(token).then((res) => {
+                let sellerObj = {}
+                res.forEach((elem) => {
+                    if (sellerObj[elem.sellerId] === undefined) {
+                        sellerObj[elem.sellerId] = [elem];
+                    } else {
+                        sellerObj[elem.sellerId] = [...sellerObj[elem.sellerId], elem];
+                    }
+                });
+                console.log("this is seller obj", sellerObj);
+                setSellerObjject(sellerObj);
+            }).then(() => {
+                addToOrderList(token).then((res) => {
+                    alert(res.message);
+                    alert("Order Confirmed");
+                    navigate("/orderconfirmation");
+                }).catch((error) => {
+                    console.log(error);
+                })
             }).catch((error) => {
                 console.log(error);
-            });
-
+            })
         } else {
             alert("please provide all the data...");
         }
 
     }
+
+    useEffect(() => {
+        for (let i in sellerObject) {
+            addToSold(sellerObject[i], i).then((res) => {
+                console.log(res.message);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, [sellerObject]);
+
+    // await addToSold(elem).then((res) => {
+    //     console.log(res.message);
+    // }).catch((error) => {
+    //     console.log(error);
+    // });
+
+    // .then(() => {
+    //     addToOrderList(token).then((res) => {
+    //         alert(res.message);
+    //         alert("Order Confirmed");
+    //         navigate("/orderconfirmation");
+    //     }).catch((error) => {
+    //         console.log(error);
+    //     })
+    // })
 
     return (
         <div className="card-form">
