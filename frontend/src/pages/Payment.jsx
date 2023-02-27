@@ -3,6 +3,17 @@ import axios from 'axios';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
 
 
 import Card from "./Card";
@@ -149,38 +160,50 @@ const Payment = () => {
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       {
         loadingManager.isLoading ?
-          <Box m={"130px auto 30px auto"}>
-            <Spinner
-              thickness='5px'
-              speed='0.5s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            />
-          </Box>
+          <>
+            <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
+              <Spinner
+                thickness='5px'
+                speed='0.5s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Box>
+          </>
           :
-          <Box h={"400px"} w={"600px"} p={"5px 10px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
-            <VStack alignItems={"left"} marginBottom={"10px"}>
-              <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Delivery Address :-</Heading>
-              <Text>Name : {user.name}</Text>
-              <Text>address : {address.houseNo}{", "}{address.street}{", "}{address.city}</Text>
-              <Text>{address.state}{", "}{address.country}{", "}{address.pincode}</Text>
-              <Text>phone no : {user.phone}</Text>
+          <Box h={"450px"} w={"600px"} p={"10px 10px"} border={"1px solid gray"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
+            <VStack alignItems={"left"} marginBottom={"10px"} textAlign={"center"}>
+              <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Delivery Address</Text>
+              <TableContainer>
+                <Table variant='simple'>
+                  <Tbody>
+                    <Tr>
+                      <Td fontSize={"18px"}>{user.name}</Td>
+                    </Tr>
+                    <Tr>
+                      <Td fontSize={"18px"}>{address.houseNo}{", "}{address.street}{", "}{address.city}{", "}{address.state}{", "}{address.country}{", "}{address.pincode}</Td>
+                    </Tr>
+                    <Tr>
+                      <Td fontSize={"18px"}>{user.phone}</Td>
+                    </Tr>
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </VStack>
-            <hr />
             <Box marginTop={"10px"}>
               <VStack w={"100%"} h={"100%"}>
-                <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
+                <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Cart Summary</Text>
                 <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
                 <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
               </VStack>
             </Box>
           </Box>
       }
-      <Box className="wrapper" >
+      <Box className="wrapper">
         <CForm
           cardMonth={state.cardMonth}
           cardYear={state.cardYear}

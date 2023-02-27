@@ -246,7 +246,7 @@ const Cart = () => {
                 }
               </Grid>
           }
-          <Box /*boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px"*/ border={"1px solid gray"} w={"40%"} h={"300px"} paddingTop={"10px"}>
+          <Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" border={"1px solid gray"} w={"40%"} h={"300px"} paddingTop={"10px"}>
             <VStack w={"100%"} h={"100%"}>
               <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Cart Summary</Text>
               <TableContainer>

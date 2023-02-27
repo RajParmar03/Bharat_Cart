@@ -175,7 +175,7 @@ export default function CForm({
     // })
 
     return (
-        <div className="card-form">
+        <div className="card-form" style={{border:"1px solid gray"}}>
             <div className="card-list">{children}</div>
             <div className="card-form__inner">
                 <div className="card-input">
