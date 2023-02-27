@@ -6,6 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { startError, startLoading, stopLoading } from '../Redux/stateManager/stateManager.action';
 import Navbar from "../components/Navbar";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
 
 
 
@@ -109,34 +120,42 @@ const Billing = () => {
   return (
     <>
       <Navbar />
-      <Box>
-        <Heading m={"130px auto 30px auto"}>Select payment method</Heading>
+      <Box m={"130px auto 30px auto"}>
+        <Text textAlign={"left"} m={"auto auto 30px 30px"} fontSize={"30px"} color={"orange"}>Select payment method</Text>
         <Divider />
-        <HStack justifyContent={"space-around"} m={" 30px auto 20px auto"}>
-          <VStack w={"50%"} h={"300px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
+        <HStack justifyContent={"space-around"} alignItems={"start"} m={"30px auto 20px auto"}>
+          <VStack w={"50%"} h={"300px"} border={"1px solid gray"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
 
-            <Box m={" 30px auto 20px auto"} >
+            <Box m={"30px auto 20px auto"}>
 
               <Stack justifyContent={"space-around"} h={"150px"}>
-                <HStack>
-                  <label>
-                    <input type={"radio"} name="payment" value={"credit"} onChange={(e) => setPtype(e.target.value)} />
-                    Pay with Debit/Credit/ATM Cards</label>
-                </HStack>
-                <HStack>
-                  <label>
-                    <input type={"radio"} name="payment" value={"cash"} onChange={(e) => setPtype(e.target.value)} />
-                    Cash On Delivery/Pay On Delivery</label>
-                </HStack>
+                <TableContainer>
+                  <Table variant='simple'>
+                    <Tbody>
+                      <Tr>
+                        <label style={{cursor:"pointer"}}>
+                          <Td fontSize={"20px"}><input type={"radio"} name="payment" value={"credit"} onChange={(e) => setPtype(e.target.value)} /></Td>
+                          <Td fontSize={"20px"}>Pay with Debit/Credit/ATM Cards</Td>
+                        </label>
+                      </Tr>
+                      <Tr>
+                        <label style={{cursor:"pointer"}}>
+                          <Td fontSize={"20px"}><input type={"radio"} name="payment" value={"cash"} onChange={(e) => setPtype(e.target.value)} /></Td>
+                          <Td fontSize={"20px"}>Cash On Delivery/Pay On Delivery</Td>
+                        </label>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
               </Stack>
 
             </Box>
-            <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} fontWeight={"bold"} onClick={() => handlePayment()}>Use this payment method</Button>
+            <Button mr={3} border={"2px solid orange"} fontSize={"18px"} color={"orange.400"} onClick={() => handlePayment()}>Use this payment method</Button>
           </VStack>
           {
             loadingManager.isLoading ?
               <>
-                <Box m={"130px auto 30px auto"} h={"400px"} w={"600px"} p={"5px 10px"}  >
+                <Box m={"50px auto 40px auto"} w={"30%"} textAlign={"center"}>
                   <Spinner
                     thickness='5px'
                     speed='0.5s'
@@ -147,18 +166,28 @@ const Billing = () => {
                 </Box>
               </>
               :
-              <Box h={"400px"} w={"600px"} p={"5px 10px"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
+              <Box h={"450px"} w={"600px"} p={"10px 10px"} border={"1px solid gray"} boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px" m={"130px auto 30px auto"}>
                 <VStack alignItems={"left"} marginBottom={"10px"} textAlign={"center"}>
-                  <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"} >Delivery Address :-</Heading>
-                  <Text >Name : {user.name}</Text>
-                  <Text >address : {address.houseNo}{", "}{address.street}{", "}{address.city}</Text>
-                  <Text >{address.state}{", "}{address.country}{", "}{address.pincode}</Text>
-                  <Text >phone no : {user.phone}</Text>
+                  <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Delivery Address</Text>
+                  <TableContainer>
+                    <Table variant='simple'>
+                      <Tbody>
+                        <Tr>
+                          <Td fontSize={"18px"}>{user.name}</Td>
+                        </Tr>
+                        <Tr>
+                          <Td fontSize={"18px"}>{address.houseNo}{", "}{address.street}{", "}{address.city}{", "}{address.state}{", "}{address.country}{", "}{address.pincode}</Td>
+                        </Tr>
+                        <Tr>
+                          <Td fontSize={"18px"}>{user.phone}</Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
                 </VStack>
-                <hr />
                 <Box marginTop={"10px"}>
                   <VStack w={"100%"} h={"100%"}>
-                    <Heading borderBottom={"1px solid gray"} paddingBottom={"10px"} marginBottom={"10px"}>Cart Summary :-</Heading>
+                    <Text fontSize={"30px"} borderBottom={"1px solid orange"} paddingBottom={"10px"} marginBottom={"10px"} color={"orange"}>Cart Summary</Text>
                     <Text fontSize={"2xl"}>Total Product :- {cartList.length} </Text>
                     <Text fontSize={"2xl"}>Total Amount :- {amount}</Text>
                   </VStack>
